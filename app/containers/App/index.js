@@ -18,33 +18,47 @@ import Header from 'components/Header';
 import Footer from 'components/Footer';
 
 import GlobalStyle from '../../global-styles';
+import SignUpPage from '../SignUpPage';
+import SignInPage from '../SignInPage';
+import ForgotPassword from '../ForgotPassword';
+import OtpForgotPassword from '../OtpForgotPassword';
+import ChooseYourBankPage from '../ChooseYourBankPage';
+import UploadDocumentsPage from '../UploadDocumentsPage';
+import Dashboard from '../Dashboard';
 
-const AppWrapper = styled.div`
-  max-width: calc(768px + 16px * 2);
-  margin: 0 auto;
-  display: flex;
-  min-height: 100%;
-  padding: 0 16px;
-  flex-direction: column;
-`;
+// const AppWrapper = styled.div`
+//   max-width: calc(768px + 16px * 2);
+//   margin: 0 auto;
+//   display: flex;
+//   min-height: 100%;
+//   padding: 0 16px;
+//   flex-direction: column;
+// `;
 
 export default function App() {
   return (
-    <AppWrapper>
-      <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
-      >
-        <meta name="description" content="A React.js Boilerplate application" />
-      </Helmet>
-      <Header />
+    // <AppWrapper>
+    <div>
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/sign-up" component={SignUpPage} />
+        <Route exact path="/sign-in" component={SignInPage} />
+        <Route exact path="/forgot-password" component={ForgotPassword} />
+        <Route
+          exact
+          path="/otp-forgot-password"
+          component={OtpForgotPassword}
+        />
+        <Route exact path="/choose-bank" component={ChooseYourBankPage} />
+        <Route exact path="/upload-documents" component={UploadDocumentsPage} />
+        <Route exact path="/dashboard" component={Dashboard} />
+
         <Route path="/features" component={FeaturePage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
-      <Footer />
       <GlobalStyle />
-    </AppWrapper>
+    </div>
+
+    // </AppWrapper>
   );
 }

@@ -33,6 +33,8 @@ import { makeSelectUsername } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
+import HeaderChooseYourBank from 'components/HeaderChooseYourBank'
+
 const key = 'home';
 
 export function HomePage({
@@ -66,7 +68,8 @@ export function HomePage({
           content="A React.js Boilerplate application homepage"
         />
       </Helmet>
-      <div>
+      <HeaderChooseYourBank />
+      {/* <div>
         <CenteredSection>
           <H2>
             <FormattedMessage {...messages.startProjectHeader} />
@@ -96,7 +99,7 @@ export function HomePage({
           </Form>
           <ReposList {...reposListProps} />
         </Section>
-      </div>
+      </div> */}
     </article>
   );
 }

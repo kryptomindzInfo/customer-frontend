@@ -16,6 +16,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import FontFaceObserver from 'fontfaceobserver';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
+import 'css/main.css';
+
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { green, orange } from '@material-ui/core/colors';
 
 // Import root app
 import App from 'containers/App';
@@ -41,6 +46,34 @@ openSansObserver.load().then(() => {
   document.body.classList.add('fontLoaded');
 });
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#417505',
+      hover: "#264503"
+    },
+    // secondary: '#6cac69',
+    // accent: '#f5a623',
+    // light: '#9ea0a5',
+    // greyLine: '#666565 ',
+    white: 'white',
+    main: '#417505',
+
+    vGradient: 'linear-gradient(to bottom, #6cac6a, #102910)',
+    hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
+    // font: 'Roboto',
+    // fontSize: '14px',
+  },
+  status: {
+    danger: orange,
+  },
+  typography: {
+    color: 'white',
+    fontFamily: ['Montserrat', 'sans-serif'].join(),
+  },
+  
+});
+
 // Create redux store with history
 const initialState = {};
 const store = configureStore(initialState, history);
@@ -49,11 +82,13 @@ const MOUNT_NODE = document.getElementById('app');
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </LanguageProvider>
+      <MuiThemeProvider theme={theme}>
+        <LanguageProvider messages={messages}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </LanguageProvider>
+      </MuiThemeProvider>
     </Provider>,
     MOUNT_NODE,
   );
