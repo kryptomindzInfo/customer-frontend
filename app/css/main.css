@@ -16,3 +16,28 @@
     width: 1396px;
   }
 }
+
+.sendMoneyButton {
+  color: rgb(65, 117, 5);
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 6px;
+  padding-right: 6px;
+  border-radius: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(65, 117, 5);
+  border-image: initial;
+  background: rgb(255, 255, 255);
+}
+
+.sendMoneyButton:hover {
+  background-color: rgb(65, 117, 5);
+  color: #fff;
+}
+
+/* .material-icons: {
+  margin-right: 5px;
+  font-size: 11px;
+} */

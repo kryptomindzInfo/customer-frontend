@@ -190,7 +190,7 @@ class UploadDocumentsPage extends Component {
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
             <form onSubmit={this.saveDocuments}>
               <UploadArea bgImg={STATIC_URL + 'main/pdf-icon.png'}>
-                {this.state.contract ? (
+                {this.state.document1 ? (
                   <a
                     className="uploadedImg"
                     href={CONTRACT_URL + this.state.document1}

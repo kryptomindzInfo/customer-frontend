@@ -17,3 +17,6 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 export const API_URL = 'http://localhost:3001/api';
 export const STATIC_URL = 'http://localhost:3001/uploads/';
 export const CONTRACT_URL = 'http://localhost:3001/uploads/';
+
+
+export const CURRENCY = 'XOF';
