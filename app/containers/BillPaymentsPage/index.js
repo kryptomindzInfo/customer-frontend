@@ -135,7 +135,7 @@ class BillPaymentsPage extends Component {
             item
             md={8}
             sm={12}
-            xs={12}
+            xs={11}
           >
             {/* <CardEwalletSendMoneyPayBills /> */}
             <Typography className={classes.amountReceivedMessage} variant="h5">

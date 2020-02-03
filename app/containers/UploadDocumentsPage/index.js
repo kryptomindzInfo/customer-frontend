@@ -158,7 +158,7 @@ class UploadDocumentsPage extends Component {
         // },
       );
     } else {
-      history.push('/');
+      history.push('/dashboard');
     }
   };
   render() {

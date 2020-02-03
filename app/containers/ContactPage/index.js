@@ -38,6 +38,17 @@ import TableRow from '@material-ui/core/TableRow';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
+    margin: '9% 2% 0% 2%',
+    borderRadius: '4px',
+    [theme.breakpoints.down('sm')]: {
+      margin: '3% 3%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '4% 5%',
+    },
+  },
+  gridSearchBarContactList:
+  {
     margin: '3% 2% 0% 2%',
     borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
@@ -47,7 +58,7 @@ const styles = theme => ({
       margin: '4% 5%',
     },
   },
-  gridCardDownloadOurApp:{
+  gridCardDownloadOurApp: {
     margin: '0% 2% 0% 2%',
     borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
@@ -120,95 +131,103 @@ class ContactPage extends Component {
         </Helmet>
         <MainHeader />
 
-        <Grid container direction="row">
-          {/* <Grid container direction="column"> */}
-          <Grid
-            className={classes.gridCardEwalletSendMoney}
-            item
-            md={3}
-            sm={12}
-            xs={12}
-          >
-            <CardEwalletSendMoneyPayBills />
-          </Grid>
-          <Grid
-            className={classes.gridCardEwalletSendMoney}
-            item
-            md={8}
-            sm={12}
-            xs={12}
-          >
-            <ActionBar
-              marginBottom="33px"
-              inputWidth="calc(100% - 241px)"
-              className="clr"
-              style={{ display: 'flex', justifyContent: 'space-around' }}
-            >
-              <div className="iconedInput fl">
-                <i className="material-icons">search</i>
-                <input type="text" placeholder="Search" />
-              </div>
-
-              <button className={`${'addBankButton'} `}>Add Contact</button>
-            </ActionBar>
-
+        <Grid container>
+          {/* <Grid item md={1}></Grid> */}
+          <Grid item md={3} sm={12} xs={12}>
             <Grid
-              className={classes.recentActivitiesTable}
+              className={classes.gridCardEwalletSendMoney}
+              item
+              md={12}
+              sm={12}
+              xs={12}
+              style={{marginBottom: '2rem'}}
+            >
+              <CardEwalletSendMoneyPayBills />
+            </Grid>
+            <Grid
+              className={classes.gridCardDownloadOurApp}
               item
               md={12}
               sm={12}
               xs={12}
             >
-              <Typography style={{ margin:'3% 3%' }} variant="h5">
-                Contacts List
-                <Typography
-                  style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
-                  variant="body1"
-                >
-                  Your family & friends
+              <CardDownloadOurApp />
+            </Grid>
+          </Grid>
+          <Grid item md={9} xs={12}>
+            <Grid
+              className={classes.gridSearchBarContactList}
+              item
+              md={12}
+              sm={12}
+              xs={12}
+            >
+              <ActionBar
+                marginBottom="33px"
+                inputWidth="calc(100% - 241px)"
+                className="clr"
+                style={{ display: 'flex', justifyContent: 'space-around' }}
+              >
+                <div className="iconedInput fl">
+                  <i className="material-icons">search</i>
+                  <input type="text" placeholder="Search" />
+                </div>
+
+                <button className={`${'addBankButton'} `}>Add Contact</button>
+              </ActionBar>
+
+              <Grid
+                className={classes.recentActivitiesTable}
+                item
+                md={12}
+                sm={12}
+                xs={12}
+              >
+                <Typography style={{ margin: '3% 3%' }} variant="h5">
+                  Contacts List
+                  <Typography
+                    style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
+                    variant="body1"
+                  >
+                    Your family & friends
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Table className={classes.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell align="right">Description</TableCell>
-                    <TableCell align="right">Fat (g)</TableCell>
-                    <TableCell align="right">Carbs (g)</TableCell>
-                    <TableCell align="right">Protein (g)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map(row => (
-                    <TableRow key={row.id}>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                <Table className={classes.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell align="right">Description</TableCell>
+                      <TableCell align="right">Fat (g)</TableCell>
+                      <TableCell align="right">Carbs (g)</TableCell>
+                      <TableCell align="right">Protein (g)</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-                
-              </Table>
-              <button style={{marginTop: '10px'}} className={`${'addBankButton'} `}>View All</button>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                      <TableRow key={row.id}>
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.calories}</TableCell>
+                        <TableCell align="right">{row.fat}</TableCell>
+                        <TableCell align="right">{row.carbs}</TableCell>
+                        <TableCell align="right">{row.protein}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <button
+                  style={{ marginTop: '10px' }}
+                  className={`${'addBankButton'} `}
+                >
+                  View All
+                </button>
 
-              {/* <span style={{textAlign: 'right', paddingTop: '4px'}}>View All</span> */}
-
+                {/* <span style={{textAlign: 'right', paddingTop: '4px'}}>View All</span> */}
+              </Grid>
             </Grid>
           </Grid>
 
-          <Grid
-            className={classes.gridCardDownloadOurApp}
-            item
-            md={3}
-            sm={12}
-            xs={12}
-          >
-            <CardDownloadOurApp />
-          </Grid>
           {/* </Grid> */}
 
           {/* <Grid container> */}

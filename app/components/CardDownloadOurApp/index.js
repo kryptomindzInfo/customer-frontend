@@ -27,7 +27,13 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       // paddingRight: '4%',
       margin: '0 auto',
-      maxWidth: '70%',
+      maxWidth: '50%',
+      textAlign: 'center',
+    },
+    [theme.breakpoints.down('sm')]: {
+      // paddingRight: '4%',
+      margin: '0 auto',
+      maxWidth: '100%',
       textAlign: 'center',
     },
   },

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 const PopupWrap = styled.div`
     position:fixed;
     width:100%;
+    textAlign: center;
+
     height:100%;
     z-index: 999;
     background-color: rgba(0, 0, 0, 0.39);
@@ -16,19 +18,25 @@ const PopupWrap = styled.div`
     form{
         display:block;
         width: 100%;
-        max-width: ${props => props.bigBody ? '100%' : '445px' };
+        max-width: ${props => (props.bigBody ? '100%' : '445px')};
         margin 0 auto;
     }
 `;
 
 const PopupBody = styled.div`
   background: #fff;
+  textalign: center;
   border-radius: 6px;
-  width: ${ props => props.bigBody ? '80%' : '35%' };
-  max-width: ${ props => props.bigBody ? 'none' : '648px' };
+  width: 37%;
   padding: 20px;
   margin: 45px auto;
   position: relative;
+  @media (max-width: 960px) {
+    width: 70%;
+  }
+  @media (max-width: 600px) {
+    width: 82%;
+  }
 
   .popClose {
     position: absolute;
@@ -37,13 +45,13 @@ const PopupBody = styled.div`
     padding: 9px;
     cursor: pointer;
     font-size: 22px;
-    background: ${props => props.theme.accent};
+    background: #cc8819;
     color: #fff;
-    :hover{
-      background-color: #cc8819
+    :hover {
+      background-color: #9c660e ;
     }
   }
-  .popInfoLeft{
+  .popInfoLeft {
     font-size: 12px;
     font-weight: bold;
     color: #4a4a4a;
@@ -78,21 +86,22 @@ const PopupBody = styled.div`
 `;
 
 class Popup extends Component {
-  
   sendCloseSignal = event => {
     if (!document.getElementById('popupBody').contains(event.target)) {
       this.props.close();
     }
   };
   componentDidMount() {
-  
     console.log(this.props);
-  
-}
+  }
   render() {
     return (
-      
-      <PopupWrap className="popupwrap" onClick={this.sendCloseSignal} bigBody={this.props.bigBody}>
+      <PopupWrap
+        style={{ textAlign: 'center' }}
+        className="popupwrap"
+        onClick={this.sendCloseSignal}
+        bigBody={this.props.bigBody}
+      >
         <PopupBody id="popupBody" bigBody={this.props.bigBody}>
           <i
             className="material-icons popClose"

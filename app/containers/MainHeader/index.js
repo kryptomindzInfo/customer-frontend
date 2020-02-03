@@ -287,7 +287,7 @@ const MainHeader = props => {
               </Typography>
             </Link>
           </div>
-          <p className="material-icons fl" style={{ paddingRight: '7px' }}>
+          <p className="material-icons fl" style={{ paddingRight: '7px', paddingBottom: 0, marginBottom: 0 }}>
             settings
           </p>
 
