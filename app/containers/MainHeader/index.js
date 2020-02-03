@@ -115,19 +115,19 @@ const MainHeader = props => {
             color="inherit"
             aria-label="Menu"
           >
-             <div className={classes.sectionDesktop}>
-            <Menu>
-              <MenuItem
+            <div className={classes.sectionDesktop}>
+              <Menu>
+                <MenuItem
                 // onClick={() => {
                 //   history.push('/');
                 //   // popupState.close();
                 // }}
-              >
-                HOME
-                {/* <FormattedMessage {...messages.homeButtonHeaderMessage} /> */}
-              </MenuItem>
+                >
+                  HOME
+                  {/* <FormattedMessage {...messages.homeButtonHeaderMessage} /> */}
+                </MenuItem>
 
-              <MenuItem
+                <MenuItem
                 // onClick={() => {
                 //   // history.push('/about');
 
@@ -135,88 +135,88 @@ const MainHeader = props => {
 
                 //   // popupState.close();
                 // }}
-              >
-                ABOUT US
-                {/* <FormattedMessage {...messages.aboutusButtonHeaderMessage} /> */}
-              </MenuItem>
-              <MenuItem
+                >
+                  ABOUT US
+                  {/* <FormattedMessage {...messages.aboutusButtonHeaderMessage} /> */}
+                </MenuItem>
+                <MenuItem
                 // onClick={() => {
                 //   history.push('/how-it-works');
-                  // popupState.close();
+                // popupState.close();
                 // }}
-              >
-                HOW IT WORKS
-                {/* <FormattedMessage {...messages.howitworksButtonHeaderMessage} /> */}
-              </MenuItem>
+                >
+                  HOW IT WORKS
+                  {/* <FormattedMessage {...messages.howitworksButtonHeaderMessage} /> */}
+                </MenuItem>
 
-              <MenuItem
+                <MenuItem
                 // onClick={popupState.close}
                 // onClick={() => {
                 //   window.open('https://managers.aktv.life');
                 //   // popupState.close();
                 // }}
-              >
-                CREATE EVENT
-                {/* <FormattedMessage
+                >
+                  CREATE EVENT
+                  {/* <FormattedMessage
                   {...messages.createEventButtonHeaderMessage} */}
-                />
-              </MenuItem>
-              <MenuItem
+                  />
+                </MenuItem>
+                <MenuItem
                 // onClick={popupState.close}
                 // onClick={() => {
                 //   history.push('/events');
                 //   // popupState.close();
                 // }}
-              >
-                BROWSE EVENT
-                {/* <FormattedMessage
+                >
+                  BROWSE EVENT
+                  {/* <FormattedMessage
                   {...messages.browseEventButtonHeaderMessage} */}
-                />
-              </MenuItem>
-            </Menu>
-          </div>
+                  />
+                </MenuItem>
+              </Menu>
+            </div>
             {/* <MenuIcon /> */}
           </IconButton>
           <div className={classes.sectionDesktop}>
             <Menu>
               <MenuItem
-                // onClick={() => {
-                //   history.push('/');
-                //   // popupState.close();
-                // }}
+              // onClick={() => {
+              //   history.push('/');
+              //   // popupState.close();
+              // }}
               >
                 HOME
                 {/* <FormattedMessage {...messages.homeButtonHeaderMessage} /> */}
               </MenuItem>
 
               <MenuItem
-                // onClick={() => {
-                //   // history.push('/about');
+              // onClick={() => {
+              //   // history.push('/about');
 
-                //   window.open('http://www.zetfly.com');
+              //   window.open('http://www.zetfly.com');
 
-                //   // popupState.close();
-                // }}
+              //   // popupState.close();
+              // }}
               >
                 ABOUT US
                 {/* <FormattedMessage {...messages.aboutusButtonHeaderMessage} /> */}
               </MenuItem>
               <MenuItem
-                // onClick={() => {
-                //   history.push('/how-it-works');
-                  // popupState.close();
-                // }}
+              // onClick={() => {
+              //   history.push('/how-it-works');
+              // popupState.close();
+              // }}
               >
                 HOW IT WORKS
                 {/* <FormattedMessage {...messages.howitworksButtonHeaderMessage} /> */}
               </MenuItem>
 
               <MenuItem
-                // onClick={popupState.close}
-                // onClick={() => {
-                //   window.open('https://managers.aktv.life');
-                //   // popupState.close();
-                // }}
+              // onClick={popupState.close}
+              // onClick={() => {
+              //   window.open('https://managers.aktv.life');
+              //   // popupState.close();
+              // }}
               >
                 CREATE EVENT
                 {/* <FormattedMessage
@@ -224,11 +224,11 @@ const MainHeader = props => {
                 />
               </MenuItem>
               <MenuItem
-                // onClick={popupState.close}
-                // onClick={() => {
-                //   history.push('/events');
-                //   // popupState.close();
-                // }}
+              // onClick={popupState.close}
+              // onClick={() => {
+              //   history.push('/events');
+              //   // popupState.close();
+              // }}
               >
                 BROWSE EVENT
                 {/* <FormattedMessage
@@ -256,7 +256,7 @@ const MainHeader = props => {
                 Dashboard
               </Typography>
             </Link>
-            <Link to="/" style={{ textDecoration: 'none' }}>
+            <Link to="/contact" style={{ textDecoration: 'none' }}>
               <Typography
                 className={`${classes.title} ${classes.eventLink}`}
                 variant="subtitle1"
@@ -266,7 +266,7 @@ const MainHeader = props => {
                 Contact
               </Typography>
             </Link>
-            <Link to="/" style={{ textDecoration: 'none' }}>
+            <Link to="/bill-payments" style={{ textDecoration: 'none' }}>
               <Typography
                 className={`${classes.title} ${classes.eventLink}`}
                 variant="subtitle1"
@@ -287,6 +287,9 @@ const MainHeader = props => {
               </Typography>
             </Link>
           </div>
+          <p className="material-icons fl" style={{ paddingRight: '7px' }}>
+            settings
+          </p>
 
           <Typography
             variant="h6"

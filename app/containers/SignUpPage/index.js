@@ -28,7 +28,7 @@ import history from 'utils/history';
 
 import { Formik, useField, Form } from 'formik';
 
-import * as Yup from 'yup';
+import { object, string, number, email, boolean } from 'yup';
 
 import { API_URL } from '../App/constants';
 
@@ -180,12 +180,12 @@ const SignUpPage = props => (
         history.push('/sign-in');
       } catch (err) {}
     }}
-    validationSchema={Yup.object().shape({
-      email: Yup.string().email(),
-      name: Yup.string()
+    validationSchema={object().shape({
+      email: string().email(),
+      name: string()
         .max(15, 'Must be 15 characters or less')
         .required('Required'),
-      acceptedTerms: Yup.boolean()
+      acceptedTerms: boolean()
         .required('Required')
         .oneOf([true], 'You must accept the terms and conditions.'),
       // address: Yup.string()

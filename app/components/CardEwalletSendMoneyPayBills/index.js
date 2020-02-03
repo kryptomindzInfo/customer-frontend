@@ -18,7 +18,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import history from 'utils/history';
 
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 
@@ -67,8 +69,13 @@ class CardEwalletSendMoneyPayBills extends Component {
     super(props);
     this.state = {
       balance: 0,
+      sendMoneyPopup: false,
     };
   }
+
+  showSendMoneyPopup = () => {
+    this.setState({ sendMoneyPopup: true });
+  };
   render() {
     const { classes } = this.props;
 
@@ -83,9 +90,12 @@ class CardEwalletSendMoneyPayBills extends Component {
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
-            <Grid container  spacing="8" style={{paddingBottom: '6%'}}>
+            <Grid container spacing="8" style={{ paddingBottom: '6%' }}>
               <Grid item>
-                <button className={`${'sendMoneyButton'} ${classes.sendMoney}`}>
+                <button
+                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                  onClick={this.showSendMoneyPopup}
+                >
                   {/* <i
                     className={classes.sendMoneyIcon}
                     className="material-icons"
@@ -111,6 +121,59 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Grid>
           </Grid>
         </Grid>
+
+        {/* {this.state.sendMoneyPopup ? (
+          <Popup close={this.closePopup.bind(this)} accentedH1>
+            <div>
+              Send Money
+            </div>
+            <form
+                action=""
+                method="post"
+                onSubmit={this.saveSendMoneyDetails}
+              >
+                <Container>
+                  <Row>
+                  <Row>
+                    <Col cW="20%" mR="2%">
+                      <FormGroup>
+                        <TextInput
+                          type="text"
+                          name="ccode"
+                          readOnly
+                          value={this.state.ccode}
+                          onChange={this.handleInputChange}
+                          required
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col cW="78%">
+                      <FormGroup>
+                        <label>
+                          
+                        </label>
+                        <TextInput
+                          type="text"
+                          pattern="[0-9]{10}"
+                          title="10 Digit numeric value"
+                          name="mobile"
+                          onFocus={inputFocus}
+                          onBlur={inputBlur}
+                          value={this.state.mobile}
+                          onChange={this.handleInputChange}
+                          required
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+
+                  </Row>
+                  </Container>
+                </form>
+                
+          </Popup>
+        ) : null} */}
         {/* <FormattedMessage {...messages.header} /> */}
       </div>
     );

@@ -25,6 +25,8 @@ import OtpForgotPassword from '../OtpForgotPassword';
 import ChooseYourBankPage from '../ChooseYourBankPage';
 import UploadDocumentsPage from '../UploadDocumentsPage';
 import Dashboard from '../Dashboard';
+import ContactPage from '../ContactPage';
+import BillPaymentsPage from '../BillPaymentsPage';
 
 // const AppWrapper = styled.div`
 //   max-width: calc(768px + 16px * 2);
@@ -52,6 +54,8 @@ export default function App() {
         <Route exact path="/choose-bank" component={ChooseYourBankPage} />
         <Route exact path="/upload-documents" component={UploadDocumentsPage} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/contact" component={ContactPage} />
+        <Route exact path="/bill-payments" component={BillPaymentsPage} />
 
         <Route path="/features" component={FeaturePage} />
         <Route path="" component={NotFoundPage} />

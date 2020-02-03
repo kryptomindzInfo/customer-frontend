@@ -121,7 +121,7 @@ const SignInPage = props => (
       try {
         // const res = await axios('api end point', values);
         // console.log(res);
-        history.push('/');
+        history.push('/dashboard');
       } catch (err) {}
     }}
     validationSchema={Yup.object().shape({

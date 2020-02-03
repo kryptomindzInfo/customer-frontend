@@ -26,16 +26,18 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
       // paddingRight: '4%',
-      textAlign: 'center'
+      margin: '0 auto',
+      maxWidth: '70%',
+      textAlign: 'center',
     },
   },
   cardDownloadOurAppTitle: {
     paddingTop: '4%',
-    paddingBottom: '10%',
+    paddingBottom: '5%',
   },
   appStoreLogo: {
     width: '96px',
-    padding: '15px 0px',
+    padding: '15px 0px 15px 0px',
   },
 });
 
@@ -44,7 +46,7 @@ function CardDownloadOurApp(props) {
   return (
     <div>
       <Grid container className={classes.mainContainer}>
-        <Grid item md={12} xs={12}>
+        <Grid item md={12} sm={12} xs={12}>
           <Typography className={classes.cardDownloadOurAppTitle} variant="h5">
             Download Our App
           </Typography>
@@ -54,7 +56,7 @@ function CardDownloadOurApp(props) {
           >
             Send & receive money through your mobile
           </Typography>
-          <a href="">
+          <a href="https://www.apple.com/in/ios/app-store/">
             <img className={classes.appStoreLogo} src={appStore} />
           </a>
           <br />
