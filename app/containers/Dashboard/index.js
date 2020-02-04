@@ -22,7 +22,6 @@ import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 
-
 import { withStyles, Grid, Typography } from '@material-ui/core';
 
 import axisBankLogo from 'images/axis-bank-logo.jpg';
@@ -38,29 +37,47 @@ const styles = theme => ({
   gridCardEwalletSendMoney: {
     margin: '3% 2% 0% 2%',
     borderRadius: '4px',
-
+    // border: '1px solid #cbd2d6',
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
-      // maxWidth: '62%',
-      // margin: '0 auto'
-      // width: '50%',
     },
     [theme.breakpoints.down('xs')]: {
       margin: '4% 5%',
-      // maxWidth: '100%',
-      // margin: '0 auto'
+    },
+  },
+  gridCongratsMerchantRecentActivities: {
+    margin: '0 auto',
+    borderRadius: '4px',
+    paddingTop: '5%',
+    
+    [theme.breakpoints.down('sm')]: {
+      margin: '3% 3%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '4% 5%',
     },
   },
   recentActivitiesTable: {
-    margin: '3% 2%',
+    margin: '0 auto',
     borderRadius: '4px',
     background: 'white',
     borderRadius: '7px',
+    // border: '1px solid #cbd2d6',
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
-      // width: '50%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '4% 5%',
+    },
+  },
+  gridCardDownloadApp: {
+    margin: '6% 2% 0% 2%',
+    borderRadius: '4px',
+
+    [theme.breakpoints.down('sm')]: {
+      margin: '3% 3%',
     },
     [theme.breakpoints.down('xs')]: {
       margin: '4% 5%',
@@ -71,6 +88,7 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
+    border: '1px solid #cbd2d6',
 
     marginBottom: '1%',
     [theme.breakpoints.down('sm')]: {
@@ -86,6 +104,7 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
+    border: '1px solid #cbd2d6',
 
     marginBottom: '1%',
     textAlign: 'center',
@@ -202,20 +221,32 @@ class Dashboard extends Component {
         </Helmet>
         <MainHeader />
         <Grid container>
-          <Grid container direction="">
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
             <Grid
               className={classes.gridCardEwalletSendMoney}
               item
-              md={3}
+              md={12}
               sm={12}
               xs={12}
             >
               <CardEwalletSendMoneyPayBills />
             </Grid>
             <Grid
-              className={classes.gridCardEwalletSendMoney}
+              className={classes.gridCardDownloadApp}
               item
-              md={8}
+              md={12}
+              sm={12}
+              xs={12}
+            >
+              <CardDownloadOurApp />
+            </Grid>
+          </Grid>
+
+          <Grid item md={8} sm={12} xs={12}>
+            <Grid
+              className={classes.gridCongratsMerchantRecentActivities}
+              item
+              md={11}
               sm={12}
               xs={12}
             >
@@ -249,26 +280,15 @@ class Dashboard extends Component {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
 
-          <Grid container direction="">
-            <Grid
-              className={classes.gridCardEwalletSendMoney}
-              item
-              md={3}
-              sm={12}
-              xs={12}
-            >
-              <CardDownloadOurApp />
-            </Grid>
             <Grid
               className={classes.recentActivitiesTable}
               item
-              md={8}
+              md={11}
               sm={12}
               xs={12}
             >
-              <Typography style={{ margin: '2% 3%' }} variant="h5">
+              <Typography style={{ margin: '2% 3%', paddingTop: '1%' }} variant="h5">
                 Recent Activities
                 <Typography
                   style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
@@ -373,7 +393,6 @@ class Dashboard extends Component {
                   </TableBody>
                 </Table>
               </div>
-
 
               <div
                 style={{

@@ -47,9 +47,9 @@ const styles = theme => ({
       margin: '4% 5%',
     },
   },
-  gridSearchBarContactList:
-  {
+  gridSearchBarContactList: {
     margin: '3% 2% 0% 2%',
+    paddingTop: '3%',
     borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
@@ -85,11 +85,13 @@ const styles = theme => ({
     },
   },
   recentActivitiesTable: {
-    margin: '3% 2%',
+    margin: '0 auto',
     borderRadius: '4px',
     background: 'white',
     borderRadius: '7px',
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
+    // border: '1px solid #cbd2d6',
+
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
       // width: '50%',
@@ -110,8 +112,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Frozen yoghurt', 159, 6.0),
+  createData('Ice cream sandwich', 237, 9.0),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -132,15 +134,14 @@ class ContactPage extends Component {
         <MainHeader />
 
         <Grid container>
-          {/* <Grid item md={1}></Grid> */}
-          <Grid item md={3} sm={12} xs={12}>
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '1% 0 0 4%' }}>                {/*  parent 1  */}
             <Grid
               className={classes.gridCardEwalletSendMoney}
               item
               md={12}
               sm={12}
               xs={12}
-              style={{marginBottom: '2rem'}}
+              style={{ marginBottom: '2rem' }}
             >
               <CardEwalletSendMoneyPayBills />
             </Grid>
@@ -154,7 +155,7 @@ class ContactPage extends Component {
               <CardDownloadOurApp />
             </Grid>
           </Grid>
-          <Grid item md={9} xs={12}>
+          <Grid item md={8} xs={12}>                 {/*  parent 2  */}
             <Grid
               className={classes.gridSearchBarContactList}
               item
@@ -166,7 +167,13 @@ class ContactPage extends Component {
                 marginBottom="33px"
                 inputWidth="calc(100% - 241px)"
                 className="clr"
-                style={{ display: 'flex', justifyContent: 'space-around' }}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  margin: '0 auto',
+                  border: '1px solid #cbd2d6',
+
+                }}
               >
                 <div className="iconedInput fl">
                   <i className="material-icons">search</i>
@@ -179,11 +186,11 @@ class ContactPage extends Component {
               <Grid
                 className={classes.recentActivitiesTable}
                 item
-                md={12}
+                md={10}
                 sm={12}
                 xs={12}
               >
-                <Typography style={{ margin: '3% 3%' }} variant="h5">
+                <Typography style={{ margin: '3% 3%', paddingTop: '2%' }} variant="h5">
                   Contacts List
                   <Typography
                     style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
@@ -198,8 +205,6 @@ class ContactPage extends Component {
                       <TableCell>Date</TableCell>
                       <TableCell align="right">Description</TableCell>
                       <TableCell align="right">Fat (g)</TableCell>
-                      <TableCell align="right">Carbs (g)</TableCell>
-                      <TableCell align="right">Protein (g)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -210,8 +215,6 @@ class ContactPage extends Component {
                         </TableCell>
                         <TableCell align="right">{row.calories}</TableCell>
                         <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -20,10 +20,14 @@ const styles = theme => ({
   mainContainer: {
     // paddingLeft: '11%',
     textAlign: 'center',
+    border: '1px solid #cbd2d6',
+
     borderRadius: '7px',
     paddingRight: '0%',
     background: 'white',
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
+    // marginLeft: '15%',
+
     [theme.breakpoints.down('sm')]: {
       // paddingRight: '4%',
       margin: '0 auto',

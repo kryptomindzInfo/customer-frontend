@@ -36,8 +36,12 @@ const styles = theme => ({
     borderRadius: '7px',
     paddingRight: '0%',
     background: 'white',
+    // marginLeft: '15%',
+    border: '1px solid #cbd2d6',
+
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
+      margin: '0 auto',
       // paddingRight: '4%',
       // textAlign: 'center'
     },
@@ -100,6 +104,10 @@ class CardEwalletSendMoneyPayBills extends Component {
   closeSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: false });
   };
+
+  goToBillsPaymentPage = () => {
+    history.push('/bill-payments');
+  };
   render() {
     const { classes } = this.props;
 
@@ -124,7 +132,10 @@ class CardEwalletSendMoneyPayBills extends Component {
                 </button>
               </Grid>
               <Grid item>
-                <button className={`${'sendMoneyButton'} ${classes.sendMoney}`}>
+                <button
+                  onClick={this.goToBillsPaymentPage}
+                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                >
                   Pay Bills
                 </button>
               </Grid>
@@ -156,7 +167,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                 try {
                   // const res = await axios('api end point', values);
                   // console.log(res);
-                  history.push('/sign-in');
+                  history.push('/dashboard');
                 } catch (err) {}
               }}
             >

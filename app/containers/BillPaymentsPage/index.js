@@ -38,7 +38,7 @@ const styles = theme => ({
     borderRadius: '4px',
     // border: '1px solid grey',
     [theme.breakpoints.down('sm')]: {
-      margin: '3% 3%',
+      margin: '0 auto',
       // maxWidth: '62%',
       // margin: '0 auto'
       // width: '50%',
@@ -49,13 +49,26 @@ const styles = theme => ({
       // margin: '0 auto'
     },
   },
+  gridMerchantDetailsBillsList: {
+    margin: '0 auto',
+    borderRadius: '4px',
+    paddingTop: '5%',
+    // border: '1px solid grey',
+    [theme.breakpoints.down('sm')]: {
+      margin: '3% 3%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '4% 5%',
+    },
+  },
   amountReceivedMessage: {
     background: 'white',
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
-    border: '1px solid grey',
+    border: '1px solid #cbd2d6',
 
+    // border: '1px solid grey',
     marginBottom: '1%',
     [theme.breakpoints.down('sm')]: {
       marginBottom: '3%',
@@ -67,23 +80,23 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700,
+    background: 'white',
   },
   recentActivitiesTable: {
-    margin: '3% 2%',
+    margin: '0 auto',
     borderRadius: '4px',
     background: 'white',
     borderRadius: '7px',
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
-      // width: '50%',
     },
     [theme.breakpoints.down('xs')]: {
       margin: '4% 5%',
     },
   },
   gridCardDownloadOurApp: {
-    margin: '0% 2% 0% 2%',
+    margin: '8% 2% 0% 2%',
     borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
@@ -101,8 +114,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Frozen yoghurt', 159, 6.0, 24),
+  createData('Ice cream sandwich', 237, 9.0, 37),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -121,98 +134,111 @@ class BillPaymentsPage extends Component {
         </Helmet>
         <MainHeader />
         <Grid container>
-          <Grid
-            item
-            className={classes.gridCardEwalletSendMoney}
-            md={3}
-            sm={12}
-            xs={12}
-          >
-            <CardEwalletSendMoneyPayBills />
-          </Grid>
-          <Grid
-            className={classes.gridCardEwalletSendMoney}
-            item
-            md={8}
-            sm={12}
-            xs={11}
-          >
-            {/* <CardEwalletSendMoneyPayBills /> */}
-            <Typography className={classes.amountReceivedMessage} variant="h5">
-              Merchant 1
-              <Typography variant="subtitle2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
-              </Typography>
-            </Typography>
-            <ActionBar
-              marginBottom="33px"
-              inputWidth="calc(100% - 241px)"
-              className="clr"
-              // style={{ display: 'flex', justifyContent: 'space-around', border: '1px solid grey' }}
-            >
-              <div className="iconedInput fl">
-                <i className="material-icons">search</i>
-                <input type="text" placeholder="Search" />
-              </div>
-            </ActionBar>
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
             <Grid
               item
               className={classes.gridCardEwalletSendMoney}
               md={12}
               sm={12}
-              xs={6}
+              xs={12}
             >
-              <div className={classes.recentActivitiesTable}>
-                <Typography style={{ margin: '3% 3%' }} variant="h5">
-                  Bills List
-                  <Typography
-                    style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
-                    variant="body1"
-                  >
-                    Pay bills safely
-                  </Typography>
+              <CardEwalletSendMoneyPayBills />
+            </Grid>
+            <Grid
+              className={classes.gridCardDownloadOurApp}
+              item
+              md={12}
+              sm={12}
+              xs={12}
+            >
+              <CardDownloadOurApp />
+            </Grid>
+          </Grid>
+
+          <Grid item md={8} sm={12} xs={12}>
+            <Grid
+              className={classes.gridMerchantDetailsBillsList}
+              item
+              md={11}
+              sm={12}
+              xs={11}
+            >
+              {/* <CardEwalletSendMoneyPayBills /> */}
+              <Typography
+                className={classes.amountReceivedMessage}
+                variant="h5"
+              >
+                Merchant 1
+                <Typography variant="subtitle2">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it to make a type
+                  specimen book.
                 </Typography>
-                <Table className={classes.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Description</TableCell>
-                      <TableCell align="right">Fat (g)</TableCell>
-                      <TableCell align="right">Carbs (g)</TableCell>
-                      <TableCell align="right">Protein (g)</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
+              </Typography>
+              <ActionBar
+                marginBottom="33px"
+                inputWidth="calc(100% - 241px)"
+                className="clr"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  margin: '0 auto',
+                  border: '1px solid #cbd2d6',
+
+                }}
+              >
+                <div className="iconedInput fl">
+                  <i className="material-icons">search</i>
+                  <input type="text" placeholder="Search" />
+                </div>
+              </ActionBar>
+              <Grid
+                item
+                className={classes.gridCardEwalletSendMoney}
+                md={12}
+                sm={12}
+                xs={6}
+              >
+                <div className={classes.recentActivitiesTable}>
+                  <Typography style={{ margin: '3% 3%', paddingTop: '2%' }} variant="h5">
+                    Bills List
+                    <Typography
+                      style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
+                      variant="body1"
+                    >
+                      Pay bills safely
+                    </Typography>
+                  </Typography>
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Date</TableCell>
+                        <TableCell align="right">Description</TableCell>
+                        <TableCell align="right">Fat (g)</TableCell>
+                        <TableCell align="right">Carbs (g)</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map(row => (
+                        <TableRow key={row.id}>
+                          <TableCell component="th" scope="row">
+                            {row.name}
+                          </TableCell>
+                          <TableCell align="right">{row.calories}</TableCell>
+                          <TableCell align="right">{row.fat}</TableCell>
+                          <TableCell align="right">{row.carbs}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
         {/* </Grid> */}
-        <Grid
-          className={classes.gridCardDownloadOurApp}
-          item
-          md={3}
-          sm={12}
-          xs={12}
-        >
-          <CardDownloadOurApp />
-        </Grid>
       </div>
     );
   }
