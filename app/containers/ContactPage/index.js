@@ -44,7 +44,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -131,7 +130,16 @@ const styles = theme => ({
     '&:hover': {
       background: theme.palette.primary.hover,
     },
-    // paddingBottom: 0
+  },
+  addMyFriendButton: {
+    background: theme.palette.primary.main,
+    marginBottom: '8%',
+    marginTop: '15%',
+    color: theme.palette.white,
+    width: '100%',
+    '&:hover': {
+      background: theme.palette.primary.hover,
+    },
   },
 });
 
@@ -142,8 +150,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData(7896543290,'Hatim','Pay Now'),
-  createData(7896543290,'Hatim','Pay Now'),
+  createData(7896543290, 'Hatim', 'Pay Now'),
+  createData(7896543290, 'Hatim', 'Pay Now'),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -157,6 +165,7 @@ class ContactPage extends Component {
     this.state = {
       // balance: 0,
       sendMoneyPopup: false,
+      addContactPopup: false,
     };
   }
 
@@ -165,6 +174,13 @@ class ContactPage extends Component {
   };
   closeSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: false });
+  };
+
+  showAddContactPopup = () => {
+    this.setState({ addContactPopup: true });
+  };
+  closeAddContactPopup = () => {
+    this.setState({ addContactPopup: false });
   };
   render() {
     const { classes } = this.props;
@@ -227,7 +243,12 @@ class ContactPage extends Component {
                   <input type="text" placeholder="Search" />
                 </div>
 
-                <button className={`${'addBankButton'} `}>Add Contact</button>
+                <button
+                  onClick={this.showAddContactPopup}
+                  className={`${'addBankButton'} `}
+                >
+                  Add Contact
+                </button>
               </ActionBar>
 
               <Grid
@@ -254,7 +275,7 @@ class ContactPage extends Component {
                     <TableRow>
                       <TableCell>Number</TableCell>
                       <TableCell align="right">Name</TableCell>
-                      <TableCell align="right"></TableCell>
+                      <TableCell align="right" />
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -267,7 +288,7 @@ class ContactPage extends Component {
                         <TableCell
                           onClick={this.showSendMoneyPopup}
                           align="right"
-                        style={{color: '#417505', fontWeight: 600 }}
+                          style={{ color: '#417505', fontWeight: 600 }}
                         >
                           {row.fat}
                         </TableCell>
@@ -386,7 +407,13 @@ class ContactPage extends Component {
                               }}
                             >
                               <span style={{ color: 'red' }}>* </span>I have
-                              read the <a onClick={() => window.open('/termsConditions')}> Term & Conditions</a>
+                              read the{' '}
+                              <a
+                                onClick={() => window.open('/termsConditions')}
+                              >
+                                {' '}
+                                Term & Conditions
+                              </a>
                             </Typography>
                             <Button
                               variant="contained"
@@ -408,6 +435,95 @@ class ContactPage extends Component {
                               {CURRENCY}
                               {props.values.balance} will be charged
                             </Typography>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Form>
+                  </>
+                );
+              }}
+            </Formik>
+          </Popup>
+        ) : null}
+
+        {this.state.addContactPopup ? (
+          <Popup close={this.closeAddContactPopup.bind(this)}>
+            <div
+              style={{
+                color: 'black',
+                textAlign: 'center',
+                fontSize: '1.5rem',
+                paddingBottom: '1rem',
+              }}
+            >
+              Add a contact
+            </div>
+
+            <Formik
+              initialValues={{
+                name: '',
+                mobileNumber: 77777777777,
+                amount: '',
+                note: '',
+                balance: 0,
+              }}
+              onSubmit={async values => {
+                try {
+                  // const res = await axios('api end point', values);
+                  // console.log(res);
+                  history.push('/dashboard');
+                } catch (err) {}
+              }}
+            >
+              {props => {
+                const {
+                  values,
+                  touched,
+                  errors,
+                  isSubmitting,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                } = this.props;
+                return (
+                  <>
+                    <Form>
+                      <Container>
+                        <Row>
+                          <Col md={12} sm={12} xs={12}>
+                            <label />
+                            <TextField
+                              label="Name"
+                              placeholder="Name"
+                              className={classes.textField}
+                              margin="normal"
+                              variant="outlined"
+                              name="name"
+                              values={props.values.name}
+                            />
+                          </Col>
+                          <Col md={12} sm={12} xs={12}>
+                            <label />
+                            <TextField
+                              label="Mobile Number"
+                              placeholder="Mobile Number"
+                              className={classes.textField}
+                              margin="normal"
+                              variant="outlined"
+                              name="mobileNumber"
+                              values={props.values.mobileNumber}
+                            />
+                          </Col>
+
+                          <Col md={12} sm={12} xs={12}>
+                            <Button
+                              variant="contained"
+                              type="submit"
+                              disabled={isSubmitting}
+                              className={classes.addMyFriendButton}
+                            >
+                              Add my friend
+                            </Button>
                           </Col>
                         </Row>
                       </Container>

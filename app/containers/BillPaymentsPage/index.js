@@ -20,6 +20,8 @@ import saga from './saga';
 import messages from './messages';
 import { withStyles, Grid, Typography } from '@material-ui/core';
 
+import history from 'utils/history';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -231,7 +233,13 @@ class BillPaymentsPage extends Component {
                           <TableCell component="th" scope="row">
                             {row.name}
                           </TableCell>
-                          <TableCell align="left">{row.calories}</TableCell>
+                          <TableCell
+                            style={{ color: '#417505', fontWeight: 600 }}
+                            onClick={() => history.push('/bill-list')}
+                            align="left"
+                          >
+                            {row.calories}
+                          </TableCell>
                           {/* <TableCell align="right">{row.fat}</TableCell>
                           <TableCell align="right">{row.carbs}</TableCell> */}
                         </TableRow>

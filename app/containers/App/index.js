@@ -27,6 +27,7 @@ import UploadDocumentsPage from '../UploadDocumentsPage';
 import Dashboard from '../Dashboard';
 import ContactPage from '../ContactPage';
 import BillPaymentsPage from '../BillPaymentsPage';
+import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
 
 // const AppWrapper = styled.div`
@@ -57,6 +58,7 @@ export default function App() {
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/contact" component={ContactPage} />
         <Route exact path="/bill-payments-merchants" component={BillPaymentsPage} />
+        <Route exact path="/bill-list" component={BillPaymentsBillList} />
 
         <Route path="/features" component={FeaturePage} />
         <Route path="/termsConditions" component={TermsConditions} />
