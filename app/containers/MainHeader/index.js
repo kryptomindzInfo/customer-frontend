@@ -263,10 +263,10 @@ const MainHeader = props => {
                 // color="inherit"
                 noWrap
               >
-                Contact
+                Contacts
               </Typography>
             </Link>
-            <Link to="/bill-payments" style={{ textDecoration: 'none' }}>
+            <Link to="/bill-payments-merchants" style={{ textDecoration: 'none' }}>
               <Typography
                 className={`${classes.title} ${classes.eventLink}`}
                 variant="subtitle1"

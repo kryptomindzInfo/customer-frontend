@@ -19,22 +19,36 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-import Button from 'components/Button';
+// import Button from 'components/Button';
 import ActionBar from 'components/ActionBar';
 
 import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import { withStyles, Grid, Typography } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 import axisBankLogo from 'images/axis-bank-logo.jpg';
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
+
+import { Formik, useField, Form } from 'formik';
+
+import { object, string, number, email, boolean } from 'yup';
+
+import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Popup from 'components/Popup';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -103,6 +117,22 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  textField: {
+    marginBottom: '0.03375rem',
+    width: '100%',
+    // height: '45px'
+  },
+  signUpButton: {
+    background: theme.palette.primary.main,
+    marginBottom: '3%',
+    marginTop: '3%',
+    color: theme.palette.white,
+    width: '100%',
+    '&:hover': {
+      background: theme.palette.primary.hover,
+    },
+    // paddingBottom: 0
+  },
 });
 
 let id = 0;
@@ -112,8 +142,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Ice cream sandwich', 237, 9.0),
+  createData(7896543290,'Hatim','Pay Now'),
+  createData(7896543290,'Hatim','Pay Now'),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -122,19 +152,35 @@ const rows = [
 class ContactPage extends Component {
   // useInjectReducer({ key: 'contactPage', reducer });
   // useInjectSaga({ key: 'contactPage', saga });
+  constructor(props) {
+    super(props);
+    this.state = {
+      // balance: 0,
+      sendMoneyPopup: false,
+    };
+  }
+
+  showSendMoneyPopup = () => {
+    this.setState({ sendMoneyPopup: true });
+  };
+  closeSendMoneyPopup = () => {
+    this.setState({ sendMoneyPopup: false });
+  };
   render() {
     const { classes } = this.props;
 
     return (
       <div>
         <Helmet>
-          <title>ContactPage</title>
+          <title>Contacts</title>
           <meta name="description" content="Description of ContactPage" />
         </Helmet>
         <MainHeader />
 
         <Grid container>
-          <Grid item md={3} sm={12} xs={12} style={{ margin: '1% 0 0 4%' }}>                {/*  parent 1  */}
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '1% 0 0 4%' }}>
+            {' '}
+            {/*  parent 1  */}
             <Grid
               className={classes.gridCardEwalletSendMoney}
               item
@@ -155,7 +201,9 @@ class ContactPage extends Component {
               <CardDownloadOurApp />
             </Grid>
           </Grid>
-          <Grid item md={8} xs={12}>                 {/*  parent 2  */}
+          <Grid item md={8} xs={12}>
+            {' '}
+            {/*  parent 2  */}
             <Grid
               className={classes.gridSearchBarContactList}
               item
@@ -172,7 +220,6 @@ class ContactPage extends Component {
                   justifyContent: 'space-around',
                   margin: '0 auto',
                   border: '1px solid #cbd2d6',
-
                 }}
               >
                 <div className="iconedInput fl">
@@ -190,7 +237,10 @@ class ContactPage extends Component {
                 sm={12}
                 xs={12}
               >
-                <Typography style={{ margin: '3% 3%', paddingTop: '2%' }} variant="h5">
+                <Typography
+                  style={{ margin: '3% 3%', paddingTop: '2%' }}
+                  variant="h5"
+                >
                   Contacts List
                   <Typography
                     style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
@@ -202,9 +252,9 @@ class ContactPage extends Component {
                 <Table className={classes.table}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Description</TableCell>
-                      <TableCell align="right">Fat (g)</TableCell>
+                      <TableCell>Number</TableCell>
+                      <TableCell align="right">Name</TableCell>
+                      <TableCell align="right"></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -214,7 +264,13 @@ class ContactPage extends Component {
                           {row.name}
                         </TableCell>
                         <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
+                        <TableCell
+                          onClick={this.showSendMoneyPopup}
+                          align="right"
+                        style={{color: '#417505', fontWeight: 600 }}
+                        >
+                          {row.fat}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -225,17 +281,143 @@ class ContactPage extends Component {
                 >
                   View All
                 </button>
-
-                {/* <span style={{textAlign: 'right', paddingTop: '4px'}}>View All</span> */}
               </Grid>
             </Grid>
           </Grid>
-
-          {/* </Grid> */}
-
-          {/* <Grid container> */}
         </Grid>
-        {/* </Grid> */}
+        {this.state.sendMoneyPopup ? (
+          <Popup close={this.closeSendMoneyPopup.bind(this)}>
+            <div
+              style={{
+                color: 'black',
+                textAlign: 'center',
+                fontSize: '1.5rem',
+                paddingBottom: '1rem',
+              }}
+            >
+              Transfer the Amount
+            </div>
+
+            <Formik
+              initialValues={{
+                mobileNumber: 77777777777,
+                amount: '',
+                note: '',
+                balance: 0,
+              }}
+              onSubmit={async values => {
+                try {
+                  // const res = await axios('api end point', values);
+                  // console.log(res);
+                  history.push('/dashboard');
+                } catch (err) {}
+              }}
+            >
+              {props => {
+                const {
+                  values,
+                  touched,
+                  errors,
+                  isSubmitting,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                } = this.props;
+                return (
+                  <>
+                    <Form>
+                      <Container>
+                        <Row>
+                          <Col md={12} sm={12} xs={12}>
+                            <label />
+                            <TextField
+                              label="Mobile Number"
+                              placeholder="Mobile Number"
+                              className={classes.textField}
+                              margin="normal"
+                              variant="outlined"
+                              name="mobileNumber"
+                              values={props.values.mobileNumber}
+                            />
+                          </Col>
+                          <Col md={12} sm={12} xs={12}>
+                            <label />
+                            <TextField
+                              label="Amount"
+                              placeholder="Amount"
+                              className={classes.textField}
+                              margin="normal"
+                              variant="outlined"
+                              name="amount"
+                              values={props.values.amount}
+                            />
+                            <Typography
+                              variant="body1"
+                              style={{
+                                color: 'grey',
+                                textAlign: 'left',
+                                paddingBottom: '0.8rem',
+                                paddingTop: '0.5rem',
+                              }}
+                            >
+                              <span style={{ color: 'red' }}>* </span>
+                              Total Available {CURRENCY}
+                              {props.values.balance}
+                            </Typography>
+                          </Col>
+                          <Col md={12} sm={12} xs={12}>
+                            <TextField
+                              name="Note"
+                              label="Note"
+                              placeholder="Note"
+                              multiline
+                              className={classes.textField}
+                              margin="normal"
+                              variant="outlined"
+                              values={props.values.note}
+                            />
+                            <Typography
+                              variant="body1"
+                              style={{
+                                color: 'grey',
+                                textAlign: 'left',
+                                paddingBottom: '0.8rem',
+                                paddingTop: '0.5rem',
+                              }}
+                            >
+                              <span style={{ color: 'red' }}>* </span>I have
+                              read the <a onClick={() => window.open('/termsConditions')}> Term & Conditions</a>
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              type="submit"
+                              disabled={isSubmitting}
+                              className={classes.signUpButton}
+                            >
+                              Proceed
+                            </Button>
+                            <Typography
+                              variant="body1"
+                              style={{
+                                color: 'grey',
+                                textAlign: 'left',
+                                paddingBottom: '2.5rem',
+                              }}
+                            >
+                              <span style={{ color: 'red' }}>* </span>Total fee{' '}
+                              {CURRENCY}
+                              {props.values.balance} will be charged
+                            </Typography>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Form>
+                  </>
+                );
+              }}
+            </Formik>
+          </Popup>
+        ) : null}
       </div>
     );
   }

@@ -106,7 +106,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   };
 
   goToBillsPaymentPage = () => {
-    history.push('/bill-payments');
+    history.push('/bill-payments-merchants');
   };
   render() {
     const { classes } = this.props;
@@ -244,7 +244,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                               }}
                             >
                               <span style={{ color: 'red' }}>* </span>I have
-                              read the <a> Term & Conditions</a>
+                              read the <a onClick={() => window.open('/termsConditions')}> Term & Conditions</a>
                             </Typography>
                             <Button
                               variant="contained"

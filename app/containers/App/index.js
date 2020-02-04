@@ -27,6 +27,7 @@ import UploadDocumentsPage from '../UploadDocumentsPage';
 import Dashboard from '../Dashboard';
 import ContactPage from '../ContactPage';
 import BillPaymentsPage from '../BillPaymentsPage';
+import TermsConditions from '../../components/TermsConditions';
 
 // const AppWrapper = styled.div`
 //   max-width: calc(768px + 16px * 2);
@@ -55,9 +56,10 @@ export default function App() {
         <Route exact path="/upload-documents" component={UploadDocumentsPage} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/contact" component={ContactPage} />
-        <Route exact path="/bill-payments" component={BillPaymentsPage} />
+        <Route exact path="/bill-payments-merchants" component={BillPaymentsPage} />
 
         <Route path="/features" component={FeaturePage} />
+        <Route path="/termsConditions" component={TermsConditions} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

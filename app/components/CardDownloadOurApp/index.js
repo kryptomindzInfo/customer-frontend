@@ -66,11 +66,11 @@ function CardDownloadOurApp(props) {
           >
             Send & receive money through your mobile
           </Typography>
-          <a href="https://www.apple.com/in/ios/app-store/">
+          <a onClick={() => window.open('https://www.apple.com/in/ios/app-store/')} >
             <img className={classes.appStoreLogo} src={appStore} />
           </a>
           <br />
-          <a>
+          <a onClick={() => window.open('https://play.google.com/store?hl=en')}>
             <img className={classes.appStoreLogo} src={GooglePlayLogo} />
           </a>
         </Grid>

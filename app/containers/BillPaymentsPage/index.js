@@ -114,8 +114,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24),
-  createData('Ice cream sandwich', 237, 9.0, 37),
+  createData('Merchant 1', 'View Bills'),
+  createData('Merchant 2', 'View Bills'),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -129,7 +129,7 @@ class BillPaymentsPage extends Component {
     return (
       <div>
         <Helmet>
-          <title>BillPaymentsPage</title>
+          <title>Bill Payments</title>
           <meta name="description" content="Description of BillPaymentsPage" />
         </Helmet>
         <MainHeader />
@@ -164,7 +164,7 @@ class BillPaymentsPage extends Component {
               xs={11}
             >
               {/* <CardEwalletSendMoneyPayBills /> */}
-              <Typography
+              {/* <Typography
                 className={classes.amountReceivedMessage}
                 variant="h5"
               >
@@ -176,7 +176,7 @@ class BillPaymentsPage extends Component {
                   printer took a galley of type and scrambled it to make a type
                   specimen book.
                 </Typography>
-              </Typography>
+              </Typography> */}
               <ActionBar
                 marginBottom="33px"
                 inputWidth="calc(100% - 241px)"
@@ -186,7 +186,6 @@ class BillPaymentsPage extends Component {
                   justifyContent: 'space-around',
                   margin: '0 auto',
                   border: '1px solid #cbd2d6',
-
                 }}
               >
                 <div className="iconedInput fl">
@@ -202,8 +201,14 @@ class BillPaymentsPage extends Component {
                 xs={6}
               >
                 <div className={classes.recentActivitiesTable}>
-                  <Typography style={{ margin: '3% 3%', paddingTop: '2%' }} variant="h5">
-                    Bills List
+                  {/* <a  href="/contact">
+                    <i className="material-icons">arrow_back</i>
+                  </a> */}
+                  <Typography
+                    style={{ margin: '0% 3% 0 3%', paddingTop: '2%' }}
+                    variant="h5"
+                  >
+                    Merchant List
                     <Typography
                       style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
                       variant="body1"
@@ -214,10 +219,10 @@ class BillPaymentsPage extends Component {
                   <Table className={classes.table}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell align="right">Description</TableCell>
-                        <TableCell align="right">Fat (g)</TableCell>
-                        <TableCell align="right">Carbs (g)</TableCell>
+                        <TableCell>Merchants</TableCell>
+                        <TableCell align="left" />
+                        {/* <TableCell align="right">Fat (g)</TableCell>
+                        <TableCell align="right">Carbs (g)</TableCell> */}
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -226,9 +231,9 @@ class BillPaymentsPage extends Component {
                           <TableCell component="th" scope="row">
                             {row.name}
                           </TableCell>
-                          <TableCell align="right">{row.calories}</TableCell>
-                          <TableCell align="right">{row.fat}</TableCell>
-                          <TableCell align="right">{row.carbs}</TableCell>
+                          <TableCell align="left">{row.calories}</TableCell>
+                          {/* <TableCell align="right">{row.fat}</TableCell>
+                          <TableCell align="right">{row.carbs}</TableCell> */}
                         </TableRow>
                       ))}
                     </TableBody>

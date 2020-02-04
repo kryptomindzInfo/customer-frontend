@@ -86,7 +86,7 @@ function HeaderChooseYourBank(props) {
             <Grid item item md={4} sm={1} />
             <Grid className={classes.headerWelcome} item md={4} sm={6}>
               <Typography
-                variant="h6"
+                // variant="h6"
                 color="inherit"
                 className={classes.welcomeUsername}
               >
