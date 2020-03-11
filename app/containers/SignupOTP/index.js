@@ -1,6 +1,6 @@
 /**
  *
- * SignInPage
+ * SignupOTP
  *
  */
 
@@ -14,7 +14,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectSignInPage from './selectors';
+import makeSelectSignupOTP from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -28,13 +28,13 @@ import axios from 'axios';
 import history from 'utils/history';
 import A from 'components/A';
 
-// import A from 'components/A';
-
 import { Formik, useField, Form } from 'formik';
 
 import * as Yup from 'yup';
 
 import { API_URL } from '../App/constants';
+// import H1 from '../../components/H1';
+// import H2 from '../../components/H2';
 
 const styles = theme => ({
   root: {
@@ -90,18 +90,23 @@ const styles = theme => ({
       paddingLeft: '20%',
     },
     [theme.breakpoints.down('sm')]: {
-      paddingLeft: '14%',
+      paddingLeft: '21%',
     },
   },
   textField: {
     // marginLeft: theme.spacing.unit,
+    // marginRight: theme.spacing.unit,
     marginBottom: '0.03375rem',
     width: '70%',
+    // height: '45px'
   },
   signInButton: {
+    // margin: theme.spacing.unit,
     background: theme.palette.primary.main,
+    // marginLeft: theme.spacing.unit,
     marginTop: '10%',
     color: theme.palette.white,
+    fontSize: '16px',
     width: '70%',
     '&:hover': {
       background: theme.palette.primary.hover,
@@ -109,40 +114,33 @@ const styles = theme => ({
   },
 });
 
-const SignInPage = props => (
-
-  // useInjectReducer({ key: 'signInPage', reducer });
-  // useInjectSaga({ key: 'signInPage', saga });
-
+const SignupOTP = props => (
+  // useInjectReducer({ key: 'SignupOTP', reducer });
+  // useInjectSaga({ key: 'SignupOTP', saga });
   <Formik
     initialValues={{
-      mobileNumber: '',
+      mobileNumber: localStorage.getItem("customerMobile"),
       password: '',
     }}
     onSubmit={async values => {
       try {
-        const res = await axios.post(`${API_URL}/userLogin`, values);
+        const res = await axios.post(`${API_URL}/userVerify`, values);
         console.log(res);
         if (res.status == 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            localStorage.setItem("customerLogged", res.data.token);
-            history.push('/dashboard');  
+            props.notify('Account verified', 'success');
+            history.push('/');  
           }
         } else {
           throw res.data.error;
         }
       } catch (err) {
-        //notify(err, 'error');
         props.notify(err, 'error');
       }
     }}
     validationSchema={Yup.object().shape({
-      mobileNumber: Yup.number(),
-      // .max(15, 'Must be 15 characters or less')
-      // .required('Required'),
-
       password: Yup.string().required('Required'),
     })}
   >
@@ -158,14 +156,15 @@ const SignInPage = props => (
       } = formikProps;
 
       const { classes } = props;
-      
       return (
         <div>
           <Helmet>
-            <title>SignInPage</title>
-            <meta name="description" content="Description of SignInPage" />
+            <title>SignupOTP</title>
+            <meta
+              name="description"
+              content="Description of SignupOTP"
+            />
           </Helmet>
-
           <div className={classes.root}>
             <Grid container justify="center">
               <Grid item md={6} className={classes.setupPageLeftSide}>
@@ -187,37 +186,25 @@ const SignInPage = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
-                <Typography variant="h5">Login to your account</Typography>
                 <Typography
-                  variant="subtitle2"
                   style={{
-                    fontSize: '12px',
-                    paddingTop: '1%',
-                    paddingBottom: '7%',
+                    paddingTop: '10%',
+                    paddingBottom: '3%',
                   }}
+                  variant="h5"
                 >
-                  Use your Mobile number to Login
+                  Enter OTP for { values.mobileNumber}
                 </Typography>
+
                 <Form>
                   <TextField
-                    label="Mobile Number"
-                    placeholder="Mobile Number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    name="mobileNumber"
-                    value={values.mobileNumber}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <TextField
-                    name="password"
-                    label="Password"
-                    className={classes.textField}
+                    label="OTP"
+                    placeholder="OTP"
                     type="password"
-                    autoComplete="current-password"
+                    className={classes.textField}
                     margin="normal"
                     variant="outlined"
+                    name="password"
                     value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -233,63 +220,26 @@ const SignInPage = props => (
                     disabled={isSubmitting}
                     className={classes.signInButton}
                   >
-                    SIGN IN
+                    SUBMIT
                   </Button>
-                  <Grid container>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          fontSize: '12px',
-                          paddingTop: '5%',
-                          width: '85%',
-                        }}
-                      >
-                        Don't have an account? 
-                        <A
-                          style={{
-                            color: 'black',
-                            textDecoration: 'none',
-                            paddingLeft: '4px',
-                          }}
-                          href="/sign-up"
-                        >
-                          Sign Up
-                        </A>
-                      </Typography>
-                    </Grid>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          fontSize: '12px',
-                          paddingTop: '5%',
-                          // paddingLeft: '5%',
-                        }}
-                      >
-                        <A
-                          style={{ color: 'black', textDecoration: 'none' }}
-                          href="/forgot-password"
-                        >
-                          Forgot password?
-                        </A>
-                      </Typography>
-                    </Grid>
-                  </Grid>
                 </Form>
               </Grid>
             </Grid>
           </div>
+
+          {/* <FormattedMessage {...messages.header} /> */}
         </div>
       );
     }}
   </Formik>
 );
 
-// SignInPage.propTypes = {
+// SignupOTP.propTypes = {
 //   dispatch: PropTypes.func.isRequired,
 // };
 
 // const mapStateToProps = createStructuredSelector({
-//   signInPage: makeSelectSignInPage(),
+//   SignupOTP: makeSelectSignupOTP(),
 // });
 
 // function mapDispatchToProps(dispatch) {
@@ -303,4 +253,4 @@ const SignInPage = props => (
 //   mapDispatchToProps,
 // );
 
-export default withStyles(styles)(SignInPage);
+export default withStyles(styles)(SignupOTP);

@@ -25,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import history from 'utils/history';
+import A from 'components/A';
 
 import { Formik, useField, Form } from 'formik';
 
@@ -174,11 +175,24 @@ const SignUpPage = props => (
       acceptedTerms: false,
     }}
     onSubmit={async values => {
+      console.log(values);
       try {
-        // const res = await axios('api end point', values);
-        // console.log(res);
-        history.push('/sign-in');
-      } catch (err) {}
+        const res = await axios.post(`${API_URL}/userSignup`, values);
+        console.log(res);
+        if (res.status == 200) {
+          if (res.data.error) {
+            throw res.data.error;
+          } else {
+            localStorage.setItem("customerMobile", values.mobileNumber);
+            history.push('/sign-up-verify');  
+          }
+        } else {
+          throw res.data.error;
+        }
+        
+      } catch (err) {
+        props.notify(err, 'error');
+      }
     }}
     validationSchema={object().shape({
       email: string().email(),
@@ -277,6 +291,9 @@ const SignUpPage = props => (
                     margin="normal"
                     variant="outlined"
                     name="mobileNumber"
+                    value={values.mobileNumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                   <TextField
                     // error
@@ -303,6 +320,9 @@ const SignUpPage = props => (
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
+                    value={values.address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                   <TextField
                     name="password"
@@ -347,7 +367,7 @@ const SignUpPage = props => (
                         }}
                       >
                         Have an account?
-                        <a
+                        <A
                           style={{
                             color: 'black',
                             textDecoration: 'none',
@@ -356,7 +376,7 @@ const SignUpPage = props => (
                           href="/sign-in"
                         >
                           Sign In
-                        </a>
+                        </A>
                       </Typography>
                     </Grid>
                     <Grid item md={6} sm={12} xs={12}>
@@ -368,12 +388,12 @@ const SignUpPage = props => (
                           // paddingLeft: '5%',
                         }}
                       >
-                        <a
+                        <A
                           style={{ color: 'black', textDecoration: 'none' }}
                           href="/forgot-password"
                         >
                           Forgot password?
-                        </a>
+                        </A>
                       </Typography>
                     </Grid>
                   </Grid>

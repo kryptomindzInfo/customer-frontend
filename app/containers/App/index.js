@@ -29,7 +29,20 @@ import ContactPage from '../ContactPage';
 import BillPaymentsPage from '../BillPaymentsPage';
 import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
+import SignupOTP from '../SignupOTP';
 
+
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure({
+  position: 'bottom-right',
+  autoClose: 4000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+});
 // const AppWrapper = styled.div`
 //   max-width: calc(768px + 16px * 2);
 //   margin: 0 auto;
@@ -40,12 +53,26 @@ import TermsConditions from '../../components/TermsConditions';
 // `;
 
 export default function App() {
+  const notify = (txt, type) => {
+    if(txt && type){
+      if(type == 'success'){
+        toast.success(txt);  
+      }else if(type == 'warn'){
+        toast.warn(txt);
+      }else if(type == 'error'){
+        toast.error(txt);
+      }else{
+        toast(txt);
+      }
+    }
+  };
   return (
     // <AppWrapper>
     <div>
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/sign-up" component={SignUpPage} />
+        <Route exact path="/" render={(props) => <SignInPage {...props} notify={notify} />} />
+        <Route exact path="/sign-up"render={(props) => <SignUpPage {...props} notify={notify} />}  />
+         <Route exact path="/sign-up-verify" render={(props) => <SignupOTP {...props} notify={notify} />}  />
         <Route exact path="/sign-in" component={SignInPage} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route
