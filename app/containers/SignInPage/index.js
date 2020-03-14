@@ -128,7 +128,20 @@ const SignInPage = props => (
             throw res.data.error;
           } else {
             localStorage.setItem("customerLogged", res.data.token);
-            history.push('/dashboard');  
+            localStorage.setItem("customerMobile", res.data.mobile);
+            localStorage.setItem("customerName", res.data.name);
+            if(res.data.status == 0){
+              history.push('/sign-up-verify');  
+            }
+            else if(res.data.status == 1){
+              history.push('/choose-bank');  
+            }
+            else if(res.data.status == 2){
+              history.push('/pending-approval');  
+            }
+            else if(res.data.status == 3){
+              history.push('/dashboard');  
+            }
           }
         } else {
           throw res.data.error;

@@ -21,7 +21,7 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 //for server
 export const API_URL = 'http://localhost:3001/api';
 export const STATIC_URL = 'http://localhost:3001/uploads/';
-export const CONTRACT_URL = 'http://localhost:3001/uploads/';
+export const CONTRACT_URL = 'http://34.68.116.5:8080/ipfs/';
 
 
 export const CURRENCY = 'XOF';

@@ -131,7 +131,7 @@ const SignupOTP = props => (
             throw res.data.error;
           } else {
             props.notify('Account verified', 'success');
-            history.push('/');  
+            history.push('/choose-bank');  
           }
         } else {
           throw res.data.error;

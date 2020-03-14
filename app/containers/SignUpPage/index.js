@@ -184,6 +184,7 @@ const SignUpPage = props => (
             throw res.data.error;
           } else {
             localStorage.setItem("customerMobile", values.mobileNumber);
+            localStorage.setItem("customerName", values.name);
             history.push('/sign-up-verify');  
           }
         } else {

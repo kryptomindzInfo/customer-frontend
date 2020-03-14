@@ -13,7 +13,7 @@ import messages from './messages';
 import { Grid } from '@material-ui/core';
 import H2 from 'components/H2';
 import { withStyles, Typography } from '@material-ui/core';
-
+import history from 'utils/history';
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -49,6 +49,17 @@ const styles = theme => ({
   welcomeUsername: {
     textAlign: 'right',
     color: 'white',
+    fontSize: '20px',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'right ',
+      paddingRight: '6%',
+    },
+  },
+  logout: {
+    textAlign: 'right',
+    color: 'white',
+    fontSize: '20px',
+    cursor:'pointer',
     [theme.breakpoints.down('xs')]: {
       textAlign: 'right ',
       paddingRight: '6%',
@@ -65,6 +76,10 @@ const styles = theme => ({
 });
 function HeaderChooseYourBank(props) {
   const { classes } = props;
+  const logout = () =>{
+    localStorage.removeItem("customerMobile");
+    history.push("/");
+  }
   return (
     <div className={classes.root}>
       <Grid container className={classes.headerMainContainer}>
@@ -90,11 +105,18 @@ function HeaderChooseYourBank(props) {
                 color="inherit"
                 className={classes.welcomeUsername}
               >
-                Welcome Username
+                Welcome {localStorage.getItem("customerName")}
               </Typography>
             </Grid>
             <Grid className={classes.headerLogout} item md={4} sm={5} xs={6}>
-              <H2>LOGOUT</H2>
+              <Typography
+                // variant="h6"
+                color="inherit"
+                className={classes.logout}
+                onClick={logout}
+              >
+                LOGOUT
+              </Typography>
             </Grid>
           </Grid>
         </Grid>

@@ -1,6 +1,6 @@
 /**
  *
- * UploadDocumentsPage
+ * PendingApprovalPage
  *
  */
 
@@ -14,7 +14,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectUploadDocumentsPage from './selectors';
+import makeSelectPendingApprovalPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -34,7 +34,7 @@ import Loader from 'components/Loader';
 
 const styles = theme => ({
   uploadDocumentsTitle: {
-    paddingTop: '2%',
+    paddingTop: '8%',
     paddingBottom: '3%',
     textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
@@ -91,7 +91,7 @@ const styles = theme => ({
   },
 });
 
-class UploadDocumentsPage extends Component {
+class PendingApprovalPage extends Component {
   // useInjectReducer({ key: 'uploadDocumentsPage', reducer });
   // useInjectSaga({ key: 'uploadDocumentsPage', saga });
 
@@ -176,7 +176,7 @@ class UploadDocumentsPage extends Component {
           if (res.data.error) {
             throw res.data.error;
           } else {
-           history.push('/pending-approval');
+           // history.push('/pending-approval');
           }
         } else {
           throw res.data.error;
@@ -201,98 +201,24 @@ class UploadDocumentsPage extends Component {
           <title>Upload Documents</title>
           <meta
             name="description"
-            content="Description of UploadDocumentsPage"
+            content="Description of PendingApprovalPage"
           />
         </Helmet>
         <HeaderChooseYourBank />
         <Typography className={classes.uploadDocumentsTitle} variant="h4">
-          Upload Documents
+          Your account has been submitted for approval!
         </Typography>
-        <Grid container className={classes.mainContainer}>
-          <Grid item md={4} sm={6} xs={12}>
-            <Typography style={{ paddingLeft: '7%' }} variant="h6">
-              Please upload the following documents:
-            </Typography>
-            <ol style={{ paddingLeft: '11%', paddingBottom: '11%' }}>
-              <li>Document</li>
-              <li>Document</li>
-              <li>Document</li>
-            </ol>
-          </Grid>
-          <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
-            <form onSubmit={this.saveDocuments}>
-              <UploadArea bgImg={STATIC_URL + this.state.pdfIcon}>
-   
-                  <a
-                    className="uploadedImg"
-                    href="javascript:;"
-                    target="_BLANK"
-                  />
-   
-                <div
-                  className="uploadTrigger"
-                  onClick={() => this.triggerBrowse('documents')}
-                >
-                  <input
-                    type="file"
-                    id="documents"
-                    onChange={this.onChange}
-                    data-key="documents"
-                    accept=".pdf"
-                  />
-                  {!this.state.documents ? (
-                    <i className="material-icons">cloud_upload</i>
-                  ) : (
-                    ' '
-                  )}
-
-                  <label>
-                    {!this.state.documents ? (
-                      // <FormattedMessage {...messages.popup10} />
-                      <span>Upload Contract</span>
-                    ) : (
-                      <span>Change Contract</span>
-                    )}
-                    *
-                    <p>
-                      <span style={{ color: 'red' }}>* </span>Only PDF allowed{' '}
-                    </p>
-                  </label>
-                </div>
-              </UploadArea>
-              <Button
-                variant="contained"
-                type="submit"
-                // disabled={isSubmitting}
-                className={classes.signInButton}
-              >
-                SAVE
-              </Button>
-            </form>
-          </Grid>
-          <Grid item md={4} sm={6} xs={12} >
-          {
-            this.state.documents.length > 0 ? 
-              this.state.documents.map(function(v){
-                return <div className={classes.uploadedFiles} ><a href={CONTRACT_URL + v} ><img className={classes.uploadedFilesImg} src = {STATIC_URL + 'main/pdf-icon.png'} /></a></div>
-              })
-            
-            :
-            null
-          }
-          </Grid>
-        </Grid>
       </div>
     );
   }
 }
 
-// UploadDocumentsPage.propTypes = {
+// PendingApprovalPage.propTypes = {
 //   dispatch: PropTypes.func.isRequired,
 // };
 
 // const mapStateToProps = createStructuredSelector({
-//   uploadDocumentsPage: makeSelectUploadDocumentsPage(),
+//   uploadDocumentsPage: makeSelectPendingApprovalPage(),
 // });
 
 // function mapDispatchToProps(dispatch) {
@@ -306,4 +232,4 @@ class UploadDocumentsPage extends Component {
 //   mapDispatchToProps,
 // );
 
-export default withStyles(styles)(UploadDocumentsPage);
+export default withStyles(styles)(PendingApprovalPage);
