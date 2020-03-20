@@ -3,5 +3,5 @@ ADD /package.json /tmp/package.json
 WORKDIR /tmp
 ADD . /tmp/
 RUN npm install
-EXPOSE 80
-ENTRYPOINT npm start --port 80
+EXPOSE 5001
+ENTRYPOINT npm start --port 5001
