@@ -5,32 +5,19 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import { Helmet } from 'react-helmet';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectSignUpPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import history from 'utils/history';
-import A from 'components/A';
 
-import { Formik, useField, Form } from 'formik';
+import { Form, Formik, useField } from 'formik';
 
-import { object, string, number, email, boolean } from 'yup';
+import { boolean, object, string } from 'yup';
 
+import Link from '@material-ui/core/Link';
 import { API_URL } from '../App/constants';
 
 const styles = theme => ({
@@ -111,9 +98,9 @@ const styles = theme => ({
   },
 
   checkboxMessage: {
-    // color: 'red',
-    fontSize: '12px',
-    paddingBottom: '3px',
+    color: '#9ea0a5',
+    fontSize: '14px',
+    paddingLeft: '5px',
   },
 });
 
@@ -183,13 +170,12 @@ const SignUpPage = props => (
           if (res.data.error) {
             throw res.data.error;
           } else {
-            localStorage.setItem("customerMobile", values.mobileNumber);
-            history.push('/sign-up-verify');  
+            localStorage.setItem('customerMobile', values.mobileNumber);
+            history.push('/sign-up-verify');
           }
         } else {
           throw res.data.error;
         }
-        
       } catch (err) {
         props.notify(err, 'error');
       }
@@ -261,7 +247,8 @@ const SignUpPage = props => (
                 <Typography
                   variant="subtitle2"
                   style={{
-                    fontSize: '12px',
+                    color: '#9ea0a5',
+                    fontSize: '14px',
                     paddingTop: '1%',
                   }}
                 >
@@ -337,15 +324,28 @@ const SignUpPage = props => (
                     onBlur={handleBlur}
                   />
                   {/* {errors.password && touched.password && (
-                    <div className={classes.inputFeedback}>
-                      {errors.password}
-                    </div>
-                  )} */}
-                  <div style={{ paddingTop: '3px' }}>
+                   <div className={classes.inputFeedback}>
+                   {errors.password}
+                   </div>
+                   )} */}
+
+                  <div style={{ paddingTop: '15px' }}>
                     <MyCheckbox name="acceptedTerms">
                       <span className={classes.checkboxMessage}>
                         {' '}
-                        I accept the terms and conditions
+                        I accept the
+                        <Link
+                          underline="always"
+                          color="primary"
+                          style={{
+                            fontWeightBold: '700',
+                            paddingLeft: '7px',
+                            fontSize: '14px',
+                          }}
+                          href="#"
+                        >
+                          Terms and Conditions
+                        </Link>
                       </span>
                     </MyCheckbox>{' '}
                   </div>
@@ -361,39 +361,46 @@ const SignUpPage = props => (
                     <Grid item md={6} sm={12} xs={12}>
                       <Typography
                         style={{
-                          fontSize: '12px',
+                          color: '#9ea0a5',
+                          fontSize: '14px',
                           paddingTop: '5%',
                           width: '85%',
                         }}
                       >
                         Have an account?
-                        <A
+                        <Link
+                          color="primary"
                           style={{
-                            color: 'black',
-                            textDecoration: 'none',
+                            fontWeightBold: '700',
                             paddingLeft: '4px',
+                            fontSize: '14px',
                           }}
                           href="/sign-in"
                         >
                           Sign In
-                        </A>
+                        </Link>
                       </Typography>
                     </Grid>
                     <Grid item md={6} sm={12} xs={12}>
                       <Typography
                         style={{
-                          fontSize: '12px',
+                          fontSize: '14px',
                           paddingTop: '5%',
                           // textAlign: 'end'
                           // paddingLeft: '5%',
                         }}
                       >
-                        <A
-                          style={{ color: 'black', textDecoration: 'none' }}
+                        <Link
+                          color="primary"
+                          style={{
+                            fontWeightBold: '900',
+                            fontSize: '14px',
+                            paddingTop: '5%',
+                          }}
                           href="/forgot-password"
                         >
                           Forgot password?
-                        </A>
+                        </Link>
                       </Typography>
                     </Grid>
                   </Grid>

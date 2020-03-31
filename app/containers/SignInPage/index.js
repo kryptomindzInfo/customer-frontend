@@ -5,36 +5,22 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectSignInPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import history from 'utils/history';
-import A from 'components/A';
-
-// import A from 'components/A';
-
-import { Formik, useField, Form } from 'formik';
+import { Form, Formik } from 'formik';
 
 import * as Yup from 'yup';
 
+import Link from '@material-ui/core/Link';
 import { API_URL } from '../App/constants';
+
+// import A from 'components/A';
 
 const styles = theme => ({
   root: {
@@ -110,7 +96,6 @@ const styles = theme => ({
 });
 
 const SignInPage = props => (
-
   // useInjectReducer({ key: 'signInPage', reducer });
   // useInjectSaga({ key: 'signInPage', saga });
 
@@ -123,12 +108,12 @@ const SignInPage = props => (
       try {
         const res = await axios.post(`${API_URL}/userLogin`, values);
         console.log(res);
-        if (res.status == 200) {
+        if (res.status === 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            localStorage.setItem("customerLogged", res.data.token);
-            history.push('/dashboard');  
+            localStorage.setItem('customerLogged', res.data.token);
+            history.push('/dashboard');
           }
         } else {
           throw res.data.error;
@@ -158,7 +143,7 @@ const SignInPage = props => (
       } = formikProps;
 
       const { classes } = props;
-      
+
       return (
         <div>
           <Helmet>
@@ -191,7 +176,7 @@ const SignInPage = props => (
                 <Typography
                   variant="subtitle2"
                   style={{
-                    fontSize: '12px',
+                    fontSize: '14px',
                     paddingTop: '1%',
                     paddingBottom: '7%',
                   }}
@@ -239,38 +224,46 @@ const SignInPage = props => (
                     <Grid item md={6} sm={12} xs={12}>
                       <Typography
                         style={{
-                          fontSize: '12px',
+                          color: '#9ea0a5',
+                          fontSize: '14px',
                           paddingTop: '5%',
                           width: '85%',
                         }}
                       >
-                        Don't have an account? 
-                        <A
+                        Don't have an account?
+                        <Link
+                          color="primary"
                           style={{
-                            color: 'black',
-                            textDecoration: 'none',
+                            fontWeightBold: '700',
                             paddingLeft: '4px',
+                            fontSize: '14px',
                           }}
                           href="/sign-up"
                         >
                           Sign Up
-                        </A>
+                        </Link>
                       </Typography>
                     </Grid>
                     <Grid item md={6} sm={12} xs={12}>
                       <Typography
                         style={{
-                          fontSize: '12px',
+                          fontSize: '14px',
                           paddingTop: '5%',
+                          // textAlign: 'end'
                           // paddingLeft: '5%',
                         }}
                       >
-                        <A
-                          style={{ color: 'black', textDecoration: 'none' }}
+                        <Link
+                          color="primary"
+                          style={{
+                            fontWeightBold: '900',
+                            fontSize: '14px',
+                            paddingTop: '5%',
+                          }}
                           href="/forgot-password"
                         >
                           Forgot password?
-                        </A>
+                        </Link>
                       </Typography>
                     </Grid>
                   </Grid>
