@@ -5,30 +5,17 @@
  */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectUploadDocumentsPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-
-import UploadArea from 'components/UploadArea';
+import axios from 'axios';
 
 import history from 'utils/history';
+import { Grid, Typography, withStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import UploadArea from '../../components/UploadArea';
 
-import { API_URL, STATIC_URL, CONTRACT_URL } from '../App/constants';
+import { API_URL, CONTRACT_URL, STATIC_URL } from '../App/constants';
 
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
-import { Typography, Grid, withStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import MainHeader from '../MainHeader';
 
 const styles = theme => ({
   uploadDocumentsTitle: {
@@ -79,6 +66,14 @@ const styles = theme => ({
       textAlign: 'center',
     },
   },
+  fileUploadDescription: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    lineHeight: '9px',
+    fontFamily: 'Helvetica',
+    fontSize: '14px',
+  },
 });
 
 class UploadDocumentsPage extends Component {
@@ -89,8 +84,7 @@ class UploadDocumentsPage extends Component {
     super(props);
     this.state = {
       document1: '',
-      document2: '',
-      document3: '',
+      fileCount: 0,
       notification: '',
     };
     this.onChange = this.onChange.bind(this);
@@ -99,15 +93,25 @@ class UploadDocumentsPage extends Component {
     // this.error = this.error.bind(this);
     // this.warn = this.warn.bind(this);
   }
+
   triggerBrowse = inp => {
     const input = document.getElementById(inp);
     input.click();
   };
-  onChange(e) {
-    if (e.target.files && e.target.files[0] != null) {
-      this.fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
+
+  getCount = () => {
+    let i = 0;
+    const div = [];
+    for (i; i < this.state.fileCount; i++) {
+      div.push(<span>Hello</span>);
     }
+    return div;
+  };
+
+  onChange(e) {
+    this.fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
   }
+
   fileUpload(file, key) {
     const formData = new FormData();
     //  formData.append('token',token);
@@ -117,22 +121,25 @@ class UploadDocumentsPage extends Component {
         'content-type': 'multipart/form-data',
       },
     };
-    var method = 'fileUpload';
+    let method = 'fileUpload';
 
     if (key == 'contract') {
       method = 'ipfsUpload';
     }
 
+    const token = localStorage.getItem('logged');
+
     axios
       .post(`${API_URL}/${method}?token=${token}`, formData, config)
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            this.setState({
+            this.setState((prevState, props) => ({
               [key]: res.data.name,
-            });
+              fileCount: prevState.fileCount + 1,
+            }));
           }
         } else {
           throw res.data.error;
@@ -161,12 +168,13 @@ class UploadDocumentsPage extends Component {
       history.push('/dashboard');
     }
   };
+
   render() {
     const { classes } = this.props;
     return (
       <div>
         <Helmet>
-          <title>Upload Documents</title>
+          <title>Upload Required Documents</title>
           <meta
             name="description"
             content="Description of UploadDocumentsPage"
@@ -189,7 +197,7 @@ class UploadDocumentsPage extends Component {
           </Grid>
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
             <form onSubmit={this.saveDocuments}>
-              <UploadArea bgImg={STATIC_URL + 'main/pdf-icon.png'}>
+              <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}>
                 {this.state.document1 ? (
                   <a
                     className="uploadedImg"
@@ -201,17 +209,23 @@ class UploadDocumentsPage extends Component {
                 )}
                 <div
                   className="uploadTrigger"
-                  onClick={() => this.triggerBrowse('document1')}
+                  onClick={() => this.triggerBrowse('contract')}
                 >
                   <input
                     type="file"
                     id="contract"
                     onChange={this.onChange}
                     data-key="contract"
+                    multiple
                     accept=".pdf"
                   />
-                  {!this.state.contract ? (
-                    <i className="material-icons">cloud_upload</i>
+                  {!this.state.document1 ? (
+                    <i
+                      style={{ color: '#417505', marginBottom: '20px' }}
+                      className="material-icons"
+                    >
+                      cloud_upload
+                    </i>
                   ) : (
                     ' '
                   )}
@@ -219,20 +233,23 @@ class UploadDocumentsPage extends Component {
                   <label>
                     {!this.state.document1 ? (
                       // <FormattedMessage {...messages.popup10} />
-                      <span>Upload Contract</span>
+                      <div className={classes.fileUploadDescription}>
+                        <span>Drag and drop here </span>
+                        <br />
+                        <span>or</span>
+                        <br />
+                        <span style={{ color: '#417505' }}>browse</span>
+                      </div>
                     ) : (
-                      <span>Change Contract</span>
+                      <span />
                     )}
-                    *
-                    <p>
-                      <span style={{ color: 'red' }}>* </span>Only PDF allowed{' '}
-                    </p>
                   </label>
                 </div>
               </UploadArea>
               <Button
                 variant="contained"
                 type="submit"
+                onClick={() => history.push('/dashboard')}
                 // disabled={isSubmitting}
                 className={classes.signInButton}
               >
@@ -240,6 +257,8 @@ class UploadDocumentsPage extends Component {
               </Button>
             </form>
           </Grid>
+          <Grid md={4} sm={6} xs={11} />
+          <div>{this.getCount()}</div>
         </Grid>
       </div>
     );

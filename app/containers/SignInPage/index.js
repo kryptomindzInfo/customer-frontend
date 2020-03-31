@@ -107,19 +107,18 @@ const SignInPage = props => (
     onSubmit={async values => {
       try {
         const res = await axios.post(`${API_URL}/userLogin`, values);
-        console.log(res);
         if (res.status === 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
             localStorage.setItem('customerLogged', res.data.token);
-            history.push('/dashboard');
+            history.push('/choose-bank');
           }
         } else {
           throw res.data.error;
         }
       } catch (err) {
-        //notify(err, 'error');
+        // notify(err, 'error');
         props.notify(err, 'error');
       }
     }}
