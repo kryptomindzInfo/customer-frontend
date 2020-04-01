@@ -11,9 +11,11 @@ import axios from 'axios';
 import history from 'utils/history';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import UploadArea from '../../components/UploadArea';
+import DocImage from '../../images/file-document-outline.png';
 
-import { API_URL, CONTRACT_URL, STATIC_URL } from '../App/constants';
+import { API_URL, CONTRACT_URL } from '../App/constants';
 
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 
@@ -41,11 +43,10 @@ const styles = theme => ({
     background: theme.palette.primary.main,
     // marginLeft: theme.spacing.unit,
     marginTop: '10%',
-    marginBottom: '8%',
     color: theme.palette.white,
     fontSize: '19px',
     height: '3rem',
-    width: '100%',
+    width: '50%',
     '&:hover': {
       background: theme.palette.primary.hover,
     },
@@ -74,6 +75,13 @@ const styles = theme => ({
     fontFamily: 'Helvetica',
     fontSize: '14px',
   },
+  skipButton: {
+    marginRight: '20 px',
+    marginTop: '10%',
+    color: theme.palette.primary.light,
+    fontSize: '19px',
+    height: '3rem',
+  },
 });
 
 class UploadDocumentsPage extends Component {
@@ -84,7 +92,7 @@ class UploadDocumentsPage extends Component {
     super(props);
     this.state = {
       document1: '',
-      fileCount: 0,
+      fileHashes: [],
       notification: '',
     };
     this.onChange = this.onChange.bind(this);
@@ -100,16 +108,36 @@ class UploadDocumentsPage extends Component {
   };
 
   getCount = () => {
-    let i = 0;
     const div = [];
-    for (i; i < this.state.fileCount; i++) {
-      div.push(<span>Hello</span>);
-    }
+    this.state.fileHashes.forEach(hash => {
+      div.push(
+        <Paper
+          elevation={0}
+          style={{
+            marginTop: '10px',
+          }}
+        >
+          <Typography>
+            <img
+              color="primary"
+              src={DocImage}
+              alt=""
+              height="100"
+              width="100"
+            />
+          </Typography>
+        </Paper>,
+      );
+    });
     return div;
   };
 
   onChange(e) {
-    this.fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
+    if (e.target.files !== undefined) {
+      Object.values(e.target.files).map(file => {
+        this.fileUpload(file, e.target.getAttribute('data-key'));
+      });
+    }
   }
 
   fileUpload(file, key) {
@@ -123,7 +151,7 @@ class UploadDocumentsPage extends Component {
     };
     let method = 'fileUpload';
 
-    if (key == 'contract') {
+    if (key === 'contract') {
       method = 'ipfsUpload';
     }
 
@@ -138,7 +166,7 @@ class UploadDocumentsPage extends Component {
           } else {
             this.setState((prevState, props) => ({
               [key]: res.data.name,
-              fileCount: prevState.fileCount + 1,
+              fileHashes: [...prevState.fileHashes, res.data.name],
             }));
           }
         } else {
@@ -169,6 +197,36 @@ class UploadDocumentsPage extends Component {
     }
   };
 
+  addHashes(list) {
+    const data = {};
+    const controller = 'saveUploadedUserDocsHash';
+    data.mobile = '8861485204';
+    if (list.length > 0) {
+      data.hashes = list;
+    }
+    axios
+      .post(`${API_URL}/${controller}`, data)
+      .then(res => {
+        if (res.status === 200) {
+          if (res.data.error) {
+            throw res.data.error;
+          } else {
+            this.setState((prevState, props) => ({
+              fileHashes: [],
+            }));
+          }
+        } else {
+          throw res.data.error;
+        }
+      })
+      .catch(err => {
+        this.setState({
+          notification: err.response ? err.response.data.error : err.toString(),
+        });
+        this.error();
+      });
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -197,7 +255,7 @@ class UploadDocumentsPage extends Component {
           </Grid>
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
             <form onSubmit={this.saveDocuments}>
-              <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}>
+              <UploadArea>
                 {this.state.document1 ? (
                   <a
                     className="uploadedImg"
@@ -246,19 +304,42 @@ class UploadDocumentsPage extends Component {
                   </label>
                 </div>
               </UploadArea>
-              <Button
-                variant="contained"
-                type="submit"
-                onClick={() => history.push('/dashboard')}
-                // disabled={isSubmitting}
-                className={classes.signInButton}
+              <Grid
+                container
+                justify="space-evenly"
+                alignItems="center"
+                direction="row"
               >
-                SAVE
-              </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  onClick={() => this.addHashes(this.state.fileHashes)}
+                  // disabled={isSubmitting}
+                  className={classes.signInButton}
+                >
+                  SAVE
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => history.push('/dashboard')}
+                  className={classes.skipButton}
+                >
+                  Skip
+                </Button>
+              </Grid>
             </form>
           </Grid>
-          <Grid md={4} sm={6} xs={11} />
-          <div>{this.getCount()}</div>
+          <Grid
+            md={4}
+            sm={6}
+            xs={11}
+            container
+            justify="center"
+            alignItems="center"
+            direction="column"
+          >
+            {this.getCount()}
+          </Grid>
         </Grid>
       </div>
     );
