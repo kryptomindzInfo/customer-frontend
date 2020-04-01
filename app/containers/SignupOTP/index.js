@@ -5,30 +5,16 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectSignupOTP from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import history from 'utils/history';
-import A from 'components/A';
 
-import { Formik, useField, Form } from 'formik';
+import { Form, Formik } from 'formik';
 
 import * as Yup from 'yup';
 
@@ -120,18 +106,21 @@ const SignupOTP = props => (
   <Formik
     initialValues={{
       mobileNumber: localStorage.getItem("customerMobile"),
-      password: '',
+      name : localStorage.getItem("customerName"),
+      email : localStorage.getItem("customerEmail"),
+      address : localStorage.getItem("customerAddress"),
+      password: localStorage.getItem("customerPassword"),
+      otp: '',
     }}
     onSubmit={async values => {
       try {
-        const res = await axios.post(`${API_URL}/userVerify`, values);
-        console.log(res);
+        const res = await axios.post(`${API_URL}/userSignup`, values);
         if (res.status == 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
             props.notify('Account verified', 'success');
-            history.push('/');  
+            history.push('/');
           }
         } else {
           throw res.data.error;
@@ -204,8 +193,8 @@ const SignupOTP = props => (
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    name="password"
-                    value={values.password}
+                    name="otp"
+                    value={values.otp}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />

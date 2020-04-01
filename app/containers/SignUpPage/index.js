@@ -162,15 +162,17 @@ const SignUpPage = props => (
       acceptedTerms: false,
     }}
     onSubmit={async values => {
-      console.log(values);
       try {
-        const res = await axios.post(`${API_URL}/userSignup`, values);
-        console.log(res);
+        const res = await axios.post(`${API_URL}/userVerify`, values);
         if (res.status == 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
             localStorage.setItem('customerMobile', values.mobileNumber);
+            localStorage.setItem('customerName', values.name);
+            localStorage.setItem('customerEmail', values.email);
+            localStorage.setItem('customerAddress', values.address);
+            localStorage.setItem('customerPassword', values.password);
             history.push('/sign-up-verify');
           }
         } else {

@@ -112,7 +112,22 @@ const SignInPage = props => (
             throw res.data.error;
           } else {
             localStorage.setItem('customerLogged', res.data.token);
-            history.push('/choose-bank');
+            switch (res.status) {
+              case 1:
+                history.push('/dashboard');
+                break;
+              case 2:
+                history.push('/choose-bank');
+                break;
+              case 3:
+                history.push('/document-upload');
+                break;
+              case 4:
+                history.push('/dashboard');
+                break;
+              default:
+                history.push('/dashboard');
+            }
           }
         } else {
           throw res.data.error;

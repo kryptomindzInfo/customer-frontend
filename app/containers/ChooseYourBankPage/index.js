@@ -4,24 +4,13 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-
-import axisBankLogo from 'images/axis-bank-logo.jpg';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectChooseYourBankPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
-import { Typography, Grid, withStyles } from '@material-ui/core';
+import { Grid, Typography, withStyles } from '@material-ui/core';
+import axios from 'axios';
+import { API_URL, STATIC_URL } from '../App/constants';
+import history from '../../utils/history';
 
 const styles = theme => ({
   titleChooseBank: {
@@ -44,6 +33,7 @@ const styles = theme => ({
   },
   bankIcons: {
     height: '9rem',
+    cursor: 'pointer',
   },
   nameOfBank: {
     paddingBottom: '13%',
@@ -51,45 +41,54 @@ const styles = theme => ({
   },
 });
 
-const listOfBanks = [
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-];
-
 const ChooseYourBankPage = props => {
   // useInjectReducer({ key: 'chooseYourBankPage', reducer });
   // useInjectSaga({ key: 'chooseYourBankPage', saga });
   const { classes } = props;
+  const val = '';
+  useEffect(() => {
+    fetchBanks()
+    .then(res => {
+      setState({
+        listOfBanks: res.data.banks,
+      })
+    }).catch();
+  },[val]);
+
+  const [state, setState] = useState({
+    listOfBanks: [],
+  });
+
+  const fetchBanks = async () => {
+    try {
+      const res = await axios.post(`${API_URL}/getBanksForUser`, {
+        token: localStorage.getItem('customerLogged'),
+      });
+      if (res.status === 200) {
+        return res;
+      }
+      return null;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const saveBank = async bank => {
+    try {
+      const res = await axios.post(`${API_URL}/assignBankToUser`, {
+        bank,
+        mobile: '8147218480',
+      });
+      if (res.status === 200) {
+        history.push('/upload-documents');
+      } else {
+        props.notify('Error while saving the bank', 'error');
+        throw res.data.error;
+      }
+    } catch (err) {
+      props.notify(err, 'error');
+    }
+  };
   return (
     <div>
       <Helmet>
@@ -105,14 +104,16 @@ const ChooseYourBankPage = props => {
             </Typography>
           </Grid>
           <Grid item className={classes.listOfBanks} md={12}>
-            <Grid container style={{maxWidth: '80%', margin: '0 auto'}} justify="center">
-              {listOfBanks.map((lob, i) => (
-                <Grid md={3} sm={6} xs={12}>
-                  <a href="/upload-documents">
-                    <img className={classes.bankIcons} src={lob.imageLink} />
-                  </a>
+            <Grid
+              container
+              style={{ maxWidth: '100%', margin: '0 auto' }}
+              justify="center"
+            >
+              {state.listOfBanks.map((lob, i) => (
+                <Grid md={3} sm={6} xs={12} key={i}>
+                  <img className={classes.bankIcons}  onClick={() => saveBank(lob)} src={`${STATIC_URL}/${lob.logo}`} />
                   <Typography variant="h5" className={classes.nameOfBank}>
-                    {lob.bankName}
+                    {lob.name}
                   </Typography>
                 </Grid>
               ))}
