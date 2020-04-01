@@ -107,29 +107,28 @@ class UploadDocumentsPage extends Component {
     input.click();
   };
 
-  getCount = () => {
-    const div = [];
-    this.state.fileHashes.forEach(hash => {
-      div.push(
+  getImages = () => {
+    const hashList = [];
+    this.state.fileHashes.forEach((hash, i) => {
+      hashList.push(
         <Paper
           elevation={0}
           style={{
             marginTop: '10px',
           }}
         >
-          <Typography>
-            <img
-              color="primary"
-              src={DocImage}
-              alt=""
-              height="100"
-              width="100"
-            />
-          </Typography>
+          <img
+            key={i}
+            color="primary"
+            src={DocImage}
+            alt=""
+            height="100"
+            width="100"
+          />
         </Paper>,
       );
     });
-    return div;
+    return hashList;
   };
 
   onChange(e) {
@@ -338,7 +337,7 @@ class UploadDocumentsPage extends Component {
             alignItems="center"
             direction="column"
           >
-            {this.getCount()}
+            {this.getImages()}
           </Grid>
         </Grid>
       </div>
