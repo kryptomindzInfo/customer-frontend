@@ -154,7 +154,7 @@ class UploadDocumentsPage extends Component {
       method = 'ipfsUpload';
     }
 
-    const token = localStorage.getItem('logged');
+    const token = localStorage.getItem('customerLogged');
 
     axios
       .post(`${API_URL}/${method}?token=${token}`, formData, config)
@@ -198,13 +198,12 @@ class UploadDocumentsPage extends Component {
 
   addHashes(list) {
     const data = {};
-    const controller = 'saveUploadedUserDocsHash';
+    const controller = 'saveUploadedDocsHash';
     data.mobile = '8861485204';
     if (list.length > 0) {
       data.hashes = list;
     }
-    axios
-      .post(`${API_URL}/${controller}`, data)
+    axios.post(`${API_URL}/user/${controller}`, data)
       .then(res => {
         if (res.status === 200) {
           if (res.data.error) {
@@ -213,6 +212,7 @@ class UploadDocumentsPage extends Component {
             this.setState((prevState, props) => ({
               fileHashes: [],
             }));
+            history.push('/dashboard');
           }
         } else {
           throw res.data.error;
@@ -225,6 +225,31 @@ class UploadDocumentsPage extends Component {
         this.error();
       });
   }
+
+  skipUpload = () => {
+    const token = localStorage.getItem('customerLogged');
+    axios.post(`${API_URL}/user/skipDocsUpload`, { token }).then(res => {
+      if (res.status === 200) {
+        if (res.data.error) {
+          throw res.data.error;
+        }
+        else {
+          this.setState((prevState, props) => ({
+            fileHashes: [],
+          }));
+          history.push('/dashboard');
+        }
+      }
+      else {
+        throw res.data.error;
+      }
+    }).catch(err => {
+      this.setState({
+        notification: err.response ? err.response.data.error : err.toString(),
+      });
+      this.error();
+    });
+  };
 
   render() {
     const { classes } = this.props;
@@ -320,7 +345,7 @@ class UploadDocumentsPage extends Component {
                 </Button>
                 <Button
                   type="submit"
-                  onClick={() => history.push('/dashboard')}
+                  onClick={() => this.skipUpload()}
                   className={classes.skipButton}
                 >
                   Skip

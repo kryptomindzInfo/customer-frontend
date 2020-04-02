@@ -163,7 +163,7 @@ const SignUpPage = props => (
     }}
     onSubmit={async values => {
       try {
-        const res = await axios.post(`${API_URL}/userVerify`, values);
+        const res = await axios.post(`${API_URL}/user/verify`, values);
         if (res.status == 200) {
           if (res.data.error) {
             throw res.data.error;

@@ -7,15 +7,9 @@
  */
 
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
-
-import HomePage from 'containers/HomePage/Loadable';
+import { Route, Switch } from 'react-router-dom';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Header from 'components/Header';
-import Footer from 'components/Footer';
 
 import GlobalStyle from '../../global-styles';
 import SignUpPage from '../SignUpPage';
@@ -30,11 +24,11 @@ import BillPaymentsPage from '../BillPaymentsPage';
 import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
 import SignupOTP from '../SignupOTP';
-
-
+import ProfilePage from '../ProfilePage';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 toast.configure({
   position: 'bottom-right',
   autoClose: 4000,
@@ -56,7 +50,7 @@ export default function App() {
   const notify = (txt, type) => {
     if(txt && type){
       if(type == 'success'){
-        toast.success(txt);  
+        toast.success(txt);
       }else if(type == 'warn'){
         toast.warn(txt);
       }else if(type == 'error'){
@@ -80,8 +74,16 @@ export default function App() {
           path="/otp-forgot-password"
           component={OtpForgotPassword}
         />
-        <Route exact path="/choose-bank" component={ChooseYourBankPage} />
-        <Route exact path="/upload-documents" component={UploadDocumentsPage} />
+        <Route
+          exact
+          path='/choose-bank'
+          component={ChooseYourBankPage}
+        />
+        <Route
+          exact
+          path='/upload-documents'
+          component={UploadDocumentsPage}
+        />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/contact" component={ContactPage} />
         <Route exact path="/bill-payments-merchants" component={BillPaymentsPage} />
@@ -89,6 +91,10 @@ export default function App() {
 
         <Route path="/features" component={FeaturePage} />
         <Route path="/termsConditions" component={TermsConditions} />
+        <Route
+          path='/profile'
+          render={() => <ProfilePage notify={notify}/>}
+        />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

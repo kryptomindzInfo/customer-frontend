@@ -114,7 +114,7 @@ const SignupOTP = props => (
     }}
     onSubmit={async values => {
       try {
-        const res = await axios.post(`${API_URL}/userSignup`, values);
+        const res = await axios.post(`${API_URL}/user/signup`, values);
         if (res.status == 200) {
           if (res.data.error) {
             throw res.data.error;
