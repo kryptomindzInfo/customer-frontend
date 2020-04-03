@@ -24,7 +24,6 @@ import BillPaymentsPage from '../BillPaymentsPage';
 import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
 import SignupOTP from '../SignupOTP';
-import ProfilePage from '../ProfilePage';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -74,16 +73,8 @@ export default function App() {
           path="/otp-forgot-password"
           component={OtpForgotPassword}
         />
-        <Route
-          exact
-          path='/choose-bank'
-          component={ChooseYourBankPage}
-        />
-        <Route
-          exact
-          path='/upload-documents'
-          component={UploadDocumentsPage}
-        />
+        <Route exact path="/choose-bank" component={ChooseYourBankPage} />
+        <Route exact path="/upload-documents" component={UploadDocumentsPage} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/contact" component={ContactPage} />
         <Route exact path="/bill-payments-merchants" component={BillPaymentsPage} />
@@ -91,10 +82,6 @@ export default function App() {
 
         <Route path="/features" component={FeaturePage} />
         <Route path="/termsConditions" component={TermsConditions} />
-        <Route
-          path='/profile'
-          render={() => <ProfilePage notify={notify}/>}
-        />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

@@ -5,17 +5,10 @@
  */
 
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import axios from 'axios';
 import history from 'utils/history';
 
 import Row from 'react-bootstrap/Row';
@@ -23,11 +16,12 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Popup from 'components/Popup';
 
-import { Formik, useField, Form } from 'formik';
+import { Form, Formik } from 'formik';
 
-import { object, string, number, email, boolean } from 'yup';
-
-import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
+import { CURRENCY } from 'containers/App/constants';
+import Paper from '@material-ui/core/Paper';
+// import PropTypes from 'prop-types';
+// import styled from 'styled-components';
 
 const styles = theme => ({
   mainContainer: {
@@ -37,7 +31,6 @@ const styles = theme => ({
     paddingRight: '0%',
     background: 'white',
     // marginLeft: '15%',
-    border: '1px solid #cbd2d6',
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
@@ -59,7 +52,7 @@ const styles = theme => ({
     padding: '6px',
     borderRadius: '2px',
     minWidth: '0 !important',
-    border: 'solid 1px ${theme.palette.primary.main}',
+    border: `solid 1px ${theme.palette.primary.main}`,
     color: theme.palette.primary.main,
     fontSize: '11px',
     fontWeight: 'bold',
@@ -101,6 +94,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   showSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: true });
   };
+
   closeSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: false });
   };
@@ -108,11 +102,12 @@ class CardEwalletSendMoneyPayBills extends Component {
   goToBillsPaymentPage = () => {
     history.push('/bill-payments-merchants');
   };
+
   render() {
     const { classes } = this.props;
 
     return (
-      <div>
+      <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
           <Grid item md={12} xs={12} sm={12}>
             <Typography className={classes.cardEwalletTitle} variant="h5">
@@ -244,7 +239,13 @@ class CardEwalletSendMoneyPayBills extends Component {
                               }}
                             >
                               <span style={{ color: 'red' }}>* </span>I have
-                              read the <a onClick={() => window.open('/termsConditions')}> Term & Conditions</a>
+                              read the{' '}
+                              <a
+                                onClick={() => window.open('/termsConditions')}
+                              >
+                                {' '}
+                                Term & Conditions
+                              </a>
                             </Typography>
                             <Button
                               variant="contained"
@@ -277,7 +278,7 @@ class CardEwalletSendMoneyPayBills extends Component {
           </Popup>
         ) : null}
         {/* <FormattedMessage {...messages.header} /> */}
-      </div>
+      </Paper>
     );
   }
 }

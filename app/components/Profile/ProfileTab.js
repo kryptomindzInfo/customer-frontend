@@ -6,8 +6,8 @@
 
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import PersonalInfoTab from '../Profile/PersonalInfoTab';
-import DocumentsTab from '../Profile/DocumentsTab';
+import PersonalInfoTab from './PersonalInfoTab';
+import DocumentsTab from './DocumentsTab';
 
 const styles = theme => ({
   root: {
@@ -15,7 +15,8 @@ const styles = theme => ({
   },
 
   container: {
-    display: 'flex', flexDirection: 'row',
+    display: 'flex',
+    flexDirection: 'row',
   },
 
   leftPanel: {
@@ -64,20 +65,18 @@ class ProfileTab extends React.Component {
     let component;
     switch (this.props.tabInfo) {
       case 'personalInfo':
-        component = <PersonalInfoTab/>;
+        component = <PersonalInfoTab />;
         break;
       case 'security':
         component = <span>Security Tab</span>;
         break;
       case 'documents':
-        component = <DocumentsTab/>;
+        component = <DocumentsTab />;
         break;
       default:
-        component = <PersonalInfoTab/>;
+        component = <PersonalInfoTab />;
     }
-    return (<div>
-      {component}
-    </div>);
+    return <div>{component}</div>;
   }
 }
 

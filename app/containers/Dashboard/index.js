@@ -5,33 +5,16 @@
  */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectDashboard from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-import MainHeader from '../MainHeader';
-import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, withStyles } from '@material-ui/core';
 
 import axisBankLogo from 'images/axis-bank-logo.jpg';
+import Button from '@material-ui/core/Button';
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import MainHeader from '../MainHeader';
+import UserTransactions from './UserTransactions';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -49,7 +32,7 @@ const styles = theme => ({
     margin: '0 auto',
     borderRadius: '4px',
     paddingTop: '5%',
-    
+
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
     },
@@ -61,7 +44,6 @@ const styles = theme => ({
     margin: '0 auto',
     borderRadius: '4px',
     background: 'white',
-    borderRadius: '7px',
     // border: '1px solid #cbd2d6',
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
@@ -88,7 +70,6 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
-    border: '1px solid #cbd2d6',
 
     marginBottom: '1%',
     [theme.breakpoints.down('sm')]: {
@@ -104,7 +85,6 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
-    border: '1px solid #cbd2d6',
 
     marginBottom: '1%',
     textAlign: 'center',
@@ -128,8 +108,12 @@ const styles = theme => ({
     textDecoration: 'none',
   },
   seeAllMerchants: {
-    textDecoration: 'italic',
-    marginTop: '12%',
+    paddingTop: '10%',
+    paddingBottom: '10%',
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    borderRadius: '50%',
+    outline: 0,
     [theme.breakpoints.down('sm')]: {
       marginTop: '%',
     },
@@ -137,14 +121,14 @@ const styles = theme => ({
       marginBottom: '3%',
       marginTop: '2%',
     },
+    '&$selected': {
+      outline: 0,
+    },
   },
   recentActivitiesTypes: {
     // margin: '2% 0%',
     padding: '4%',
     fontWeight: 600,
-  },
-  table: {
-    minWidth: 700,
   },
 });
 
@@ -167,18 +151,117 @@ const listOfBanks = [
   },
 ];
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  {
+    id: '1',
+    date: 'Nov 17, 2020',
+    time: '01:00 PM',
+    action: 'TRANSFERED',
+    to: 'Sandeep',
+    keyword: 'to',
+    amount: 400.0,
+    source: 'Non Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '2',
+    date: 'Nov 15, 2020',
+    time: '01:00 PM',
+    action: 'RECIEVED',
+    keyword: 'from',
+    to: 'Sandeep',
+    amount: 586.0,
+    source: 'Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '3',
+    date: 'Nov 17, 2020',
+    time: '01:00 PM',
+    action: 'TRANSFERED',
+    to: 'Sandeep',
+    keyword: 'to',
+    amount: 400.0,
+    source: 'Non Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '4',
+    date: 'Nov 15, 2020',
+    time: '01:00 PM',
+    action: 'RECIEVED',
+    keyword: 'from',
+    to: 'Sandeep',
+    amount: 586.0,
+    source: 'Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '5',
+    date: 'Nov 17, 2020',
+    time: '01:00 PM',
+    action: 'TRANSFERED',
+    to: 'Sandeep',
+    keyword: 'to',
+    amount: 400.0,
+    source: 'Non Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '6',
+    date: 'Nov 15, 2020',
+    time: '01:00 PM',
+    action: 'RECIEVED',
+    keyword: 'from',
+    to: 'Sandeep',
+    amount: 586.0,
+    source: 'Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '7',
+    date: 'Nov 17, 2020',
+    time: '01:00 PM',
+    action: 'TRANSFERED',
+    to: 'Sandeep',
+    keyword: 'to',
+    amount: 400.0,
+    source: 'Non Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '8',
+    date: 'Nov 15, 2020',
+    time: '01:00 PM',
+    action: 'RECIEVED',
+    keyword: 'from',
+    to: 'Sandeep',
+    amount: 586.0,
+    source: 'Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '9',
+    date: 'Nov 17, 2020',
+    time: '01:00 PM',
+    action: 'TRANSFERED',
+    to: 'Sandeep',
+    keyword: 'to',
+    amount: 400.0,
+    source: 'Non Wallet',
+    status: 'COMPLETED',
+  },
+  {
+    id: '10',
+    date: 'Nov 15, 2020',
+    time: '01:00 PM',
+    action: 'RECIEVED',
+    keyword: 'from',
+    to: 'Sandeep',
+    amount: 586.0,
+    source: 'Wallet',
+    status: 'COMPLETED',
+  },
 ];
 
 class Dashboard extends Component {
@@ -186,31 +269,9 @@ class Dashboard extends Component {
   // useInjectSaga({ key: 'dashboard', saga });
   constructor(props) {
     super(props);
-    this.state = {
-      allTransactionsVisible: true,
-      paymentsSentVisible: false,
-      paymentsReceivedVisible: false,
-    };
+    this.state = {};
   }
 
-  showallTransactions = () => {
-    console.log('working!!');
-    this.setState({ allTransactionsVisible: true });
-    this.setState({ paymentsSentVisible: false });
-    this.setState({ paymentsReceivedVisible: false });
-  };
-  showPaymentsSent = () => {
-    console.log('working!!');
-    this.setState({ paymentsSentVisible: true });
-    this.setState({ allTransactionsVisible: false });
-    this.setState({ paymentsReceivedVisible: false });
-  };
-  showPaymentsReceived = () => {
-    console.log('working!!');
-    this.setState({ paymentsSentVisible: false });
-    this.setState({ allTransactionsVisible: false });
-    this.setState({ paymentsReceivedVisible: true });
-  };
   render() {
     const { classes } = this.props;
     return (
@@ -274,9 +335,14 @@ class Dashboard extends Component {
                   </Grid>
                 ))}
                 <Grid item md={4} xs={12}>
-                  <Typography className={classes.seeAllMerchants} variant="h6">
-                    See All Merchants
-                  </Typography>
+                  <Button
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                    className={classes.seeAllMerchants}
+                  >
+                    See All
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
@@ -288,146 +354,9 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <Typography style={{ margin: '2% 3%', paddingTop: '1%' }} variant="h5">
-                Recent Activities
-                <Typography
-                  style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
-                  variant="body1"
-                >
-                  E-wallet activity
-                </Typography>
-              </Typography>
-
-              <div>
-                <span
-                  className={`${classes.recentActivitiesTypes} ${
-                    this.state.allTransactionsVisible
-                    // ? 'ActiveTab'
-                    // : 'InactiveTab'
-                  }`}
-                  onClick={this.showallTransactions}
-                >
-                  All
-                </span>
-                <span
-                  className={`${classes.recentActivitiesTypes} ${
-                    this.state.paymentsSentVisible
-                  }`}
-                  onClick={this.showPaymentsSent}
-                >
-                  Payments Sent
-                </span>
-                <span
-                  className={`${classes.recentActivitiesTypes} ${
-                    this.state.paymentsReceivedVisible
-                  }`}
-                  onClick={this.showPaymentsReceived}
-                >
-                  Payments Received
-                </span>
-              </div>
-
-              <div
-                style={{
-                  display: `${
-                    this.state.allTransactionsVisible ? 'block' : 'none'
-                  }`,
-                }}
-              >
-                {/* hiiiii */}
-                <Table className={classes.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Description</TableCell>
-                      <TableCell align="right">Fat (g)</TableCell>
-                      <TableCell align="right">Carbs (g)</TableCell>
-                      <TableCell align="right">Protein (g)</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              <div
-                style={{
-                  display: `${
-                    this.state.paymentsSentVisible ? 'block' : 'none'
-                  }`,
-                }}
-              >
-                <Table className={classes.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Description</TableCell>
-                      <TableCell align="right">Fat (g)</TableCell>
-                      {/* <TableCell align="right">Carbs (g)</TableCell>
-                      <TableCell align="right">Protein (g)</TableCell> */}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              <div
-                style={{
-                  display: `${
-                    this.state.paymentsReceivedVisible ? 'block' : 'none'
-                  }`,
-                }}
-              >
-                <Table className={classes.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      {/* <TableCell align="right">Description</TableCell>
-                      <TableCell align="right">Fat (g)</TableCell> */}
-                      {/* <TableCell align="right">Carbs (g)</TableCell>
-                      <TableCell align="right">Protein (g)</TableCell> */}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map(row => (
-                      <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              {/* <CardEwalletSendMoneyPayBills /> */}
+              <UserTransactions rows={rows} />
             </Grid>
+            {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>
         </Grid>
       </div>

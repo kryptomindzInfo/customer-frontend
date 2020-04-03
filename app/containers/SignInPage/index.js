@@ -106,24 +106,23 @@ const SignInPage = props => (
     }}
     onSubmit={async values => {
       try {
-        const res = await axios.post(`${API_URL}/user/login`, values);
+        const res = await axios.post(`${API_URL}/userLogin`, values);
         if (res.status === 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
             localStorage.setItem('customerLogged', res.data.token);
-            localStorage.setItem('onboardingStatus', res.data.status);
-            switch (res.data.status) {
-              case '1':
+            switch (res.status) {
+              case 1:
                 history.push('/dashboard');
                 break;
-              case '2':
+              case 2:
                 history.push('/choose-bank');
                 break;
-              case '3':
-                history.push('/upload-documents');
+              case 3:
+                history.push('/document-upload');
                 break;
-              case '4':
+              case 4:
                 history.push('/dashboard');
                 break;
               default:

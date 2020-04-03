@@ -198,20 +198,53 @@ class UploadDocumentsPage extends Component {
 
   addHashes(list) {
     const data = {};
-    const controller = 'saveUploadedDocsHash';
-    data.mobile = '8861485204';
+    const controller = 'saveUploadedUserDocsHash';
+    data.token = localStorage.getItem('customerLogged');
     if (list.length > 0) {
       data.hashes = list;
+      axios
+        .post(`${API_URL}/${controller}`, data)
+        .then(res => {
+          if (res.status === 200) {
+            if (res.data.error) {
+              throw res.data.error;
+            } else {
+              this.setState(() => ({
+                fileHashes: [],
+              }));
+              history.push('/dashboard');
+            }
+          } else {
+            throw res.data.error;
+          }
+        })
+        .catch(err => {
+          this.setState({
+            notification: err.response
+              ? err.response.data.error
+              : err.toString(),
+          });
+          this.error();
+        });
+    } else {
+      this.setState({
+        notification: 'No Documents Uploaded',
+      });
     }
-    axios.post(`${API_URL}/user/${controller}`, data)
+  }
+
+  handleSkip = () => {
+    const data = {};
+    const controller = 'skipUserDocsUpload';
+    data.token = localStorage.getItem('customerLogged');
+
+    axios
+      .post(`${API_URL}/${controller}`, data)
       .then(res => {
         if (res.status === 200) {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            this.setState((prevState, props) => ({
-              fileHashes: [],
-            }));
             history.push('/dashboard');
           }
         } else {
@@ -224,31 +257,6 @@ class UploadDocumentsPage extends Component {
         });
         this.error();
       });
-  }
-
-  skipUpload = () => {
-    const token = localStorage.getItem('customerLogged');
-    axios.post(`${API_URL}/user/skipDocsUpload`, { token }).then(res => {
-      if (res.status === 200) {
-        if (res.data.error) {
-          throw res.data.error;
-        }
-        else {
-          this.setState((prevState, props) => ({
-            fileHashes: [],
-          }));
-          history.push('/dashboard');
-        }
-      }
-      else {
-        throw res.data.error;
-      }
-    }).catch(err => {
-      this.setState({
-        notification: err.response ? err.response.data.error : err.toString(),
-      });
-      this.error();
-    });
   };
 
   render() {
@@ -345,7 +353,7 @@ class UploadDocumentsPage extends Component {
                 </Button>
                 <Button
                   type="submit"
-                  onClick={() => this.skipUpload()}
+                  onClick={this.handleSkip}
                   className={classes.skipButton}
                 >
                   Skip

@@ -18,7 +18,9 @@ const styles = theme => ({
   },
 
   container: {
-    display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 
   leftPanel: {
@@ -60,14 +62,15 @@ const styles = theme => ({
     border: 'solid 1px #e9eff4',
     backgroundColor: '#ffffff',
     cursor: 'pointer',
-    "&:hover": {
-      background: "#6cac69",
+    '&:hover': {
+      background: '#6cac69',
       color: '#fff',
     },
   },
 
   settingTabIcon: {
-    marginRight: '20px', marginLeft: '20px',
+    marginRight: '20px',
+    marginLeft: '20px',
   },
 });
 
@@ -76,37 +79,54 @@ class ProfilePage extends React.Component {
     super(props);
     this.state = {
       tabOpen: 'personalInfo',
-    }
+    };
   }
 
   render() {
     const { classes } = this.props;
-    return (<div>
-      <HeaderChooseYourBank/>
-      <div className={classes.container}>
-        <div className={classes.leftPanel}>
-          <span style={{ fontWeight: '600' }}>Settings</span>
-          <div>
-            <div className={classes.settingButton} onClick={() => this.setState({ tabOpen: 'personalInfo' })}>
-              <span className={classes.settingTabIcon}><img width='25px' height='20px' src={userIcon}/></span>
-              <span>Personal Info</span>
-            </div>
-            <div className={classes.settingButton} onClick={() => this.setState({ tabOpen: 'security' })}>
-              <span className={classes.settingTabIcon}><img width='25px' height='20px' src={documentIcon}/></span>
-              <span>Log in and Security</span>
-            </div>
-            <div className={classes.settingButton} onClick={() => this.setState({ tabOpen: 'documents' })}>
-              <span className={classes.settingTabIcon}><img width='25px' height='20px' src={documentIcon}/></span>
-              <span>Documents</span>
+    return (
+      <div>
+        <HeaderChooseYourBank />
+        <div className={classes.container}>
+          <div className={classes.leftPanel}>
+            <span style={{ fontWeight: '600' }}>Settings</span>
+            <div>
+              <div
+                className={classes.settingButton}
+                onClick={() => this.setState({ tabOpen: 'personalInfo' })}
+              >
+                <span className={classes.settingTabIcon}>
+                  <img width="25px" height="20px" src={userIcon} />
+                </span>
+                <span>Personal Info</span>
+              </div>
+              <div
+                className={classes.settingButton}
+                onClick={() => this.setState({ tabOpen: 'security' })}
+              >
+                <span className={classes.settingTabIcon}>
+                  <img width="25px" height="20px" src={documentIcon} />
+                </span>
+                <span>Log in and Security</span>
+              </div>
+              <div
+                className={classes.settingButton}
+                onClick={() => this.setState({ tabOpen: 'documents' })}
+              >
+                <span className={classes.settingTabIcon}>
+                  <img width="25px" height="20px" src={documentIcon} />
+                </span>
+                <span>Documents</span>
+              </div>
             </div>
           </div>
+          <div className={classes.rightPanel}>
+            <ProfileTab tabInfo={this.state.tabOpen} />
+          </div>
+          <div />
         </div>
-        <div className={classes.rightPanel}>
-          <ProfileTab tabInfo={this.state.tabOpen}/>
-        </div>
-        <div/>
       </div>
-    </div>);
+    );
   }
 }
 
