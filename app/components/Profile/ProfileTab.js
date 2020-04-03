@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import FormControl from '@material-ui/core/FormControl';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Button from '@material-ui/core/Button';
+import withStyles from '@material-ui/core/styles/withStyles';
+import PersonalInfoTab from '../Profile/PersonalInfoTab';
+import DocumentsTab from '../Profile/DocumentsTab';
 
 const styles = theme => ({
   root: {
@@ -61,27 +61,22 @@ class ProfileTab extends React.Component {
 
   render() {
     const { classes } = this.props;
+    let component;
+    switch (this.props.tabInfo) {
+      case 'personalInfo':
+        component = <PersonalInfoTab/>;
+        break;
+      case 'security':
+        component = <span>Security Tab</span>;
+        break;
+      case 'documents':
+        component = <DocumentsTab/>;
+        break;
+      default:
+        component = <PersonalInfoTab/>;
+    }
     return (<div>
-      <div>
-        <div className={classes.nameField}>
-          <span>Name</span>
-          <FormControl className={clsx(classes.margin, classes.textField)} variant='outlined'>
-            <InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>
-            <OutlinedInput
-              id='outlined-adornment-password'
-              type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
-              endAdornment={<InputAdornment position='end'>
-                <Button size='small' className={classes.margin}>
-                  Small
-                </Button>
-              </InputAdornment>}
-              labelWidth={70}
-            />
-          </FormControl>
-        </div>
-      </div>
+      {component}
     </div>);
   }
 }
