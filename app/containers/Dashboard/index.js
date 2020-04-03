@@ -14,7 +14,7 @@ import axisBankLogo from 'images/axis-bank-logo.jpg';
 import Button from '@material-ui/core/Button';
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
 import MainHeader from '../MainHeader';
-import UserTransactions from './UserTransactions';
+import RecentActivityTab from './RecentActivityTab';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -354,7 +354,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <UserTransactions rows={rows} />
+              <RecentActivityTab rows={rows} />
             </Grid>
             {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>
