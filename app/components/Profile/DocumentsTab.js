@@ -16,7 +16,7 @@ const styles = theme => ({
   },
   documentContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexWrap: 'wrap',
   },
   documentCard: {
@@ -26,14 +26,19 @@ const styles = theme => ({
     height: '150px',
     borderRadius: '5px',
     justifyContent: 'center',
-    marginLeft:'20px',
+    marginLeft: '20px',
     marginTop: '20px',
     alignItems: 'center',
     border: 'solid 1px #e9eff4',
     cursor: 'pointer',
-    "&:hover":{
+    '&:hover': {
       border: 'solid 1px #4da1ff',
-    }
+    },
+  },
+  documentsTab: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
@@ -58,32 +63,36 @@ class DocumentsTab extends React.Component {
           fileType: 'doc',
         },
       ],
-    }
+    };
   }
 
   render() {
     const { classes } = this.props;
-    return (<div>
+    return (
+      <div>
         <div className={classes.documentContainer}>
-          <span style={{fontWeight: '600'}}>Documents</span>
-          <div className={classes.documentCard}>
-            <img width={60} height={70} src={pdfFileIcon}/>
-            <span style={{ marginTop: '20px' }}>Contract</span>
-          </div>
-          <div className={classes.documentCard}>
-            <img width={60} height={70} src={documentFileIcon}/>
-            <span style={{ marginTop: '20px' }}>Agreement</span>
-          </div>
-          <div className={classes.documentCard}>
-            <img width={60} height={70} src={imageFileIcon}/>
-            <span style={{ marginTop: '20px' }}>Photo</span>
-          </div>
-          <div className={classes.documentCard}>
-            <img width={60} height={70} src={documentFileIcon}/>
-            <span style={{ marginTop: '20px' }}>Agreement</span>
+          <span style={{ fontWeight: '600' }}>Documents</span>
+          <div className={classes.documentsTab}>
+            <div className={classes.documentCard}>
+              <img width={60} height={70} src={pdfFileIcon} />
+              <span style={{ marginTop: '20px' }}>Contract</span>
+            </div>
+            <div className={classes.documentCard}>
+              <img width={60} height={70} src={documentFileIcon} />
+              <span style={{ marginTop: '20px' }}>Agreement</span>
+            </div>
+            <div className={classes.documentCard}>
+              <img width={60} height={70} src={imageFileIcon} />
+              <span style={{ marginTop: '20px' }}>Photo</span>
+            </div>
+            <div className={classes.documentCard}>
+              <img width={60} height={70} src={documentFileIcon} />
+              <span style={{ marginTop: '20px' }}>Agreement</span>
+            </div>
           </div>
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 

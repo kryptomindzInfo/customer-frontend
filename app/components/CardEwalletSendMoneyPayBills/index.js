@@ -5,29 +5,14 @@
  */
 
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import axios from 'axios';
 import history from 'utils/history';
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Popup from 'components/Popup';
-
-import { Formik, useField, Form } from 'formik';
-
-import { object, string, number, email, boolean } from 'yup';
-
-import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
+import { CURRENCY } from 'containers/App/constants';
+import SendMoneyPopup from './SendMoneyPopup';
+// import PropTypes from 'prop-types';
+// import styled from 'styled-components';
 
 const styles = theme => ({
   mainContainer: {
@@ -142,141 +127,7 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Grid>
           </Grid>
         </Grid>
-
-        {this.state.sendMoneyPopup ? (
-          <Popup close={this.closeSendMoneyPopup.bind(this)}>
-            <div
-              style={{
-                color: 'black',
-                textAlign: 'center',
-                fontSize: '1.5rem',
-                paddingBottom: '1rem',
-              }}
-            >
-              Transfer the Amount
-            </div>
-
-            <Formik
-              initialValues={{
-                mobileNumber: '',
-                amount: '',
-                note: '',
-                balance: 0,
-              }}
-              onSubmit={async values => {
-                try {
-                  // const res = await axios('api end point', values);
-                  // console.log(res);
-                  history.push('/dashboard');
-                } catch (err) {}
-              }}
-            >
-              {props => {
-                const {
-                  values,
-                  touched,
-                  errors,
-                  isSubmitting,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                } = this.props;
-                return (
-                  <>
-                    <Form>
-                      <Container>
-                        <Row>
-                          <Col md={12} sm={12} xs={12}>
-                            <label />
-                            <TextField
-                              label="Mobile Number"
-                              placeholder="Mobile Number"
-                              className={classes.textField}
-                              margin="normal"
-                              variant="outlined"
-                              name="mobileNumber"
-                              values={props.values.mobileNumber}
-                            />
-                          </Col>
-                          <Col md={12} sm={12} xs={12}>
-                            <label />
-                            <TextField
-                              label="Amount"
-                              placeholder="Amount"
-                              className={classes.textField}
-                              margin="normal"
-                              variant="outlined"
-                              name="amount"
-                              values={props.values.amount}
-                            />
-                            <Typography
-                              variant="body1"
-                              style={{
-                                color: 'grey',
-                                textAlign: 'left',
-                                paddingBottom: '0.8rem',
-                                paddingTop: '0.5rem',
-                              }}
-                            >
-                              <span style={{ color: 'red' }}>* </span>
-                              Total Available {CURRENCY}
-                              {props.values.balance}
-                            </Typography>
-                          </Col>
-                          <Col md={12} sm={12} xs={12}>
-                            <TextField
-                              name="Note"
-                              label="Note"
-                              placeholder="Note"
-                              multiline
-                              className={classes.textField}
-                              margin="normal"
-                              variant="outlined"
-                              values={props.values.note}
-                            />
-                            <Typography
-                              variant="body1"
-                              style={{
-                                color: 'grey',
-                                textAlign: 'left',
-                                paddingBottom: '0.8rem',
-                                paddingTop: '0.5rem',
-                              }}
-                            >
-                              <span style={{ color: 'red' }}>* </span>I have
-                              read the <a onClick={() => window.open('/termsConditions')}> Term & Conditions</a>
-                            </Typography>
-                            <Button
-                              variant="contained"
-                              type="submit"
-                              disabled={isSubmitting}
-                              className={classes.signUpButton}
-                            >
-                              Proceed
-                            </Button>
-                            <Typography
-                              variant="body1"
-                              style={{
-                                color: 'grey',
-                                textAlign: 'left',
-                                paddingBottom: '2.5rem',
-                              }}
-                            >
-                              <span style={{ color: 'red' }}>* </span>Total fee{' '}
-                              {CURRENCY}
-                              {props.values.balance} will be charged
-                            </Typography>
-                          </Col>
-                        </Row>
-                      </Container>
-                    </Form>
-                  </>
-                );
-              }}
-            </Formik>
-          </Popup>
-        ) : null}
-        {/* <FormattedMessage {...messages.header} /> */}
+         <SendMoneyPopup onClose = {() => this.closeSendMoneyPopup()} open={this.state.sendMoneyPopup}/>
       </div>
     );
   }

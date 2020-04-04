@@ -5,14 +5,9 @@
  */
 
 import React from 'react';
+import { Grid, Typography, withStyles } from '@material-ui/core';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { Grid } from '@material-ui/core';
-import H2 from 'components/H2';
-import { withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -90,11 +85,8 @@ function HeaderChooseYourBank(props) {
                 color="inherit"
                 className={classes.welcomeUsername}
               >
-                Welcome Username
+                Welcome Hatim
               </Typography>
-            </Grid>
-            <Grid className={classes.headerLogout} item md={4} sm={5} xs={6}>
-              <H2>LOGOUT</H2>
             </Grid>
           </Grid>
         </Grid>

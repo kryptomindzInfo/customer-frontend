@@ -5,32 +5,14 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-
-import { Link, Redirect } from 'react-router-dom';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectMainHeader from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-import { Grid } from '@material-ui/core';
-import H2 from 'components/H2';
 import { withStyles } from '@material-ui/core';
-
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { Link } from 'react-router-dom';
 
 // import MenuIcon from '@material-ui/icons/Menu';
 
@@ -43,7 +25,8 @@ const styles = theme => ({
   },
   headerTitleEwallet: {
     // paddingLeft: '6%',
-    flexGrow: 1,
+    marginRight: '120px',
+    marginLeft: '20px',
     // fontSize: '1em',
     fontSize: '24px',
     fontWeight: 600,
@@ -73,25 +56,17 @@ const styles = theme => ({
   },
   headerLink: {
     display: 'flex',
-    [theme.breakpoints.down('md')]: {
-      display: 'none',
-    },
+    justifyContent: 'flex-start',
+    flexGrow: '1',
   },
   eventLink: {
-    // fontWeight: 600,
-    // display: 'block',
     marginRight: 24,
     [theme.breakpoints.down('md')]: {
       display: 'none',
     },
   },
   title: {
-    // display: 'none',
-    // [theme.breakpoints.up('sm')]: {
-    // display: 'block',
-    // },
     color: 'white',
-    // fontWeight: 'bold',
   },
   sectionDesktop: {
     display: 'flex',
@@ -102,10 +77,16 @@ const styles = theme => ({
 });
 
 const MainHeader = props => {
-  // useInjectReducer({ key: 'mainHeader', reducer });
-  // useInjectSaga({ key: 'mainHeader', saga });
   const { classes } = props;
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -115,128 +96,9 @@ const MainHeader = props => {
             color="inherit"
             aria-label="Menu"
           >
-            <div className={classes.sectionDesktop}>
-              <Menu>
-                <MenuItem
-                // onClick={() => {
-                //   history.push('/');
-                //   // popupState.close();
-                // }}
-                >
-                  HOME
-                  {/* <FormattedMessage {...messages.homeButtonHeaderMessage} /> */}
-                </MenuItem>
-
-                <MenuItem
-                // onClick={() => {
-                //   // history.push('/about');
-
-                //   window.open('http://www.zetfly.com');
-
-                //   // popupState.close();
-                // }}
-                >
-                  ABOUT US
-                  {/* <FormattedMessage {...messages.aboutusButtonHeaderMessage} /> */}
-                </MenuItem>
-                <MenuItem
-                // onClick={() => {
-                //   history.push('/how-it-works');
-                // popupState.close();
-                // }}
-                >
-                  HOW IT WORKS
-                  {/* <FormattedMessage {...messages.howitworksButtonHeaderMessage} /> */}
-                </MenuItem>
-
-                <MenuItem
-                // onClick={popupState.close}
-                // onClick={() => {
-                //   window.open('https://managers.aktv.life');
-                //   // popupState.close();
-                // }}
-                >
-                  CREATE EVENT
-                  {/* <FormattedMessage
-                  {...messages.createEventButtonHeaderMessage} */}
-                  />
-                </MenuItem>
-                <MenuItem
-                // onClick={popupState.close}
-                // onClick={() => {
-                //   history.push('/events');
-                //   // popupState.close();
-                // }}
-                >
-                  BROWSE EVENT
-                  {/* <FormattedMessage
-                  {...messages.browseEventButtonHeaderMessage} */}
-                  />
-                </MenuItem>
-              </Menu>
-            </div>
             {/* <MenuIcon /> */}
           </IconButton>
-          <div className={classes.sectionDesktop}>
-            <Menu>
-              <MenuItem
-              // onClick={() => {
-              //   history.push('/');
-              //   // popupState.close();
-              // }}
-              >
-                HOME
-                {/* <FormattedMessage {...messages.homeButtonHeaderMessage} /> */}
-              </MenuItem>
-
-              <MenuItem
-              // onClick={() => {
-              //   // history.push('/about');
-
-              //   window.open('http://www.zetfly.com');
-
-              //   // popupState.close();
-              // }}
-              >
-                ABOUT US
-                {/* <FormattedMessage {...messages.aboutusButtonHeaderMessage} /> */}
-              </MenuItem>
-              <MenuItem
-              // onClick={() => {
-              //   history.push('/how-it-works');
-              // popupState.close();
-              // }}
-              >
-                HOW IT WORKS
-                {/* <FormattedMessage {...messages.howitworksButtonHeaderMessage} /> */}
-              </MenuItem>
-
-              <MenuItem
-              // onClick={popupState.close}
-              // onClick={() => {
-              //   window.open('https://managers.aktv.life');
-              //   // popupState.close();
-              // }}
-              >
-                CREATE EVENT
-                {/* <FormattedMessage
-                  {...messages.createEventButtonHeaderMessage} */}
-                />
-              </MenuItem>
-              <MenuItem
-              // onClick={popupState.close}
-              // onClick={() => {
-              //   history.push('/events');
-              //   // popupState.close();
-              // }}
-              >
-                BROWSE EVENT
-                {/* <FormattedMessage
-                  {...messages.browseEventButtonHeaderMessage} */}
-                />
-              </MenuItem>
-            </Menu>
-          </div>
+          <div className={classes.sectionDesktop} />
           <Typography
             // variant="h4"
             color="inherit"
@@ -244,7 +106,6 @@ const MainHeader = props => {
           >
             E-WALLET
           </Typography>
-          {/* <div className={classes.grow} /> */}
           <div className={`headerLink ${classes.headerLink}`}>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <Typography
@@ -266,7 +127,10 @@ const MainHeader = props => {
                 Contacts
               </Typography>
             </Link>
-            <Link to="/bill-payments-merchants" style={{ textDecoration: 'none' }}>
+            <Link
+              to="/bill-payments-merchants"
+              style={{ textDecoration: 'none' }}
+            >
               <Typography
                 className={`${classes.title} ${classes.eventLink}`}
                 variant="subtitle1"
@@ -287,62 +151,45 @@ const MainHeader = props => {
               </Typography>
             </Link>
           </div>
-          <p className="material-icons fl" style={{ paddingRight: '7px', paddingBottom: 0, marginBottom: 0 }}>
-            settings
-          </p>
-
-          <Typography
-            variant="h6"
-            color="inherit"
-            className={classes.headerLogout}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            Welcome Username
-          </Typography>
+            <div
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+              className="material-icons fl"
+              style={{ marginRight: '10px', display: 'flex', color: '#fff' }}
+            >
+              settings
+            </div>
+
+            <Typography
+              variant="subtitle1"
+              color="inherit"
+              className={classes.headerLogout}
+            >
+              Welcome Hatim
+            </Typography>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <Link to="/profile" style={{ textDecoration: 'none' }}>
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+              </Link>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
     </div>
   );
 };
-
-//   return (
-//     <div className={classes.root}>
-//       <Grid container className={classes.headerMainContainer}>
-//         <Grid item md={6} sm={6} xs={6}>
-//           <H2 className={classes.headerTitleEwallet}>E-WALLET</H2>
-//         </Grid>
-//         <Grid item md={6} sm={6} xs={6}>
-//           <Grid
-//             container
-//             className={classes.headerTitleWelcome}
-//             justify="flex-end"
-//           >
-//             <Grid className={classes.headerLogout} item md={6} sm={12} xs={12}>
-//               <H2>Welcome Username</H2>
-//             </Grid>
-//           </Grid>
-//         </Grid>
-//       </Grid>
-//     </div>
-//   );
-// };
-
-// MainHeader.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   mainHeader: makeSelectMainHeader(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
-
 export default withStyles(styles)(MainHeader);
