@@ -11,6 +11,8 @@ import history from 'utils/history';
 
 import { CURRENCY } from 'containers/App/constants';
 import Paper from '@material-ui/core/Paper';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
 import SendMoneyPopup from './SendMoneyPopup';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
@@ -41,14 +43,13 @@ const styles = theme => ({
     // paddingBottom: '0%',
   },
   sendMoney: {
-    padding: '6px',
+    padding: '8px',
     borderRadius: '2px',
     minWidth: '0 !important',
     border: `solid 1px ${theme.palette.primary.main}`,
     color: theme.palette.primary.main,
     fontSize: '11px',
     fontWeight: 'bold',
-    paddingRight: '6px',
     background: '#fff',
 
     i: {
@@ -109,22 +110,36 @@ class CardEwalletSendMoneyPayBills extends Component {
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
-            <Grid container spacing="8" style={{ paddingBottom: '6%' }}>
-              <Grid item>
-                <button
-                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+            <Grid
+              container
+              xs={12}
+              md={12}
+              spacing="4"
+              style={{ marginTop: '20px', paddingBottom: '6%' }}
+            >
+              <Grid xs={12} md={6} item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingRight: '20px' }}
                   onClick={this.showSendMoneyPopup}
+                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                  startIcon={<Icon>send</Icon>}
                 >
                   Send Money
-                </button>
+                </Button>
               </Grid>
-              <Grid item>
-                <button
+              <Grid xs={12} md={6} item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingRight: '30px' }}
                   onClick={this.goToBillsPaymentPage}
                   className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                  startIcon={<Icon>receipt</Icon>}
                 >
                   Pay Bills
-                </button>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
