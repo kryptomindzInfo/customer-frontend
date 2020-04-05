@@ -103,8 +103,14 @@ export default ({ rows }) => {
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Icon fontSize="large" style={{ width: '100 px' }}>
-            <i className="material-icons">playlist_add_check</i>
+          <Icon
+            fontSize="large"
+            style={{
+              color: 'green',
+              fontSize: 50,
+            }}
+          >
+            playlist_add_check
           </Icon>
         </Grid>
         <Grid

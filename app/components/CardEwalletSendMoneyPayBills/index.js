@@ -10,6 +10,9 @@ import Grid from '@material-ui/core/Grid';
 import history from 'utils/history';
 
 import { CURRENCY } from 'containers/App/constants';
+import Paper from '@material-ui/core/Paper';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
 import SendMoneyPopup from './SendMoneyPopup';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
@@ -22,7 +25,6 @@ const styles = theme => ({
     paddingRight: '0%',
     background: 'white',
     // marginLeft: '15%',
-    border: '1px solid #cbd2d6',
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
@@ -41,14 +43,13 @@ const styles = theme => ({
     // paddingBottom: '0%',
   },
   sendMoney: {
-    padding: '6px',
+    padding: '8px',
     borderRadius: '2px',
     minWidth: '0 !important',
-    border: 'solid 1px ${theme.palette.primary.main}',
+    border: `solid 1px ${theme.palette.primary.main}`,
     color: theme.palette.primary.main,
     fontSize: '11px',
     fontWeight: 'bold',
-    paddingRight: '6px',
     background: '#fff',
 
     i: {
@@ -86,6 +87,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   showSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: true });
   };
+
   closeSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: false });
   };
@@ -93,11 +95,12 @@ class CardEwalletSendMoneyPayBills extends Component {
   goToBillsPaymentPage = () => {
     history.push('/bill-payments-merchants');
   };
+
   render() {
     const { classes } = this.props;
 
     return (
-      <div>
+      <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
           <Grid item md={12} xs={12} sm={12}>
             <Typography className={classes.cardEwalletTitle} variant="h5">
@@ -107,28 +110,45 @@ class CardEwalletSendMoneyPayBills extends Component {
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
-            <Grid container spacing="8" style={{ paddingBottom: '6%' }}>
-              <Grid item>
-                <button
-                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+            <Grid
+              container
+              xs={12}
+              md={12}
+              spacing="4"
+              style={{ marginTop: '20px', paddingBottom: '6%' }}
+            >
+              <Grid xs={12} md={6} item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingRight: '20px' }}
                   onClick={this.showSendMoneyPopup}
+                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                  startIcon={<Icon>send</Icon>}
                 >
                   Send Money
-                </button>
+                </Button>
               </Grid>
-              <Grid item>
-                <button
+              <Grid xs={12} md={6} item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ paddingRight: '30px' }}
                   onClick={this.goToBillsPaymentPage}
                   className={`${'sendMoneyButton'} ${classes.sendMoney}`}
+                  startIcon={<Icon>receipt</Icon>}
                 >
                   Pay Bills
-                </button>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-         <SendMoneyPopup onClose = {() => this.closeSendMoneyPopup()} open={this.state.sendMoneyPopup}/>
-      </div>
+        <SendMoneyPopup
+          onClose={() => this.closeSendMoneyPopup()}
+          open={this.state.sendMoneyPopup}
+        />
+      </Paper>
     );
   }
 }
