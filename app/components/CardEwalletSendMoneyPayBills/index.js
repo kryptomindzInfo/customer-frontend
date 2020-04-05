@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import history from 'utils/history';
 
 import { CURRENCY } from 'containers/App/constants';
+import Paper from '@material-ui/core/Paper';
 import SendMoneyPopup from './SendMoneyPopup';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
@@ -22,7 +23,6 @@ const styles = theme => ({
     paddingRight: '0%',
     background: 'white',
     // marginLeft: '15%',
-    border: '1px solid #cbd2d6',
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
@@ -44,7 +44,7 @@ const styles = theme => ({
     padding: '6px',
     borderRadius: '2px',
     minWidth: '0 !important',
-    border: 'solid 1px ${theme.palette.primary.main}',
+    border: `solid 1px ${theme.palette.primary.main}`,
     color: theme.palette.primary.main,
     fontSize: '11px',
     fontWeight: 'bold',
@@ -86,6 +86,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   showSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: true });
   };
+
   closeSendMoneyPopup = () => {
     this.setState({ sendMoneyPopup: false });
   };
@@ -93,11 +94,12 @@ class CardEwalletSendMoneyPayBills extends Component {
   goToBillsPaymentPage = () => {
     history.push('/bill-payments-merchants');
   };
+
   render() {
     const { classes } = this.props;
 
     return (
-      <div>
+      <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
           <Grid item md={12} xs={12} sm={12}>
             <Typography className={classes.cardEwalletTitle} variant="h5">
@@ -127,8 +129,11 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Grid>
           </Grid>
         </Grid>
-         <SendMoneyPopup onClose = {() => this.closeSendMoneyPopup()} open={this.state.sendMoneyPopup}/>
-      </div>
+        <SendMoneyPopup
+          onClose={() => this.closeSendMoneyPopup()}
+          open={this.state.sendMoneyPopup}
+        />
+      </Paper>
     );
   }
 }
