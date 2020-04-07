@@ -11,6 +11,7 @@ import { Route, Switch } from 'react-router-dom';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
+import { toast } from 'react-toastify';
 import GlobalStyle from '../../global-styles';
 import SignUpPage from '../SignUpPage';
 import SignInPage from '../SignInPage';
@@ -25,8 +26,8 @@ import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
 import SignupOTP from '../SignupOTP';
 import ProfilePage from '../ProfilePage';
+import { ProtectedRoute } from './ProtectedRoute';
 
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure({
@@ -48,14 +49,14 @@ toast.configure({
 
 export default function App() {
   const notify = (txt, type) => {
-    if(txt && type){
-      if(type == 'success'){
+    if (txt && type) {
+      if (type == 'success') {
         toast.success(txt);
-      }else if(type == 'warn'){
+      } else if (type == 'warn') {
         toast.warn(txt);
-      }else if(type == 'error'){
+      } else if (type == 'error') {
         toast.error(txt);
-      }else{
+      } else {
         toast(txt);
       }
     }
@@ -64,9 +65,21 @@ export default function App() {
     // <AppWrapper>
     <div>
       <Switch>
-        <Route exact path="/" render={(props) => <SignInPage {...props} notify={notify} />} />
-        <Route exact path="/sign-up"render={(props) => <SignUpPage {...props} notify={notify} />}  />
-         <Route exact path="/sign-up-verify" render={(props) => <SignupOTP {...props} notify={notify} />}  />
+        <Route
+          exact
+          path="/"
+          render={props => <SignInPage {...props} notify={notify} />}
+        />
+        <Route
+          exact
+          path="/sign-up"
+          render={props => <SignUpPage {...props} notify={notify} />}
+        />
+        <Route
+          exact
+          path="/sign-up-verify"
+          render={props => <SignupOTP {...props} notify={notify} />}
+        />
         <Route exact path="/sign-in" component={SignInPage} />
         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route
@@ -74,32 +87,35 @@ export default function App() {
           path="/otp-forgot-password"
           component={OtpForgotPassword}
         />
-        <Route
+        <ProtectedRoute
           exact
-          path='/choose-bank'
+          path="/choose-bank"
           component={ChooseYourBankPage}
         />
-        <Route
+        <ProtectedRoute
           exact
-          path='/upload-documents'
+          path="/upload-documents"
           component={UploadDocumentsPage}
         />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/contact" component={ContactPage} />
-        <Route exact path="/bill-payments-merchants" component={BillPaymentsPage} />
-        <Route exact path="/bill-list" component={BillPaymentsBillList} />
-
-        <Route path="/features" component={FeaturePage} />
-        <Route path="/termsConditions" component={TermsConditions} />
-        <Route
-          path='/profile'
-          render={() => <ProfilePage notify={notify}/>}
+        <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+        <ProtectedRoute exact path="/contact" component={ContactPage} />
+        <ProtectedRoute
+          exact
+          path="/bill-payments-merchants"
+          component={BillPaymentsPage}
         />
+        <ProtectedRoute
+          exact
+          path="/bill-list"
+          component={BillPaymentsBillList}
+        />
+
+        <ProtectedRoute path="/features" component={FeaturePage} />
+        <ProtectedRoute path="/termsConditions" component={TermsConditions} />
+        <ProtectedRoute path="/profile" component={ProfilePage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
     </div>
-
-    // </AppWrapper>
   );
 }

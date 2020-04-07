@@ -3,18 +3,23 @@ import { Redirect, Route } from 'react-router-dom';
 
 const token = localStorage.getItem('customerLogged');
 const onboardingStatus = localStorage.getItem('onBoardingStatus');
-export const ProtectedRoute = ({ component: Component, ...rest }) => (<Route
+export const ProtectedRoute = ({ component: Component, ...rest }) => (
+  <Route
     {...rest}
     render={props => {
       if (token) {
         return <Component {...props} />;
       }
-      return (<Redirect
+      return (
+        <Redirect
           to={{
-            pathname: '/', state: {
+            pathname: '/',
+            state: {
               from: props.location,
             },
           }}
-        />);
+        />
+      );
     }}
-  />);
+  />
+);

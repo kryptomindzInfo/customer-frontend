@@ -95,10 +95,28 @@ const styles = theme => ({
   },
 });
 
+const redirectUser = status => {
+  switch (status) {
+    case '1':
+      history.push('/dashboard');
+      break;
+    case '2':
+      history.push('/choose-bank');
+      break;
+    case '3':
+      history.push('/upload-documents');
+      break;
+    case '4':
+      history.push('/dashboard');
+      return;
+    default:
+      history.push('/dashboard');
+  }
+};
+
 const SignInPage = props => (
   // useInjectReducer({ key: 'signInPage', reducer });
   // useInjectSaga({ key: 'signInPage', saga });
-
   <Formik
     initialValues={{
       mobileNumber: '',
@@ -113,22 +131,7 @@ const SignInPage = props => (
           } else {
             localStorage.setItem('customerLogged', res.data.token);
             localStorage.setItem('onboardingStatus', res.data.status);
-            switch (res.data.status) {
-              case '1':
-                history.push('/dashboard');
-                break;
-              case '2':
-                history.push('/choose-bank');
-                break;
-              case '3':
-                history.push('/upload-documents');
-                break;
-              case '4':
-                history.push('/dashboard');
-                break;
-              default:
-                history.push('/dashboard');
-            }
+            redirectUser(res.data.status);
           }
         } else {
           throw res.data.error;
@@ -158,9 +161,12 @@ const SignInPage = props => (
       } = formikProps;
 
       const { classes } = props;
+      const token = localStorage.getItem('customerLogged');
+      const status = localStorage.getItem('onboardingStatus');
 
       return (
         <div>
+          {token !== null ? redirectUser(status) : null}
           <Helmet>
             <title>SignInPage</title>
             <meta name="description" content="Description of SignInPage" />

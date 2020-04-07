@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from 'react-router-dom';
+import history from '../../utils/history';
 
 // import MenuIcon from '@material-ui/icons/Menu';
 
@@ -87,6 +88,11 @@ const MainHeader = props => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const onLogoutClick = () => {
+    localStorage.removeItem('customerLogged');
+    history.push('/');
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -185,6 +191,7 @@ const MainHeader = props => {
               <Link to="/profile" style={{ textDecoration: 'none' }}>
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
               </Link>
+              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
             </Menu>
           </div>
         </Toolbar>
