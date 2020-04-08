@@ -68,7 +68,7 @@ class ProfileTab extends React.Component {
         component = <PersonalInfoTab />;
         break;
       case 'security':
-        component = <span>Security Tab</span>;
+        component = <span>Change Password</span>;
         break;
       case 'documents':
         component = <DocumentsTab />;

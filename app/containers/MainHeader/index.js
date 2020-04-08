@@ -93,6 +93,8 @@ const MainHeader = props => {
     history.push('/');
   };
 
+  const { name } = JSON.parse(localStorage.getItem('loggedUser'));
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -179,7 +181,7 @@ const MainHeader = props => {
               color="inherit"
               className={classes.headerLogout}
             >
-              Welcome Hatim
+              Welcome {name}
             </Typography>
             <Menu
               id="simple-menu"

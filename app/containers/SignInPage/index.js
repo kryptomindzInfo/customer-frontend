@@ -124,7 +124,8 @@ const SignInPage = props => (
             throw res.data.error;
           } else {
             localStorage.setItem('customerLogged', res.data.token);
-            localStorage.setItem('loggedUser', res.data.user);
+            const loggedUser = JSON.stringify(res.data.user);
+            localStorage.setItem('loggedUser', loggedUser);
             redirectUser(res.data.user);
           }
         } else {
@@ -155,8 +156,6 @@ const SignInPage = props => (
       } = formikProps;
 
       const { classes } = props;
-      const token = localStorage.getItem('customerLogged');
-      const status = localStorage.getItem('onboardingStatus');
 
       return (
         <Fragment>

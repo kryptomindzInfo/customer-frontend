@@ -21,7 +21,7 @@ const styles = theme => ({
     flexDirection: 'row',
   },
 
- formFields: {
+  formFields: {
     display: 'flex',
     flexDirection: 'column',
     marginTop: '0px',
@@ -54,74 +54,173 @@ const styles = theme => ({
     fontWeight: '600',
     textTransform: 'capitalize',
   },
+  errorText: {
+    color: 'red',
+    marginTop: '5px',
+    fontSize: '12px',
+  },
 });
 
 class PersonalInfoTab extends React.Component {
   constructor(props) {
     super(props);
+    const { name, email, mobile } = JSON.parse(
+      localStorage.getItem('loggedUser'),
+    );
     this.state = {
-      name: '', email: '', phoneNumber: '',
+      name,
+      email,
+      phoneNumber: mobile,
+      nameErr: false,
+      nameErrorText: '',
+      emailErr: false,
+      emailErrorText: '',
     };
   }
 
   render() {
     const { classes } = this.props;
-    return (<div>
-      <div className={classes.personalInfoContainer}>
-        <span style={{fontWeight: '600'}}>Personal Info</span>
-        <div className={classes.formContainer}>
-          <div className={classes.formFields}>
-            <span className={classes.fieldHeading}>Name</span>
-            <FormControl variant='outlined'>
-              <OutlinedInput
-                id='name'
-                type='text'
-                className={classes.inputField}
-                value={this.state.name}
-                onChange={e => this.setState({ name: e.target.value })}
-                endAdornment={<InputAdornment position='end'>
-                  <Button size='small'className={classes.updateButton}>
-                    Update
-                  </Button>
-                </InputAdornment>}
-                labelWidth={0}
-              />
-            </FormControl>
-          </div>
-          <div className={classes.formFields}>
-            <span className={classes.fieldHeading}>Email</span>
-            <FormControl variant='outlined'>
-              <OutlinedInput
-                id='email'
-                type='text'
-                value={this.state.email}
-                className={classes.inputField}
-                onChange={e => this.setState({ email: e.target.value })}
-                endAdornment={<InputAdornment position='end'>
-                  <Button size='small' className={classes.updateButton}>
-                    Update
-                  </Button>
-                </InputAdornment>}
-                labelWidth={0}
-              />
-            </FormControl>
-          </div>
-          <div className={classes.formFields}>
-            <span className={classes.fieldHeading}>Phone Number</span>
-            <FormControl variant='outlined'>
-              <OutlinedInput
-                id='mobileNumber'
-                type='text'
-                disabled={true}
-                className={classes.inputField}
-                value='8148248293'
-                labelWidth={0}
-              />
-            </FormControl>
+    const user = JSON.parse(localStorage.getItem('loggedUser'));
+    const updateUserName = value => {
+      if (value) {
+        if (value === user.name) {
+          return;
+        }
+        if (value.match('^[a-zA-Z\\s]*$')) {
+          user.name = value;
+          const updateUser = JSON.stringify(user);
+          localStorage.setItem('loggedUser', updateUser);
+        } else {
+          this.setState({
+            nameErr: true,
+            nameErrorText: 'Please enter a valid name',
+          });
+        }
+      } else {
+        this.setState({
+          nameErr: true,
+          nameErrorText: 'Please enter a valid name',
+        });
+      }
+    };
+    const updateUserEmail = value => {
+      if (value) {
+        if (value === user.email) {
+          return;
+        }
+        if (
+          value.match(
+            '^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
+          )
+        ) {
+          user.email = value;
+          const updateUser = JSON.stringify(user);
+          localStorage.setItem('loggedUser', updateUser);
+        } else {
+          this.setState({
+            emailErr: true,
+            emailErrorText: 'Please enter a valid email',
+          });
+        }
+      } else {
+        this.setState({
+          emailErr: true,
+          emailErrorText: 'Please enter a valid email',
+        });
+      }
+    };
+    return (
+      <div>
+        <div className={classes.personalInfoContainer}>
+          <span style={{ fontWeight: '600' }}>Personal Info</span>
+          <div className={classes.formContainer}>
+            <div className={classes.formFields}>
+              <span className={classes.fieldHeading}>Name</span>
+              <FormControl variant="outlined">
+                <OutlinedInput
+                  id="name"
+                  error={this.state.nameErr}
+                  type="text"
+                  onClick={() => updateUserEmail(this.state.email)}
+                  className={classes.inputField}
+                  value={this.state.name}
+                  onChange={e =>
+                    this.setState({
+                      name: e.target.value,
+                      nameErr: false,
+                      nameErrorText: '',
+                    })
+                  }
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Button
+                        onClick={() => updateUserName(this.state.name)}
+                        size="small"
+                        className={classes.updateButton}
+                      >
+                        Update
+                      </Button>
+                    </InputAdornment>
+                  }
+                  labelWidth={0}
+                />
+                <span className={classes.errorText}>
+                  {this.state.nameErrorText}
+                </span>
+              </FormControl>
+            </div>
+            <div className={classes.formFields}>
+              <span className={classes.fieldHeading}>Email</span>
+              <FormControl variant="outlined">
+                <OutlinedInput
+                  id="email"
+                  type="text"
+                  value={this.state.email}
+                  error={this.state.emailErr}
+                  helperText={this.state.emailErrorText}
+                  className={classes.inputField}
+                  onChange={e =>
+                    this.setState({
+                      email: e.target.value,
+                      emailErr: false,
+                      emailErrorText: '',
+                    })
+                  }
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Button
+                        onClick={() => updateUserEmail(this.state.email)}
+                        size="small"
+                        className={classes.updateButton}
+                      >
+                        Update
+                      </Button>
+                    </InputAdornment>
+                  }
+                  labelWidth={0}
+                />
+                <span className={classes.errorText}>
+                  {this.state.emailErrorText}
+                </span>
+              </FormControl>
+            </div>
+            <div className={classes.formFields}>
+              <span className={classes.fieldHeading}>Phone Number</span>
+              <FormControl variant="outlined">
+                <OutlinedInput
+                  id="mobileNumber"
+                  type="text"
+                  disabled
+                  className={classes.inputField}
+                  value={this.state.phoneNumber}
+                  labelWidth={0}
+                />
+              </FormControl>
+            </div>
           </div>
         </div>
       </div>
-    </div>);
+    );
   }
 }
 

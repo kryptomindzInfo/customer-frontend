@@ -107,7 +107,7 @@ class ProfilePage extends React.Component {
                 <span className={classes.settingTabIcon}>
                   <img width="25px" height="20px" src={documentIcon} />
                 </span>
-                <span>Log in and Security</span>
+                <span>Change Password</span>
               </div>
               <div
                 className={classes.settingButton}
