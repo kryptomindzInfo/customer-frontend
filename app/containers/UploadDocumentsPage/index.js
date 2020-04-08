@@ -199,11 +199,13 @@ class UploadDocumentsPage extends Component {
   addHashes(list) {
     const data = {};
     const controller = 'saveUploadedDocsHash';
-    data.mobile = '8861485204';
+    const token = localStorage.getItem('customerLogged');
+    data.token = token;
     if (list.length > 0) {
       data.hashes = list;
     }
-    axios.post(`${API_URL}/user/${controller}`, data)
+    axios
+      .post(`${API_URL}/user/${controller}`, data)
       .then(res => {
         if (res.status === 200) {
           if (res.data.error) {
@@ -228,27 +230,28 @@ class UploadDocumentsPage extends Component {
 
   skipUpload = () => {
     const token = localStorage.getItem('customerLogged');
-    axios.post(`${API_URL}/user/skipDocsUpload`, { token }).then(res => {
-      if (res.status === 200) {
-        if (res.data.error) {
+    axios
+      .post(`${API_URL}/user/skipDocsUpload`, { token })
+      .then(res => {
+        if (res.status === 200) {
+          if (res.data.error) {
+            throw res.data.error;
+          } else {
+            this.setState((prevState, props) => ({
+              fileHashes: [],
+            }));
+            history.push('/dashboard');
+          }
+        } else {
           throw res.data.error;
         }
-        else {
-          this.setState((prevState, props) => ({
-            fileHashes: [],
-          }));
-          history.push('/dashboard');
-        }
-      }
-      else {
-        throw res.data.error;
-      }
-    }).catch(err => {
-      this.setState({
-        notification: err.response ? err.response.data.error : err.toString(),
+      })
+      .catch(err => {
+        this.setState({
+          notification: err.response ? err.response.data.error : err.toString(),
+        });
+        this.error();
       });
-      this.error();
-    });
   };
 
   render() {
