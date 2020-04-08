@@ -354,7 +354,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <RecentActivityTab rows={rows} />
+              <RecentActivityTab />
             </Grid>
             {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>

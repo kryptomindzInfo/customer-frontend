@@ -95,22 +95,18 @@ const styles = theme => ({
   },
 });
 
-const redirectUser = status => {
-  switch (status) {
+const redirectUser = user => {
+  switch (user.status) {
     case '1':
-      history.push('/dashboard');
-      break;
+      return history.push('/dashboard');
     case '2':
-      history.push('/choose-bank');
-      break;
+      return history.push('/choose-bank');
     case '3':
-      history.push('/upload-documents');
-      break;
+      return history.push('/upload-documents');
     case '4':
-      history.push('/dashboard');
-      return;
+      return history.push('/dashboard');
     default:
-      history.push('/dashboard');
+      return history.push('/dashboard');
   }
 };
 
@@ -130,8 +126,8 @@ const SignInPage = props => (
             throw res.data.error;
           } else {
             localStorage.setItem('customerLogged', res.data.token);
-            localStorage.setItem('onboardingStatus', res.data.status);
-            redirectUser(res.data.status);
+            localStorage.setItem('loggedUser', res.data.user);
+            redirectUser(res.data.user);
           }
         } else {
           throw res.data.error;

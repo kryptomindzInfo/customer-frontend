@@ -1,15 +1,8 @@
-import React, { Fragment, useState } from 'react';
-import {
-  Button,
-  Grid,
-  makeStyles,
-  Paper,
-  Tab,
-  Tabs,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Grid, makeStyles, Paper, Tab, Tabs, Typography, withStyles } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
+import axios from 'axios';
+import { API_URL } from '../App/constants';
 
 const DashBoardTabs = withStyles({
   indicator: {
@@ -42,7 +35,7 @@ const DashboardTab = withStyles(theme => ({
   },
 }))(props => <Tab disableRipple {...props} />);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   paper: {
     padding: '2%',
     width: '100%',
@@ -62,24 +55,58 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '10%',
   },
 }));
-export default ({ rows }) => {
+
+const getTransactionHistory = async () => {
+  try {
+    const controller = 'getTransactionHistory';
+    const values = localStorage.getItem('customerLogged');
+
+    const res = await axios.post(`${API_URL}/user/${controller}`, {
+      token: values,
+    });
+    if (res.status === 200) {
+      if (res.data.error) {
+        throw res.data.error;
+      } else {
+        return res.data.history;
+      }
+    } else {
+      throw res.data.error;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export default () => {
   const classes = useStyles();
+  let rows = [];
+  useEffect(() => {
+    getTransactionHistory()
+      .then(r => {
+        rows = r;
+        return rows;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, rows);
   const [fullRow, setRow] = useState(rows);
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     switch (newValue) {
       case 0:
-        setRow([...rows]);
+        setRow(rows);
         break;
       case 1:
-        setRow([...rows.filter(row => row.action === 'TRANSFERED')]);
+        setRow(rows.filter(row => row.action === 'TRANSFERED'));
         break;
       case 2:
-        setRow([...rows.filter(row => row.action === 'RECIEVED')]);
+        setRow(rows.filter(row => row.action === 'RECIEVED'));
         break;
       default:
-        setRow([...rows]);
+        setRow(rows);
     }
     setValue(newValue);
   };
@@ -88,7 +115,6 @@ export default ({ rows }) => {
     <Fragment>
       <Grid
         container
-        xs={12}
         justify="flex-start"
         alignItems="flex-start"
         className={classes.paper}
@@ -114,12 +140,7 @@ export default ({ rows }) => {
           </Icon>
         </Grid>
         <Grid
-          container
-          xl={6}
-          lg={6}
-          md={4}
-          sm={4}
-          xs={12}
+          column
           direction="column"
           justify="flex-start"
           alignItems="flex-start"
@@ -128,14 +149,19 @@ export default ({ rows }) => {
             Recent Activity
           </Typography>
           <Typography
-            variant="headline"
+            variant="subtitle1"
             styles={{ textAlign: 'start', color: '#9ea0a5' }}
           >
             E-wallet activity
           </Typography>
         </Grid>
       </Grid>
-      <DashBoardTabs onChange={handleChange} value={value}>
+      <DashBoardTabs
+        variant="scrollable"
+        scrollButtons="auto"
+        onChange={handleChange}
+        value={value}
+      >
         <DashboardTab label="All" className={classes.allTab} />
         <DashboardTab label="Payment Sent" className={classes.tab} />
         <DashboardTab label="Payment Recieved" className={classes.tab} />
@@ -152,20 +178,15 @@ export default ({ rows }) => {
             <Grid container spacing={2} alignItems="center" justify="center">
               <Grid
                 container
-                xl={2}
-                lg={2}
-                md={4}
-                sm={4}
-                xs={12}
                 direction="column"
                 justify="flex-start"
                 alignItems="flex-start"
                 className={classes.rowField}
               >
-                <Typography variant="headline" styles={{ textAlign: 'start' }}>
+                <Typography variant="subtitle1" styles={{ textAlign: 'start' }}>
                   {row.date}
                 </Typography>
-                <Typography variant="headline">{row.time}</Typography>
+                <Typography variant="subtitle1">{row.time}</Typography>
               </Grid>
               <Grid
                 item
@@ -178,10 +199,10 @@ export default ({ rows }) => {
                 alignItems="flex-start"
                 className={classes.rowField}
               >
-                <Typography variant="headline">{row.id}</Typography>
+                <Typography variant="subtitle1">{row.id}</Typography>
               </Grid>
               <Grid
-                container
+                item
                 xl={5}
                 lg={5}
                 md={4}
@@ -197,7 +218,7 @@ export default ({ rows }) => {
                 </Typography>
                 <Typography
                   color="primary"
-                  variant="headline"
+                  variant="subtitle1"
                   styles={{ textAlign: 'start' }}
                 >
                   {row.status}
@@ -214,7 +235,7 @@ export default ({ rows }) => {
                 alignItems="flex-start"
                 className={classes.rowField}
               >
-                <Typography variant="headline">{row.source}</Typography>
+                <Typography variant="subtitle1">{row.source}</Typography>
               </Grid>
               <Grid
                 item
@@ -235,7 +256,6 @@ export default ({ rows }) => {
       </Grid>
       <Grid
         container
-        xs={12}
         justify="flex-end"
         alignItems="flex-end"
         className={classes.paper}
