@@ -89,7 +89,7 @@ const MainHeader = props => {
     setAnchorEl(null);
   };
   const onLogoutClick = () => {
-    localStorage.removeItem('customerLogged');
+    localStorage.clear();
     history.push('/');
   };
 

@@ -6,7 +6,7 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
@@ -63,7 +63,7 @@ export default function App() {
   };
   return (
     // <AppWrapper>
-    <div>
+    <Fragment>
       <Switch>
         <Route
           exact
@@ -116,6 +116,6 @@ export default function App() {
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
-    </div>
+    </Fragment>
   );
 }

@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 
 import { Typography, withStyles } from '@material-ui/core';
@@ -12,12 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import history from 'utils/history';
 import { Form, Formik } from 'formik';
 
 import * as Yup from 'yup';
 
 import Link from '@material-ui/core/Link';
+import history from '../../utils/history';
 import { API_URL } from '../App/constants';
 
 // import A from 'components/A';
@@ -98,15 +98,13 @@ const styles = theme => ({
 const redirectUser = user => {
   switch (user.status) {
     case '1':
+    case '4':
+    default:
       return history.push('/dashboard');
     case '2':
       return history.push('/choose-bank');
     case '3':
       return history.push('/upload-documents');
-    case '4':
-      return history.push('/dashboard');
-    default:
-      return history.push('/dashboard');
   }
 };
 
@@ -161,8 +159,7 @@ const SignInPage = props => (
       const status = localStorage.getItem('onboardingStatus');
 
       return (
-        <div>
-          {token !== null ? redirectUser(status) : null}
+        <Fragment>
           <Helmet>
             <title>SignInPage</title>
             <meta name="description" content="Description of SignInPage" />
@@ -288,7 +285,7 @@ const SignInPage = props => (
               </Grid>
             </Grid>
           </div>
-        </div>
+        </Fragment>
       );
     }}
   </Formik>

@@ -140,6 +140,9 @@ class UploadDocumentsPage extends Component {
   }
 
   fileUpload(file, key) {
+    const doc = {};
+    doc.name = file.name;
+    doc.type = file.type;
     const formData = new FormData();
     //  formData.append('token',token);
     formData.append('file', file);
@@ -163,9 +166,10 @@ class UploadDocumentsPage extends Component {
           if (res.data.error) {
             throw res.data.error;
           } else {
+            doc.hash = res.data.name;
             this.setState((prevState, props) => ({
               [key]: res.data.name,
-              fileHashes: [...prevState.fileHashes, res.data.name],
+              fileHashes: [...prevState.fileHashes, doc],
             }));
           }
         } else {
