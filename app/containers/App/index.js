@@ -29,6 +29,7 @@ import ProfilePage from '../ProfilePage';
 import { ProtectedRoute } from './ProtectedRoute';
 
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 toast.configure({
   position: 'bottom-right',
@@ -48,6 +49,8 @@ toast.configure({
 // `;
 
 export default function App() {
+  const AUTH_TOKEN = localStorage.getItem('customerLogged');
+  axios.defaults.headers.common.Authorization = AUTH_TOKEN;
   const notify = (txt, type) => {
     if (txt && type) {
       if (type == 'success') {

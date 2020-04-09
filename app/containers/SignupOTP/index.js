@@ -105,11 +105,11 @@ const SignupOTP = props => (
   // useInjectSaga({ key: 'SignupOTP', saga });
   <Formik
     initialValues={{
-      mobileNumber: localStorage.getItem("customerMobile"),
-      name : localStorage.getItem("customerName"),
-      email : localStorage.getItem("customerEmail"),
-      address : localStorage.getItem("customerAddress"),
-      password: localStorage.getItem("customerPassword"),
+      mobile: localStorage.getItem('customerMobile'),
+      name: localStorage.getItem('customerName'),
+      email: localStorage.getItem('customerEmail'),
+      address: localStorage.getItem('customerAddress'),
+      password: localStorage.getItem('customerPassword'),
       otp: '',
     }}
     onSubmit={async values => {
@@ -130,7 +130,7 @@ const SignupOTP = props => (
       }
     }}
     validationSchema={Yup.object().shape({
-      password: Yup.string().required('Required'),
+      password: Yup.number().required('Required'),
     })}
   >
     {formikProps => {
@@ -149,10 +149,7 @@ const SignupOTP = props => (
         <div>
           <Helmet>
             <title>SignupOTP</title>
-            <meta
-              name="description"
-              content="Description of SignupOTP"
-            />
+            <meta name="description" content="Description of SignupOTP" />
           </Helmet>
           <div className={classes.root}>
             <Grid container justify="center">
@@ -182,7 +179,7 @@ const SignupOTP = props => (
                   }}
                   variant="h5"
                 >
-                  Enter OTP for { values.mobileNumber}
+                  Enter OTP for {values.mobile}
                 </Typography>
 
                 <Form>

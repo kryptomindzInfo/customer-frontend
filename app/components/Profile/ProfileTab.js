@@ -8,6 +8,7 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PersonalInfoTab from './PersonalInfoTab';
 import DocumentsTab from './DocumentsTab';
+import ChangePasswordTab from './ChangePasswordTab';
 
 const styles = theme => ({
   root: {
@@ -68,7 +69,7 @@ class ProfileTab extends React.Component {
         component = <PersonalInfoTab />;
         break;
       case 'security':
-        component = <span>Change Password</span>;
+        component = <ChangePasswordTab />;
         break;
       case 'documents':
         component = <DocumentsTab />;

@@ -5,23 +5,17 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import { Grid } from '@material-ui/core';
-import { withStyles, Typography } from '@material-ui/core';
+import { Grid, Typography, withStyles } from '@material-ui/core';
 
 import appStore from 'images/appStore.png';
 import GooglePlayLogo from 'images/GooglePlayLogo.png';
+// import PropTypes from 'prop-types';
+// import styled from 'styled-components';
 
 const styles = theme => ({
   mainContainer: {
     // paddingLeft: '11%',
     textAlign: 'center',
-    border: '1px solid #cbd2d6',
-
     borderRadius: '7px',
     paddingRight: '0%',
     background: 'white',
@@ -66,7 +60,11 @@ function CardDownloadOurApp(props) {
           >
             Send & receive money through your mobile
           </Typography>
-          <a onClick={() => window.open('https://www.apple.com/in/ios/app-store/')} >
+          <a
+            onClick={() =>
+              window.open('https://www.apple.com/in/ios/app-store/')
+            }
+          >
             <img className={classes.appStoreLogo} src={appStore} />
           </a>
           <br />

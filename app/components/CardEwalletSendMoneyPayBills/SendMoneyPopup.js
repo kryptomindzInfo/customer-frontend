@@ -3,7 +3,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { Checkbox, FormControlLabel, Grid, Typography } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -20,7 +25,6 @@ const dialogTilteStyles = theme => ({
     color: 'white',
     textAlign: 'center',
     backgroundColor: 'orange',
-    padding: theme.spacing(2),
   },
   closeButton: {
     position: 'absolute',
@@ -50,10 +54,10 @@ const DialogTitle = withStyles(dialogTilteStyles)(props => {
 
 const dialogStyles = theme => ({
   paper: {
-    minHeight: '90%',
+    minHeight: '95%',
     maxHeight: '90%',
     minWidth: '95%',
-    maxWidth: '95%',
+    maxWidth: '100%',
   },
 });
 
@@ -70,17 +74,22 @@ const VerifyDialogModal = withStyles(verifyDialogStyles)(Dialog);
 const DialogModal = withStyles(dialogStyles)(Dialog);
 
 const dialogContentStyles = makeStyles(theme => ({
+  '@global': {
+    'MuiOutlinedInput-input': {
+      padding: '12.5px 10px 12.5px 10px',
+    },
+  },
   dialogNonWallet: {
     paddingTop: '5%',
   },
   dialogGridLeft: {
-    paddingTop: '15%',
+    paddingTop: '5%',
     paddingBottom: '2%',
     paddingLeft: '10%',
     paddingRight: '2%',
   },
   dialogGridRight: {
-    paddingTop: '7.5%',
+    paddingTop: '5%',
     paddingBottom: '2%',
     paddingRight: '10%',
     paddingLeft: '2%',
@@ -89,7 +98,7 @@ const dialogContentStyles = makeStyles(theme => ({
   dialogTextFieldGrid: {
     paddingLeft: '1%',
     paddingRight: '1%',
-    paddingBottom: '2%',
+    paddingBottom: '1.5%',
   },
   dialogTextField: {
     paddingLeft: '1%',
@@ -101,6 +110,10 @@ const dialogContentStyles = makeStyles(theme => ({
   dialogTextFieldGridErrorText: {
     color: 'red',
     fontSize: '12px',
+  },
+  dialogTextFieldFullRow: {
+    padding: '0.5%',
+    marginBottom: '10px',
   },
   dialogSubHeader: {
     paddingBottom: '4%',
@@ -121,7 +134,7 @@ const dialogContentStyles = makeStyles(theme => ({
   },
   toggleButtonGroup: {
     color: 'green',
-    marginTop: '30px',
+    marginTop: '10px',
   },
   toggleButton: {
     width: '150px',
@@ -189,14 +202,7 @@ export default function SendMoneyPopup(props) {
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Send Money
         </DialogTitle>
-        <Grid
-          xs={12}
-          md={12}
-          container
-          spacing={2}
-          direction="column"
-          alignItems="center"
-        >
+        <Grid xs={12} md={12} container direction="column" alignItems="center">
           <Grid item>
             <ToggleButtonGroup
               className={classes.toggleButtonGroup}
@@ -307,7 +313,6 @@ export default function SendMoneyPopup(props) {
                       <Grid
                         container
                         direction="column"
-                        spacing={2}
                         className={classes.dialogGridLeft}
                       >
                         <Grid container direction="row" alignItems="flex-start">
@@ -321,6 +326,7 @@ export default function SendMoneyPopup(props) {
                               autoFocus
                               id="form-phone-pre"
                               label="+91"
+                              className={classes.formField}
                               variant="outlined"
                               type="text"
                               disabled
@@ -424,6 +430,7 @@ export default function SendMoneyPopup(props) {
                           <Grid
                             item
                             xs={12}
+                            md={12}
                             alignItems="center"
                             className={classes.dialogTextFieldGrid}
                           >
@@ -552,7 +559,14 @@ export default function SendMoneyPopup(props) {
                           direction="column"
                           alignItems="flex-start"
                         >
-                          <Grid item className={classes.dialogTextFieldGrid}>
+                          <Grid
+                            item
+                            style={{
+                              paddingBottom: '0px',
+                              marginBottom: '-10px',
+                            }}
+                            className={classes.dialogTextFieldGrid}
+                          >
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -598,7 +612,6 @@ export default function SendMoneyPopup(props) {
                       <Grid
                         container
                         direction="column"
-                        spacing={2}
                         className={classes.dialogGridRight}
                       >
                         <Typography
@@ -786,7 +799,7 @@ export default function SendMoneyPopup(props) {
                               placeholder="Note"
                               variant="outlined"
                               multiline
-                              rows="4"
+                              rows="3"
                               type="text"
                               value={values.note}
                               onChange={handleChange}

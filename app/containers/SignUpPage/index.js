@@ -155,7 +155,7 @@ const SignUpPage = props => (
   <Formik
     initialValues={{
       name: '',
-      mobileNumber: '',
+      mobile: '',
       email: '',
       address: '',
       password: '',
@@ -168,7 +168,7 @@ const SignUpPage = props => (
           if (res.data.error) {
             throw res.data.error;
           } else {
-            localStorage.setItem('customerMobile', values.mobileNumber);
+            localStorage.setItem('customerMobile', values.mobile);
             localStorage.setItem('customerName', values.name);
             localStorage.setItem('customerEmail', values.email);
             localStorage.setItem('customerAddress', values.address);
@@ -279,8 +279,8 @@ const SignUpPage = props => (
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    name="mobileNumber"
-                    value={values.mobileNumber}
+                    name="mobile"
+                    value={values.mobile}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />

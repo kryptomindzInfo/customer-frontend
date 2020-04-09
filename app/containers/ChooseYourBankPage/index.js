@@ -6,9 +6,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import axios from 'axios';
+import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 import { API_URL, STATIC_URL } from '../App/constants';
 import history from '../../utils/history';
 
@@ -48,12 +48,13 @@ const ChooseYourBankPage = props => {
   const val = '';
   useEffect(() => {
     fetchBanks()
-    .then(res => {
-      setState({
-        listOfBanks: res.data.banks,
+      .then(res => {
+        setState({
+          listOfBanks: res.data.banks,
+        });
       })
-    }).catch();
-  },[val]);
+      .catch();
+  }, [val]);
 
   const [state, setState] = useState({
     listOfBanks: [],
@@ -62,9 +63,7 @@ const ChooseYourBankPage = props => {
   const token = localStorage.getItem('customerLogged');
   const fetchBanks = async () => {
     try {
-      const res = await axios.post(`${API_URL}/user/getBanks`, {
-        token,
-      });
+      const res = await axios.get(`${API_URL}/user/getBanks`);
       if (res.status === 200) {
         return res;
       }
@@ -77,7 +76,7 @@ const ChooseYourBankPage = props => {
   const saveBank = async bank => {
     try {
       const res = await axios.post(`${API_URL}/user/assignBank`, {
-        bank, token,
+        bank,
       });
       if (res.status === 200) {
         history.push('/upload-documents');
@@ -111,7 +110,11 @@ const ChooseYourBankPage = props => {
             >
               {state.listOfBanks.map((lob, i) => (
                 <Grid md={3} sm={6} xs={12} key={i}>
-                  <img className={classes.bankIcons}  onClick={() => saveBank(lob)} src={`${STATIC_URL}/${lob.logo}`} />
+                  <img
+                    className={classes.bankIcons}
+                    onClick={() => saveBank(lob)}
+                    src={`${STATIC_URL}/${lob.logo}`}
+                  />
                   <Typography variant="h5" className={classes.nameOfBank}>
                     {lob.name}
                   </Typography>

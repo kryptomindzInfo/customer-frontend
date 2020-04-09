@@ -8,7 +8,6 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import pdfFileIcon from '../../images/pdf_icon.png';
 import documentFileIcon from '../../images/document_icon.png';
-import imageFileIcon from '../../images/jpg_icon.png';
 
 const styles = theme => ({
   root: {
@@ -48,23 +47,31 @@ class DocumentsTab extends React.Component {
     this.state = {
       documentList: [
         {
-          id: '1',
-          fileName: 'contract',
-          fileType: 'pdf',
+          hash: '1',
+          name: 'contract',
+          type: 'application/pdf',
         },
         {
-          id: '2',
-          fileName: 'Identity',
-          fileType: 'pdf',
-        },
-        {
-          id: '3',
-          fileName: 'Pan',
-          fileType: 'doc',
+          hash: '2',
+          name: 'Identity',
+          type: 'application/docs',
         },
       ],
     };
   }
+
+  componentDidMount = async () => {
+    // const user = JSON.parse(localStorage.getItem('loggedUser'));
+    // const payload = {
+    //   token: user.token,
+    // };
+    // const res = await axios.post(`${API_URL}/user/getUser`, payload);
+    // if (res.status === 200) {
+    //   this.setState({ documentList: res.data.docsHash });
+    // } else {
+    //   console.log('Error');
+    // }
+  };
 
   render() {
     const { classes } = this.props;
@@ -73,22 +80,20 @@ class DocumentsTab extends React.Component {
         <div className={classes.documentContainer}>
           <span style={{ fontWeight: '600' }}>Documents</span>
           <div className={classes.documentsTab}>
-            <div className={classes.documentCard}>
-              <img width={60} height={70} src={pdfFileIcon} />
-              <span style={{ marginTop: '20px' }}>Contract</span>
-            </div>
-            <div className={classes.documentCard}>
-              <img width={60} height={70} src={documentFileIcon} />
-              <span style={{ marginTop: '20px' }}>Agreement</span>
-            </div>
-            <div className={classes.documentCard}>
-              <img width={60} height={70} src={imageFileIcon} />
-              <span style={{ marginTop: '20px' }}>Photo</span>
-            </div>
-            <div className={classes.documentCard}>
-              <img width={60} height={70} src={documentFileIcon} />
-              <span style={{ marginTop: '20px' }}>Agreement</span>
-            </div>
+            {this.state.documentList.map((value, index) => (
+              <div key={index} className={classes.documentCard}>
+                <img
+                  width={60}
+                  height={70}
+                  src={
+                    value.type === 'application/pdf'
+                      ? pdfFileIcon
+                      : documentFileIcon
+                  }
+                />
+                <span style={{ marginTop: '20px' }}>{value.name}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -97,14 +97,16 @@ const styles = theme => ({
 
 const redirectUser = user => {
   switch (user.status) {
-    case '1':
-    case '4':
+    case 1:
+      return history.push('/dashboard');
+    case 2:
+      return history.push('/choose-bank');
+    case 3:
+      return history.push('/upload-documents');
+    case 4:
+      return history.push('/dashboard');
     default:
       return history.push('/dashboard');
-    case '2':
-      return history.push('/choose-bank');
-    case '3':
-      return history.push('/upload-documents');
   }
 };
 
