@@ -9,7 +9,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
 import pdfFileIcon from '../../images/pdf_icon.png';
 import documentFileIcon from '../../images/document_icon.png';
-import { API_URL } from '../../containers/App/constants';
+import { API_URL, CONTRACT_URL } from '../../containers/App/constants';
 
 const styles = theme => ({
   root: {
@@ -82,18 +82,20 @@ class DocumentsTab extends React.Component {
           <div className={classes.documentsTab}>
             {this.state.documentList.length > 0 ? (
               this.state.documentList.map((value, index) => (
-                <div key={index} className={classes.documentCard}>
-                  <img
-                    width={60}
-                    height={70}
-                    src={
-                      value.type === 'application/pdf'
-                        ? pdfFileIcon
-                        : documentFileIcon
-                    }
-                  />
-                  <span style={{ marginTop: '20px' }}>{value.name}</span>
-                </div>
+                <a target="_blank" href={`${CONTRACT_URL}/${value.hash}`}>
+                  <div key={index} className={classes.documentCard}>
+                    <img
+                      width={60}
+                      height={70}
+                      src={
+                        value.type === 'application/pdf'
+                          ? pdfFileIcon
+                          : documentFileIcon
+                      }
+                    />
+                    <span style={{ marginTop: '20px' }}>{value.name}</span>
+                  </div>
+                </a>
               ))
             ) : (
               <div className={classes.documentCard}>

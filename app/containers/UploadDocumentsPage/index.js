@@ -306,7 +306,7 @@ class UploadDocumentsPage extends Component {
                     onChange={this.onChange}
                     data-key="contract"
                     multiple
-                    accept=".pdf"
+                    accept=".pdf,.docs"
                   />
                   {!this.state.document1 ? (
                     <i
