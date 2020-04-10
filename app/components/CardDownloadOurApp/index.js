@@ -40,7 +40,7 @@ const styles = theme => ({
     paddingBottom: '5%',
   },
   appStoreLogo: {
-    width: '96px',
+    width: '150px',
     padding: '15px 0px 15px 0px',
   },
 });

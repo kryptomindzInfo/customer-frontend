@@ -9,11 +9,13 @@ import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import history from 'utils/history';
 
-import { CURRENCY } from 'containers/App/constants';
+import { API_URL, CURRENCY } from 'containers/App/constants';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 import SendMoneyPopup from './SendMoneyPopup';
+
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
@@ -34,8 +36,12 @@ const styles = theme => ({
     },
   },
   cardEwalletTitle: {
-    paddingTop: '4%',
-    paddingBottom: '12%',
+    paddingTop: '5%',
+    paddingBottom: '5%',
+    fontWeight: 500,
+    width: '150px',
+    marginRight: '-100px',
+    fontSize: '32px',
   },
   cardEwalletCurrency: {
     fontWeight: 600,
@@ -71,7 +77,17 @@ const styles = theme => ({
     '&:hover': {
       background: theme.palette.primary.hover,
     },
-    // paddingBottom: 0
+  },
+  eWalletTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cardBankTitle: {
+    paddingTop: '3%',
+    fontSize: '12px',
+    marginRight: '20px',
+    wordBreak: 'break-word',
   },
 });
 
@@ -96,6 +112,16 @@ class CardEwalletSendMoneyPayBills extends Component {
     history.push('/bill-payments-merchants');
   };
 
+  componentDidMount = async () => {
+    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+    const res = await axios.get(`${API_URL}/user/getBalance`, { username });
+    if (res.data.status === 1) {
+      this.setState({ balance: res.data.balance });
+    } else {
+      console.log('Error while fetching balance ');
+    }
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -103,9 +129,12 @@ class CardEwalletSendMoneyPayBills extends Component {
       <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
           <Grid item md={12} xs={12} sm={12}>
-            <Typography className={classes.cardEwalletTitle} variant="h5">
-              E-WALLET
-            </Typography>
+            <div className={classes.eWalletTitle}>
+              <span className={classes.cardEwalletTitle}>E-WALLET</span>
+              <span className={classes.cardBankTitle}>
+                Powered by Axis bank
+              </span>
+            </div>
             <Typography variant="subtitle2">Available:</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}

@@ -3,12 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, Grid, Typography } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -243,6 +238,7 @@ export default function SendMoneyPopup(props) {
               receiverCountry: '',
               receiverEmail: '',
               receiverIdentificationCountry: '',
+              receiverTermsAndCondition: false,
               receiverIdentificationType: '',
               receiverIdentificationNumber: '',
               receiverIdentificationValidTill: '',
@@ -618,7 +614,7 @@ export default function SendMoneyPopup(props) {
                           variant="h5"
                           className={classes.dialogSubHeader}
                         >
-                          Reciever's Identification
+                          Receiver Identification
                         </Typography>
 
                         <Grid container direction="row" alignItems="flex-start">
@@ -823,7 +819,12 @@ export default function SendMoneyPopup(props) {
                             Total Fee $200 will be charged
                           </Typography>
                           <FormControlLabel
-                            control={<Checkbox name="gilad" />}
+                            onChange={handleChange}
+                            required
+                            onBlur={handleBlur}
+                            control={<Checkbox name="terms" />}
+                            value={values.receiverTermsAndCondition}
+                            name="terms"
                             label={
                               <span>
                                 I have read the <u> terms and conditions </u>
