@@ -123,7 +123,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes,notify } = this.props;
 
     return (
       <Paper elevation={0}>
@@ -174,6 +174,7 @@ class CardEwalletSendMoneyPayBills extends Component {
           </Grid>
         </Grid>
         <SendMoneyPopup
+          notify={notify}
           onClose={() => this.closeSendMoneyPopup()}
           open={this.state.sendMoneyPopup}
         />

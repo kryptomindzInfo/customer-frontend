@@ -47,16 +47,16 @@ const DialogTitle = withStyles(dialogTilteStyles)(props => {
   );
 });
 
-const dialogStyles = theme => ({
+const dialogStyles = () => ({
   paper: {
-    minHeight: '95%',
-    maxHeight: '90%',
-    minWidth: '95%',
-    maxWidth: '100%',
+    minHeight: '80%',
+    maxHeight: '80%',
+    minWidth: '80%',
+    maxWidth: '80%',
   },
 });
 
-const verifyDialogStyles = theme => ({
+const verifyDialogStyles = () => ({
   paper: {
     minHeight: '50%',
     maxHeight: '50%',
@@ -99,9 +99,6 @@ const dialogContentStyles = makeStyles(theme => ({
     paddingLeft: '1%',
     paddingRight: '1%',
   },
-  dialogTextFieldGridError: {
-    border: '2px solid red',
-  },
   dialogTextFieldGridErrorText: {
     color: 'red',
     fontSize: '12px',
@@ -136,6 +133,7 @@ const dialogContentStyles = makeStyles(theme => ({
     background: '#1a841b',
     color: '#fff',
     '&:hover': {
+      background: '#1a841b',
       color: '#333',
     },
   },
@@ -252,15 +250,15 @@ export default function SendMoneyPopup(props) {
                 );
                 if (res.status === 200) {
                   if (res.data.error) {
-                    throw res.data.error;
+                    props.notify(res.data.error, 'error');
                   } else {
                     handleOnProceedClick();
                   }
                 } else {
-                  throw res.data.error;
+                  props.notify(res.data.error, 'error');
                 }
               } catch (err) {
-                console.log(err);
+                props.notify('Something went wrong', 'error');
               }
             }}
             validationSchema={Yup.object().shape({
@@ -874,15 +872,15 @@ export default function SendMoneyPopup(props) {
                 );
                 if (res.status === 200) {
                   if (res.data.error) {
-                    throw res.data.error;
+                    props.notify(res.data.error, 'error');
                   } else {
                     handleOnProceedClick();
                   }
                 } else {
-                  throw res.data.error;
+                  props.notify(res.data.error, 'error');
                 }
               } catch (err) {
-                console.log(err);
+                props.notify('Something went wrong', 'error');
               }
             }}
             validationSchema={Yup.object().shape({

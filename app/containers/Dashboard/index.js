@@ -273,7 +273,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, notify } = this.props;
     return (
       <div>
         <Helmet>
@@ -290,7 +290,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <CardEwalletSendMoneyPayBills />
+              <CardEwalletSendMoneyPayBills notify={notify} />
             </Grid>
             <Grid
               className={classes.gridCardDownloadApp}

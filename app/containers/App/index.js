@@ -100,7 +100,7 @@ export default function App() {
           path="/upload-documents"
           component={UploadDocumentsPage}
         />
-        <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+        <ProtectedRoute exact path="/dashboard" notify={notify} component={Dashboard} />
         <ProtectedRoute exact path="/contact" component={ContactPage} />
         <ProtectedRoute
           exact
