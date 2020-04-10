@@ -115,13 +115,13 @@ const SignInPage = props => (
   // useInjectSaga({ key: 'signInPage', saga });
   <Formik
     initialValues={{
-      mobileNumber: '',
+      username: '',
       password: '',
     }}
     onSubmit={async values => {
       try {
         const res = await axios.post(`${API_URL}/user/login`, values);
-        if (res.status === 200) {
+        if (res.data.status === 1) {
           if (res.data.error) {
             throw res.data.error;
           } else {
@@ -139,7 +139,7 @@ const SignInPage = props => (
       }
     }}
     validationSchema={Yup.object().shape({
-      mobileNumber: Yup.number(),
+      username: Yup.mixed(),
       // .max(15, 'Must be 15 characters or less')
       // .required('Required'),
 
@@ -205,8 +205,8 @@ const SignInPage = props => (
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
-                    name="mobileNumber"
-                    value={values.mobileNumber}
+                    name="username"
+                    value={values.username}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />

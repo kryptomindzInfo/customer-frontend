@@ -60,7 +60,6 @@ const ChooseYourBankPage = props => {
     listOfBanks: [],
   });
 
-  const token = localStorage.getItem('customerLogged');
   const fetchBanks = async () => {
     try {
       const res = await axios.get(`${API_URL}/user/getBanks`);
@@ -74,11 +73,13 @@ const ChooseYourBankPage = props => {
   };
 
   const saveBank = async bank => {
+    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
     try {
       const res = await axios.post(`${API_URL}/user/assignBank`, {
         bank,
+        username,
       });
-      if (res.status === 200) {
+      if (res.data.status === 1) {
         history.push('/upload-documents');
       } else {
         props.notify('Error while saving the bank', 'error');

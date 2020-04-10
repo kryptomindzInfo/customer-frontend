@@ -203,8 +203,8 @@ class UploadDocumentsPage extends Component {
   addHashes(list) {
     const data = {};
     const controller = 'saveUploadedDocsHash';
-    const token = localStorage.getItem('customerLogged');
-    data.token = token;
+    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+    data.username = username;
     if (list.length > 0) {
       data.hashes = list;
     }
@@ -233,11 +233,11 @@ class UploadDocumentsPage extends Component {
   }
 
   skipUpload = () => {
-    const token = localStorage.getItem('customerLogged');
+    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
     axios
-      .post(`${API_URL}/user/skipDocsUpload`, { token })
+      .post(`${API_URL}/user/skipDocsUpload`, { username })
       .then(res => {
-        if (res.status === 200) {
+        if (res.data.status === 1) {
           if (res.data.error) {
             throw res.data.error;
           } else {

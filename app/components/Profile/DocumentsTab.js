@@ -8,6 +8,8 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import pdfFileIcon from '../../images/pdf_icon.png';
 import documentFileIcon from '../../images/document_icon.png';
+import { API_URL } from '../../containers/App/constants';
+import axios from 'axios';
 
 const styles = theme => ({
   root: {
@@ -61,16 +63,13 @@ class DocumentsTab extends React.Component {
   }
 
   componentDidMount = async () => {
-    // const user = JSON.parse(localStorage.getItem('loggedUser'));
-    // const payload = {
-    //   token: user.token,
-    // };
-    // const res = await axios.post(`${API_URL}/user/getUser`, payload);
-    // if (res.status === 200) {
-    //   this.setState({ documentList: res.data.docsHash });
-    // } else {
-    //   console.log('Error');
-    // }
+    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+    const res = await axios.get(`${API_URL}/user/getDetails`, { username });
+    if (res.data.status === 1) {
+      this.setState({ documentList: res.data.user.docs_hash });
+    } else {
+      console.log('Error');
+    }
   };
 
   render() {
