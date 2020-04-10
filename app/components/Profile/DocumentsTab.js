@@ -6,10 +6,10 @@
 
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
+import axios from 'axios';
 import pdfFileIcon from '../../images/pdf_icon.png';
 import documentFileIcon from '../../images/document_icon.png';
 import { API_URL } from '../../containers/App/constants';
-import axios from 'axios';
 
 const styles = theme => ({
   root: {
@@ -66,6 +66,7 @@ class DocumentsTab extends React.Component {
     const { username } = JSON.parse(localStorage.getItem('loggedUser'));
     const res = await axios.get(`${API_URL}/user/getDetails`, { username });
     if (res.data.status === 1) {
+      localStorage.setItem('loggedUser', JSON.stringify(res.data.user));
       this.setState({ documentList: res.data.user.docs_hash });
     } else {
       console.log('Error');
@@ -79,20 +80,26 @@ class DocumentsTab extends React.Component {
         <div className={classes.documentContainer}>
           <span style={{ fontWeight: '600' }}>Documents</span>
           <div className={classes.documentsTab}>
-            {this.state.documentList.map((value, index) => (
-              <div key={index} className={classes.documentCard}>
-                <img
-                  width={60}
-                  height={70}
-                  src={
-                    value.type === 'application/pdf'
-                      ? pdfFileIcon
-                      : documentFileIcon
-                  }
-                />
-                <span style={{ marginTop: '20px' }}>{value.name}</span>
+            {this.state.documentList.length > 0 ? (
+              this.state.documentList.map((value, index) => (
+                <div key={index} className={classes.documentCard}>
+                  <img
+                    width={60}
+                    height={70}
+                    src={
+                      value.type === 'application/pdf'
+                        ? pdfFileIcon
+                        : documentFileIcon
+                    }
+                  />
+                  <span style={{ marginTop: '20px' }}>{value.name}</span>
+                </div>
+              ))
+            ) : (
+              <div className={classes.documentCard}>
+                <span>No documents uploaded</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

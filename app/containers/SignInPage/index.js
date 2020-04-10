@@ -102,7 +102,7 @@ const redirectUser = user => {
     case 2:
       return history.push('/choose-bank');
     case 3:
-      return history.push('/upload-documents');
+      return history.push('/dashboard');
     case 4:
       return history.push('/dashboard');
     default:

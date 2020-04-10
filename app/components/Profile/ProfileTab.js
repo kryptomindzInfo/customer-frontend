@@ -66,16 +66,16 @@ class ProfileTab extends React.Component {
     let component;
     switch (this.props.tabInfo) {
       case 'personalInfo':
-        component = <PersonalInfoTab />;
+        component = <PersonalInfoTab notify={this.props.notify} />;
         break;
       case 'security':
-        component = <ChangePasswordTab />;
+        component = <ChangePasswordTab notify={this.props.notify} />;
         break;
       case 'documents':
-        component = <DocumentsTab />;
+        component = <DocumentsTab notify={this.props.notify} />;
         break;
       default:
-        component = <PersonalInfoTab />;
+        component = <PersonalInfoTab notify={this.props.notify} />;
     }
     return <div>{component}</div>;
   }

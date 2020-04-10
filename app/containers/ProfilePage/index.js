@@ -83,7 +83,7 @@ class ProfilePage extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, notify } = this.props;
     return (
       <div>
         <MainHeader />
@@ -105,7 +105,7 @@ class ProfilePage extends React.Component {
                 onClick={() => this.setState({ tabOpen: 'security' })}
               >
                 <span className={classes.settingTabIcon}>
-                  <img width="25px" height="20px" src={documentIcon} />
+                  <img width="25px" height="25px" src={documentIcon} />
                 </span>
                 <span>Change Password</span>
               </div>
@@ -114,14 +114,14 @@ class ProfilePage extends React.Component {
                 onClick={() => this.setState({ tabOpen: 'documents' })}
               >
                 <span className={classes.settingTabIcon}>
-                  <img width="25px" height="20px" src={documentIcon} />
+                  <img width="25px" height="25px" src={documentIcon} />
                 </span>
                 <span>Documents</span>
               </div>
             </div>
           </div>
           <div className={classes.rightPanel}>
-            <ProfileTab tabInfo={this.state.tabOpen} />
+            <ProfileTab tabInfo={this.state.tabOpen} notify={notify} />
           </div>
           <div />
         </div>

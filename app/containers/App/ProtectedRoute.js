@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={props => {
       if (token) {
-        return <Component {...props} />;
+        return <Component {...rest} {...props} />;
       }
       return (
         <Redirect

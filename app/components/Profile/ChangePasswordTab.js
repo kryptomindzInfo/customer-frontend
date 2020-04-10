@@ -7,6 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { Field, Form, Formik } from 'formik';
 import { Button } from '@material-ui/core';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { API_URL } from '../../containers/App/constants';
 
 const styles = theme => ({
   root: {
@@ -78,7 +80,12 @@ const ChangePasswordForm = props => (
       currentPassword: Yup.mixed()
         .required('Please enter the current password!')
         .oneOf([Yup.ref('password'), null], "Passwords don't match"),
-      newPassword: Yup.mixed().required('Please enter the new password!'),
+      newPassword: Yup.mixed()
+        .required('Please enter the new password!')
+        .oneOf(
+          [Yup.ref('currentPassword'), null],
+          'New password cannot be same as current password',
+        ),
       repeatPassword: Yup.mixed().when('newPassword', {
         is: val => !!(val && val.length > 0),
         then: Yup.string().oneOf(
@@ -87,7 +94,22 @@ const ChangePasswordForm = props => (
         ),
       }),
     })}
-    onSubmit={(values, { isSubmitting }) => {}}
+    onSubmit={async values => {
+      const user = JSON.parse(localStorage.getItem('loggedUser'));
+      const res = await axios.post(`${API_URL}/user/updatePassword`, {
+        password: values.newPassword,
+        username: user.username,
+      });
+      if (res.data.status === 1) {
+        user.password = values.newPassword;
+        const updateUser = JSON.stringify(user);
+        localStorage.setItem('loggedUser', updateUser);
+        props.notify('Password successfully updated', 'success');
+        window.location.reload();
+      } else {
+        props.notify('Error while updating password', 'error');
+      }
+    }}
   >
     {formikProps => {
       const {
@@ -205,6 +227,7 @@ const ChangePasswordForm = props => (
                 className={[classes.inputField, classes.submitButton]}
                 variant="contained"
                 type="submit"
+                onClick={handleSubmit}
                 disabled={isSubmitting}
               >
                 Submit

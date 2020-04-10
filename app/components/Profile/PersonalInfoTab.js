@@ -10,6 +10,8 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
+import axios from 'axios';
+import { API_URL } from '../../containers/App/constants';
 
 const styles = theme => ({
   root: {
@@ -81,15 +83,25 @@ class PersonalInfoTab extends React.Component {
   render() {
     const { classes } = this.props;
     const user = JSON.parse(localStorage.getItem('loggedUser'));
-    const updateUserName = value => {
+    const updateUserName = async value => {
       if (value) {
         if (value === user.name) {
           return;
         }
         if (value.match('^[a-zA-Z\\s]*$')) {
-          user.name = value;
-          const updateUser = JSON.stringify(user);
-          localStorage.setItem('loggedUser', updateUser);
+          const res = await axios.post(`${API_URL}/user/updateName`, {
+            name: this.state.name,
+            username: user.username,
+          });
+          if (res.data.status === 1) {
+            user.name = value;
+            const updateUser = JSON.stringify(user);
+            localStorage.setItem('loggedUser', updateUser);
+            this.props.notify('Username successfully updated', 'success');
+            window.location.reload();
+          } else {
+            this.props.notify('Error while updating username', 'error');
+          }
         } else {
           this.setState({
             nameErr: true,
@@ -103,7 +115,7 @@ class PersonalInfoTab extends React.Component {
         });
       }
     };
-    const updateUserEmail = value => {
+    const updateUserEmail = async value => {
       if (value) {
         if (value === user.email) {
           return;
@@ -113,9 +125,19 @@ class PersonalInfoTab extends React.Component {
             '^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
           )
         ) {
-          user.email = value;
-          const updateUser = JSON.stringify(user);
-          localStorage.setItem('loggedUser', updateUser);
+          const res = await axios.post(`${API_URL}/user/updateEmail`, {
+            email: this.state.email,
+            username: user.username,
+          });
+          if (res.data.status === 1) {
+            user.email = value;
+            const updateUser = JSON.stringify(user);
+            localStorage.setItem('loggedUser', updateUser);
+            this.props.notify('Email successfully updated', 'success');
+            window.location.reload();
+          } else {
+            this.props.notify('Error while updating email', 'error');
+          }
         } else {
           this.setState({
             emailErr: true,

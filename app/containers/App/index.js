@@ -115,7 +115,7 @@ export default function App() {
 
         <ProtectedRoute path="/features" component={FeaturePage} />
         <ProtectedRoute path="/termsConditions" component={TermsConditions} />
-        <ProtectedRoute path="/profile" component={ProfilePage} />
+        <ProtectedRoute path="/profile" component={ProfilePage} notify={notify} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
