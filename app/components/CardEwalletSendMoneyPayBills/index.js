@@ -48,35 +48,10 @@ const styles = theme => ({
     paddingTop: '2%',
     // paddingBottom: '0%',
   },
-  sendMoney: {
-    padding: '8px',
-    borderRadius: '2px',
-    minWidth: '0 !important',
-    border: `solid 1px ${theme.palette.primary.main}`,
-    color: theme.palette.primary.main,
-    fontSize: '11px',
-    fontWeight: 'bold',
-    background: '#fff',
-
-    i: {
-      marginRight: '5px',
-      fontSize: '11px',
-    },
-  },
   textField: {
     marginBottom: '0.03375rem',
     width: '100%',
     // height: '45px'
-  },
-  signUpButton: {
-    background: theme.palette.primary.main,
-    marginBottom: '3%',
-    marginTop: '3%',
-    color: theme.palette.white,
-    width: '100%',
-    '&:hover': {
-      background: theme.palette.primary.hover,
-    },
   },
   eWalletTitle: {
     display: 'flex',
@@ -141,18 +116,14 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Typography>
             <Grid
               container
-              xs={12}
-              md={12}
               spacing="4"
               style={{ marginTop: '20px', paddingBottom: '6%' }}
             >
               <Grid xs={12} md={6} item>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
-                  style={{ paddingRight: '20px' }}
                   onClick={this.showSendMoneyPopup}
-                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
                   startIcon={<Icon>send</Icon>}
                 >
                   Send Money
@@ -160,11 +131,9 @@ class CardEwalletSendMoneyPayBills extends Component {
               </Grid>
               <Grid xs={12} md={6} item>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
-                  style={{ paddingRight: '30px' }}
                   onClick={this.goToBillsPaymentPage}
-                  className={`${'sendMoneyButton'} ${classes.sendMoney}`}
                   startIcon={<Icon>receipt</Icon>}
                 >
                   Pay Bills
