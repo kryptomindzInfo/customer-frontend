@@ -76,8 +76,7 @@ const ChooseYourBankPage = props => {
     const { username } = JSON.parse(localStorage.getItem('loggedUser'));
     try {
       const res = await axios.post(`${API_URL}/user/assignBank`, {
-        bank,
-        username,
+        bank:bank.name,
       });
       if (res.data.status === 1) {
         history.push('/upload-documents');
