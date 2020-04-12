@@ -1124,12 +1124,7 @@ export default function SendMoneyPopup(props) {
             <Typography className={classes.resendText}>Resend OTP?</Typography>
           </Grid>
           <Grid container xs={12} md={12} justify="center" alignItems="center">
-            <Button
-              variant="contained"
-              fullWidth
-              color="primary"
-              disableElevation
-            >
+            <Button variant="contained" color="primary" disableElevation>
               Verify OTP
             </Button>
           </Grid>

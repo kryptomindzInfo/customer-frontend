@@ -151,119 +151,6 @@ const listOfBanks = [
   },
 ];
 
-const rows = [
-  {
-    id: '1',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '2',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '3',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '4',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '5',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '6',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '7',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '8',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '9',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '10',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-];
-
 class Dashboard extends Component {
   // useInjectReducer({ key: 'dashboard', reducer });
   // useInjectSaga({ key: 'dashboard', saga });
@@ -354,7 +241,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <RecentActivityTab />
+              <RecentActivityTab notify={notify} />
             </Grid>
             {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>
