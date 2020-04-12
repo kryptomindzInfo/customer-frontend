@@ -98,15 +98,25 @@ const styles = theme => ({
 const redirectUser = user => {
   switch (user.status) {
     case 1:
-      return history.push('/dashboard');
+      history.push('/dashboard');
+      window.location.reload();
+      break;
     case 2:
-      return history.push('/choose-bank');
+      history.push('/choose-bank');
+      window.location.reload();
+      break;
     case 3:
-      return history.push('/dashboard');
+      history.push('/dashboard');
+      window.location.reload();
+      break;
     case 4:
-      return history.push('/dashboard');
+      history.push('/dashboard');
+      window.location.reload();
+      break;
     default:
-      return history.push('/dashboard');
+      history.push('/dashboard');
+      window.location.reload();
+      break;
   }
 };
 
@@ -128,7 +138,7 @@ const SignInPage = props => (
             localStorage.setItem('customerLogged', res.data.token);
             const loggedUser = JSON.stringify(res.data.user);
             localStorage.setItem('loggedUser', loggedUser);
-            redirectUser(res.data.user);
+            return redirectUser(res.data.user);
           }
         } else {
           throw res.data.error;

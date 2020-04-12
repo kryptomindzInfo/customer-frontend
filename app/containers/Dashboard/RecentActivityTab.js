@@ -43,7 +43,6 @@ const DashboardTab = withStyles(theme => ({
     fontWeight: theme.typography.fontWeightBold,
   },
   selected: {
-
     '&$selected': {
       outline: 'none',
       border: 'none',
@@ -260,7 +259,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const getTransactionHistory = async () => {
+const getTransactionHistory = async notify => {
   try {
     const controller = 'getTransactionHistory';
     const { username } = JSON.parse(localStorage.getItem('loggedUser'));
@@ -270,29 +269,29 @@ const getTransactionHistory = async () => {
     });
     if (res.status === 200) {
       if (res.data.error) {
-        throw res.data.error;
+        notify(res.data.error, 'error');
       } else {
         return res.data.history;
       }
     } else {
-      throw res.data.error;
+      notify(res.data.error, 'error');
     }
   } catch (err) {
     throw err;
   }
 };
 
-export default () => {
+export default ({ notify }) => {
   const classes = useStyles();
   let rows = [];
   useEffect(() => {
-    getTransactionHistory()
+    getTransactionHistory(notify)
       .then(r => {
         rows = r;
         return rows;
       })
       .catch(error => {
-        console.log(error);
+        notify('Error while fetching history', 'error');
       });
   }, rows);
   const [fullRow, setRow] = useState(sampleRows);

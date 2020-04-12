@@ -89,16 +89,20 @@ class CardEwalletSendMoneyPayBills extends Component {
 
   componentDidMount = async () => {
     const { username } = JSON.parse(localStorage.getItem('loggedUser'));
-    const res = await axios.get(`${API_URL}/user/getBalance`, { username });
-    if (res.data.status === 1) {
-      this.setState({ balance: res.data.balance });
-    } else {
-      console.log('Error while fetching balance ');
+    try {
+      const res = await axios.get(`${API_URL}/user/getBalance`, { username });
+      if (res.data.status === 1) {
+        this.setState({ balance: res.data.balance });
+      } else {
+        this.props.notify(res.data.error, 'error');
+      }
+    } catch (e) {
+      this.props.notify('Error while fetching balance', 'error');
     }
   };
 
   render() {
-    const { classes,notify } = this.props;
+    const { classes, notify } = this.props;
 
     return (
       <Paper elevation={0}>
