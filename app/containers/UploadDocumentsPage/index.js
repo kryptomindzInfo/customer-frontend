@@ -78,6 +78,7 @@ const styles = theme => ({
   skipButton: {
     marginRight: '20 px',
     marginTop: '10%',
+    width: '200px',
     color: theme.palette.primary.light,
     fontSize: '19px',
     height: '3rem',
@@ -351,6 +352,8 @@ class UploadDocumentsPage extends Component {
                   SAVE
                 </Button>
                 <Button
+                  variant="outlined"
+                  color="primary"
                   type="submit"
                   onClick={() => this.skipUpload()}
                   className={classes.skipButton}
@@ -376,24 +379,5 @@ class UploadDocumentsPage extends Component {
     );
   }
 }
-
-// UploadDocumentsPage.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   uploadDocumentsPage: makeSelectUploadDocumentsPage(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
 
 export default withStyles(styles)(UploadDocumentsPage);

@@ -1,5 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Grid, makeStyles, Paper, Tab, Tabs, Typography, withStyles } from '@material-ui/core';
+import {
+  Grid,
+  makeStyles,
+  Tab,
+  Tabs,
+  Typography,
+  withStyles,
+} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Icon from '@material-ui/core/Icon';
 import axios from 'axios';
@@ -318,9 +325,11 @@ export default ({ notify }) => {
         break;
       case 1:
         setRow(sampleRows.filter(row => row.action === 'TRANSFERED'));
+        setPage(0);
         break;
       case 2:
         setRow(sampleRows.filter(row => row.action === 'RECIEVED'));
+        setPage(0);
         break;
       default:
         setRow(sampleRows);
@@ -395,7 +404,7 @@ export default ({ notify }) => {
         justify="center"
         className={classes.paper}
       >
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table aria-label="custom pagination table">
             <TableBody>
               {(rowsPerPage > 0
@@ -414,7 +423,7 @@ export default ({ notify }) => {
                     <Typography variant="subtitle1">{row.id}</Typography>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    <Typography variant="h6">
+                    <Typography style={{ color: '#4a90e2' }} variant="h6">
                       {row.action} {row.keyword} {row.to}
                     </Typography>
                     <Typography color="primary" variant="subtitle1">

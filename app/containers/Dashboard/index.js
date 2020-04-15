@@ -10,11 +10,10 @@ import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBill
 
 import { Grid, Typography, withStyles } from '@material-ui/core';
 
-import axisBankLogo from 'images/axis-bank-logo.jpg';
-import Button from '@material-ui/core/Button';
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
 import MainHeader from '../MainHeader';
 import RecentActivityTab from './RecentActivityTab';
+import ContactList from './ContactList';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -107,49 +106,12 @@ const styles = theme => ({
     paddingBottom: '13%',
     textDecoration: 'none',
   },
-  seeAllMerchants: {
-    paddingTop: '10%',
-    paddingBottom: '10%',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    borderRadius: '50%',
-    outline: 0,
-    [theme.breakpoints.down('sm')]: {
-      marginTop: '%',
-    },
-    [theme.breakpoints.down('xs')]: {
-      marginBottom: '3%',
-      marginTop: '2%',
-    },
-    '&$selected': {
-      outline: 0,
-    },
-  },
   recentActivitiesTypes: {
     // margin: '2% 0%',
     padding: '4%',
     fontWeight: 600,
   },
 });
-
-const listOfBanks = [
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-  {
-    imageLink: axisBankLogo,
-    bankName: 'Axis Bank',
-  },
-];
 
 class Dashboard extends Component {
   // useInjectReducer({ key: 'dashboard', reducer });
@@ -168,7 +130,7 @@ class Dashboard extends Component {
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
         <MainHeader />
-        <Grid container>
+        <Grid container style={{ background: '#fcfffc' }}>
           <Grid item md={3} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
             <Grid
               className={classes.gridCardEwalletSendMoney}
@@ -211,26 +173,7 @@ class Dashboard extends Component {
               </Typography>
 
               <Grid container className={classes.listOfMerchantsContainer}>
-                {listOfBanks.map((lob, i) => (
-                  <Grid md={2} sm={6} xs={6}>
-                    <a href="/">
-                      <img className={classes.bankIcons} src={lob.imageLink} />
-                    </a>
-                    <Typography variant="h6" className={classes.nameOfBank}>
-                      {lob.bankName}
-                    </Typography>
-                  </Grid>
-                ))}
-                <Grid item md={4} xs={12}>
-                  <Button
-                    size="large"
-                    variant="outlined"
-                    color="primary"
-                    className={classes.seeAllMerchants}
-                  >
-                    See All
-                  </Button>
-                </Grid>
+                <ContactList notify={notify} />
               </Grid>
             </Grid>
 
@@ -250,24 +193,5 @@ class Dashboard extends Component {
     );
   }
 }
-
-// Dashboard.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   dashboard: makeSelectDashboard(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
 
 export default withStyles(styles)(Dashboard);

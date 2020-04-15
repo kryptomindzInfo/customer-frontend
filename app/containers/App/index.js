@@ -30,6 +30,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import VerificationLandingPage from '../VerificationLandingPage';
 
 toast.configure({
   position: 'bottom-right',
@@ -100,7 +101,12 @@ export default function App() {
           path="/upload-documents"
           component={UploadDocumentsPage}
         />
-        <ProtectedRoute exact path="/dashboard" notify={notify} component={Dashboard} />
+        <ProtectedRoute
+          exact
+          path="/dashboard"
+          notify={notify}
+          component={Dashboard}
+        />
         <ProtectedRoute exact path="/contact" component={ContactPage} />
         <ProtectedRoute
           exact
@@ -115,7 +121,17 @@ export default function App() {
 
         <ProtectedRoute path="/features" component={FeaturePage} />
         <ProtectedRoute path="/termsConditions" component={TermsConditions} />
-        <ProtectedRoute path="/profile" component={ProfilePage} notify={notify} />
+        <ProtectedRoute
+          path="/profile"
+          component={ProfilePage}
+          notify={notify}
+        />
+        <ProtectedRoute
+          exact
+          path="/user-verification"
+          component={VerificationLandingPage}
+          notify={notify}
+        />
         <Route path="" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
