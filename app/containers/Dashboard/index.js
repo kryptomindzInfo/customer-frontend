@@ -168,7 +168,7 @@ class Dashboard extends Component {
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
         <MainHeader />
-        <Grid container>
+        <Grid container style={{ background: '#fcfffc' }}>
           <Grid item md={3} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
             <Grid
               className={classes.gridCardEwalletSendMoney}
@@ -250,24 +250,5 @@ class Dashboard extends Component {
     );
   }
 }
-
-// Dashboard.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   dashboard: makeSelectDashboard(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
 
 export default withStyles(styles)(Dashboard);

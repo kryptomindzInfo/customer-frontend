@@ -48,7 +48,7 @@ const styles = theme => ({
     textAlign: 'center',
     paddingTop: '27%',
     paddingBottom: '7%',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   setupPageSubtitle1: {
     color: theme.palette.white,
@@ -86,7 +86,9 @@ const styles = theme => ({
   },
   signInButton: {
     background: theme.palette.primary.main,
-    marginTop: '10%',
+    marginTop: '7%',
+    padding: '0px',
+    fontSize: '24px',
     color: theme.palette.white,
     width: '70%',
     '&:hover': {
@@ -99,23 +101,18 @@ const redirectUser = user => {
   switch (user.status) {
     case 1:
       history.push('/dashboard');
-      window.location.reload();
       break;
     case 2:
       history.push('/choose-bank');
-      window.location.reload();
       break;
     case 3:
-      history.push('/dashboard');
-      window.location.reload();
+      history.push('/user-verification');
       break;
     case 4:
-      history.push('/dashboard');
-      window.location.reload();
+      history.push('/user-verification');
       break;
     default:
-      history.push('/dashboard');
-      window.location.reload();
+      history.push('/');
       break;
   }
 };
@@ -182,12 +179,10 @@ const SignInPage = props => (
                 <Typography className={classes.setupPageTitle} variant="h1">
                   E-WALLET
                 </Typography>
-                <Typography variant="h4" className={classes.setupPageSubtitle1}>
-                  Welcome to E-wallet
-                </Typography>
-                <Typography variant="h6" className={classes.setupPageSubtitle2}>
-                  Create your wallet for easy transferring of money to your
-                  friends and family
+                <Typography variant="h5" className={classes.setupPageSubtitle2}>
+                  Welcome to E-wallet <br/>
+                  Create your wallet for easy transfering <br/>
+                  of money to your friends and family
                 </Typography>
               </Grid>
               <Grid
@@ -202,6 +197,7 @@ const SignInPage = props => (
                   variant="subtitle2"
                   style={{
                     fontSize: '14px',
+                    color: '#9ea0a5',
                     paddingTop: '1%',
                     paddingBottom: '7%',
                   }}
@@ -262,6 +258,7 @@ const SignInPage = props => (
                             fontWeightBold: '700',
                             paddingLeft: '4px',
                             fontSize: '14px',
+                            fontWeight: '600',
                           }}
                           href="/sign-up"
                         >
@@ -284,6 +281,7 @@ const SignInPage = props => (
                             fontWeightBold: '900',
                             fontSize: '14px',
                             paddingTop: '5%',
+                            fontWeight: '600',
                           }}
                           href="/forgot-password"
                         >
@@ -301,24 +299,5 @@ const SignInPage = props => (
     }}
   </Formik>
 );
-
-// SignInPage.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   signInPage: makeSelectSignInPage(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
 
 export default withStyles(styles)(SignInPage);

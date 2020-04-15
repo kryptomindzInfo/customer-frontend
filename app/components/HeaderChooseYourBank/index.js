@@ -5,23 +5,37 @@
  */
 
 import React from 'react';
-import { Grid, Typography, withStyles } from '@material-ui/core';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
+import { withStyles } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import history from '../../utils/history';
+
+// import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
   },
   headerMainContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     background: theme.palette.hGradient,
-    paddingTop: '18px',
-    paddingBottom: '15px',
-    boxShadow: '0 0px 12px 0 rgba(0, 0, 0, 0.02)',
-    // fontFamily: 'Montserrat'
+  },
+  leftContent: {
+    display: 'flex',
   },
   headerTitleEwallet: {
-    paddingLeft: '6%',
+    // paddingLeft: '6%',
+    marginRight: '120px',
+    marginLeft: '20px',
+    // fontSize: '1em',
+    fontSize: '24px',
+    fontWeight: 600,
   },
   headerTitleWelcome: {
     textAlign: 'right ',
@@ -33,68 +47,115 @@ const styles = theme => ({
     },
   },
   headerLogout: {
-    textAlign: 'right ',
-    paddingRight: '10%',
-
-    [theme.breakpoints.down('xs')]: {
-      textAlign: 'right ',
-      paddingRight: '10%',
-    },
-  },
-  welcomeUsername: {
-    textAlign: 'right',
-    color: 'white',
+    textAlign: 'center ',
     [theme.breakpoints.down('xs')]: {
       textAlign: 'right ',
       paddingRight: '6%',
     },
   },
-  headerTitleEwallet: {
-    paddingLeft: '6%',
+  grow: {
     flexGrow: 1,
-    // fontSize: '1em',
-    fontSize: '24px',
-    fontWeight: 600,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+  headerLink: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexGrow: '1',
+  },
+  eventLink: {
+    marginRight: 24,
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+  title: {
     color: 'white',
   },
+  sectionDesktop: {
+    display: 'flex',
+    [theme.breakpoints.up('lg')]: {
+      display: 'none',
+    },
+  },
 });
-function HeaderChooseYourBank(props) {
+
+const HeaderChooseYourBank = props => {
   const { classes } = props;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const onLogoutClick = () => {
+    localStorage.clear();
+    history.push('/');
+  };
+
+  const { name } = JSON.parse(localStorage.getItem('loggedUser'));
+
   return (
     <div className={classes.root}>
-      <Grid container className={classes.headerMainContainer}>
-        <Grid item md={6} sm={6} xs={6}>
-          <Typography
-            // variant="h4"
-            color="inherit"
-            className={classes.headerTitleEwallet}
+      <AppBar position="static">
+        <Toolbar className={classes.headerMainContainer}>
+          <div className={classes.leftContent}>
+            <IconButton
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Menu"
+            >
+              {/* <MenuIcon /> */}
+            </IconButton>
+            <div className={classes.sectionDesktop} />
+            <Typography
+              // variant="h4"
+              color="inherit"
+              className={classes.headerTitleEwallet}
+            >
+              E-WALLET
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+            }}
           >
-            E-WALLET
-          </Typography>
-        </Grid>
-        <Grid item md={6} sm={6} xs={6}>
-          <Grid
-            container
-            className={classes.headerTitleWelcome}
-            justify="flex-end"
-          >
-            <Grid item item md={4} sm={1} />
-            <Grid className={classes.headerWelcome} item md={4} sm={6}>
-              <Typography
-                // variant="h6"
-                color="inherit"
-                className={classes.welcomeUsername}
-              >
-                Welcome Hatim
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+            <div
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+              className="material-icons fl"
+              style={{ marginRight: '10px', display: 'flex', color: '#fff' }}
+            >
+              settings
+            </div>
+
+            <Typography
+              variant="subtitle1"
+              color="inherit"
+              className={classes.headerLogout}
+            >
+              Welcome {name}
+            </Typography>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </AppBar>
     </div>
   );
-}
-
-// HeaderChooseYourBank.propTypes = {};
-
+};
 export default withStyles(styles)(HeaderChooseYourBank);

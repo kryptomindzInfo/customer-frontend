@@ -110,9 +110,9 @@ class CardEwalletSendMoneyPayBills extends Component {
           <Grid item md={12} xs={12} sm={12}>
             <div className={classes.eWalletTitle}>
               <span className={classes.cardEwalletTitle}>E-WALLET</span>
-              <span className={classes.cardBankTitle}>
-                Powered by Axis bank
-              </span>
+              {/* <span className={classes.cardBankTitle}> */}
+              {/*  Powered by Axis bank */}
+              {/* </span> */}
             </div>
             <Typography variant="subtitle2">Available:</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
@@ -127,6 +127,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                 <Button
                   variant="outlined"
                   color="primary"
+                  style={{ fontSize: '13px' }}
                   onClick={this.showSendMoneyPopup}
                   startIcon={<Icon>send</Icon>}
                 >
@@ -137,6 +138,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                 <Button
                   variant="outlined"
                   color="primary"
+                  style={{ fontSize: '13px' }}
                   onClick={this.goToBillsPaymentPage}
                   startIcon={<Icon>receipt</Icon>}
                 >

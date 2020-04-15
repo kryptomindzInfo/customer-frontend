@@ -6,18 +6,19 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Typography, withStyles } from '@material-ui/core';
+import { FormControlLabel, Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
 
-import { Form, Formik, useField } from 'formik';
+import { Form, Formik } from 'formik';
 
-import { boolean, object, string } from 'yup';
+import { boolean, mixed, object, string } from 'yup';
 
 import Link from '@material-ui/core/Link';
+import Checkbox from '@material-ui/core/Checkbox';
 import { API_URL } from '../App/constants';
 
 const styles = theme => ({
@@ -46,7 +47,7 @@ const styles = theme => ({
     textAlign: 'center',
     paddingTop: '27%',
     paddingBottom: '7%',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   setupPageSubtitle1: {
     color: theme.palette.white,
@@ -89,6 +90,9 @@ const styles = theme => ({
     background: theme.palette.primary.main,
     // marginLeft: theme.spacing.unit,
     marginTop: '3%',
+    fontWeight: '600',
+    padding: '0px',
+    fontSize: '20px',
     color: theme.palette.white,
     width: '70%',
     '&:hover': {
@@ -104,54 +108,7 @@ const styles = theme => ({
   },
 });
 
-const MyTextInput = ({ label, ...props }) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input> and alse replace ErrorMessage entirely.
-  const [field, meta] = useField(props);
-  return (
-    <>
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <div style={{ color: 'red' }} className={classes.error}>
-          {meta.error}
-        </div>
-      ) : null}
-    </>
-  );
-};
-
-const MyCheckbox = ({ children, ...props }) => {
-  const [field, meta] = useField({ ...props, type: 'checkbox' });
-  return (
-    <>
-      <label className="checkbox">
-        <input {...field} {...props} type="checkbox" />
-        {children}
-      </label>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </>
-  );
-};
-
 const SignUpPage = props => (
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     checkedA: true,
-  //     name: '',
-  //     mobileNumber: '',
-  //     email: '',
-  //     address: '',
-  //     password: '',
-  //   };
-  // }
-  // useInjectReducer({ key: 'signUpPage', reducer });
-  // useInjectSaga({ key: 'signUpPage', saga });
-  // render() {
-
   <Formik
     initialValues={{
       name: '',
@@ -183,27 +140,17 @@ const SignUpPage = props => (
       }
     }}
     validationSchema={object().shape({
-      email: string().email(),
+      email: string()
+        .email()
+        .required('Email is required'),
+      password: mixed().required('Password is required'),
       name: string()
         .max(15, 'Must be 15 characters or less')
         .required('Required'),
       acceptedTerms: boolean()
         .required('Required')
         .oneOf([true], 'You must accept the terms and conditions.'),
-      // address: Yup.string()
-      //   // .max(20, "Must be 20 characters or less")
-      //   .required('Required'),
-      // password: Yup.string()
-      //   // .password()
-      //   .max(15, 'Must be 15 characters or less')
-      //   .required('Required'),
     })}
-    // onSubmit={(values, { setSubmitting }) => {
-    //   setTimeout(() => {
-    //     alert(JSON.stringify(values, null, 2));
-    //     setSubmitting(false);
-    //   }, 400);
-    // }}
   >
     {formikProps => {
       const {
@@ -230,12 +177,10 @@ const SignUpPage = props => (
                 <Typography className={classes.setupPageTitle} variant="h1">
                   E-WALLET
                 </Typography>
-                <Typography variant="h4" className={classes.setupPageSubtitle1}>
-                  Welcome to E-wallet
-                </Typography>
-                <Typography variant="h6" className={classes.setupPageSubtitle2}>
-                  Create your wallet for easy transferring of money to your
-                  friends and family
+                <Typography variant="h5" className={classes.setupPageSubtitle1}>
+                  Welcome to E-wallet <br />
+                  Create your wallet for easy transfering <br />
+                  of money to your friends and family
                 </Typography>
               </Grid>
               <Grid
@@ -252,6 +197,7 @@ const SignUpPage = props => (
                     color: '#9ea0a5',
                     fontSize: '14px',
                     paddingTop: '1%',
+                    marginBottom: '20px',
                   }}
                 >
                   Use your Mobile number to create new account at no cost.
@@ -266,6 +212,7 @@ const SignUpPage = props => (
                     variant="outlined"
                     name="name"
                     value={values.name}
+                    size="small"
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -280,10 +227,14 @@ const SignUpPage = props => (
                     margin="normal"
                     variant="outlined"
                     name="mobile"
+                    size="small"
                     value={values.mobile}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
+                  {errors.mobile && touched.mobile && (
+                    <div className={classes.inputFeedback}>{errors.mobile}</div>
+                  )}
                   <TextField
                     // error
                     // id="outlined-email-input"
@@ -293,6 +244,7 @@ const SignUpPage = props => (
                     name="email"
                     autoComplete="email"
                     margin="normal"
+                    size="small"
                     variant="outlined"
                     value={values.email}
                     onChange={handleChange}
@@ -306,6 +258,7 @@ const SignUpPage = props => (
                     label="Address"
                     placeholder="Address"
                     multiline
+                    size="small"
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
@@ -316,6 +269,7 @@ const SignUpPage = props => (
                   <TextField
                     name="password"
                     label="Password"
+                    size="small"
                     className={classes.textField}
                     type="password"
                     // autoComplete="current-password"
@@ -325,32 +279,40 @@ const SignUpPage = props => (
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {/* {errors.password && touched.password && (
-                   <div className={classes.inputFeedback}>
-                   {errors.password}
-                   </div>
-                   )} */}
+                  {errors.password && touched.password && (
+                    <div className={classes.inputFeedback}>
+                      {errors.password}
+                    </div>
+                  )}
 
-                  <div style={{ paddingTop: '15px' }}>
-                    <MyCheckbox name="acceptedTerms">
-                      <span className={classes.checkboxMessage}>
-                        {' '}
-                        I accept the
-                        <Link
-                          underline="always"
-                          color="primary"
+                  <div style={{ paddingTop: '15px', marginTop: '6%' }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{
-                            fontWeightBold: '700',
-                            paddingLeft: '7px',
-                            fontSize: '14px',
+                            color: 'rgb(53, 153, 51)',
+                            '&$checked': {
+                              color: 'rgb(53, 153, 51)',
+                            },
                           }}
-                          href="#"
-                        >
-                          Terms and Conditions
-                        </Link>
-                      </span>
-                    </MyCheckbox>{' '}
+                          value={values.acceptedTerms}
+                          name="terms"
+                        />
+                      }
+                      label={
+                        <span>
+                          I have read the <u> terms and conditions </u>
+                        </span>
+                      }
+                    />
                   </div>
+                  {errors.acceptedTerms && touched.acceptedTerms && (
+                    <div className={classes.inputFeedback}>
+                      {errors.acceptedTerms}
+                    </div>
+                  )}
                   <Button
                     variant="contained"
                     type="submit"
@@ -373,7 +335,7 @@ const SignUpPage = props => (
                         <Link
                           color="primary"
                           style={{
-                            fontWeightBold: '700',
+                            fontWeight: '600',
                             paddingLeft: '4px',
                             fontSize: '14px',
                           }}
@@ -395,7 +357,7 @@ const SignUpPage = props => (
                         <Link
                           color="primary"
                           style={{
-                            fontWeightBold: '900',
+                            fontWeight: '600',
                             fontSize: '14px',
                             paddingTop: '5%',
                           }}
@@ -410,32 +372,10 @@ const SignUpPage = props => (
               </Grid>
             </Grid>
           </div>
-
-          {/* <FormattedMessage {...messages.header} /> */}
         </div>
       );
     }}
   </Formik>
 );
-// }
-
-// SignUpPage.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-//   signUpPage: makeSelectSignUpPage(),
-// });
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     dispatch,
-//   };
-// }
-
-// const withConnect = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// );
 
 export default withStyles(styles)(SignUpPage);
