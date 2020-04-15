@@ -78,6 +78,7 @@ const dialogContentStyles = makeStyles(theme => ({
     paddingTop: '5%',
   },
   dialogGridLeft: {
+    marginTop: '5%',
     paddingTop: '5%',
     paddingBottom: '2%',
     paddingLeft: '10%',
@@ -108,7 +109,7 @@ const dialogContentStyles = makeStyles(theme => ({
     marginBottom: '5px',
   },
   dialogSubHeader: {
-    paddingBottom: '4%',
+    paddingBottom: '2%',
     paddingRight: '3%',
     paddingLeft: '3%',
   },
@@ -574,7 +575,7 @@ export default function SendMoneyPopup(props) {
                           direction="column"
                           alignItems="flex-start"
                           style={{
-                            marginTop: '25px',
+                            marginTop: '15px',
                           }}
                         >
                           <Grid
@@ -878,9 +879,7 @@ export default function SendMoneyPopup(props) {
                             label={
                               <Typography variant="caption">
                                 I have read the{' '}
-                                <Link
-                                  style={{ color: '#56575a' }}
-                                >
+                                <Link style={{ color: '#56575a' }}>
                                   <u>terms and conditions.</u>
                                 </Link>
                               </Typography>
@@ -973,7 +972,7 @@ export default function SendMoneyPopup(props) {
                         container
                         direction="column"
                         spacing={2}
-                        className={classes.dialogGridRight}
+                        style={{ marginTop: '10%' }}
                       >
                         <Grid container direction="row" alignItems="flex-start">
                           <Grid

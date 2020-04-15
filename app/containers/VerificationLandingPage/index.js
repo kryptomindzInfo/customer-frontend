@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 import verificationLogo from '../../images/verification_logo.png';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     flexGrow: 1,
   },
@@ -40,11 +40,20 @@ class VerificationLandingPage extends React.Component {
             <img alt="verifyLogo" src={verificationLogo} />
           </div>
           <div className={classes.rightContainer}>
-            {user.status === 3
-              ?  <Typography variant="h4"> Pending approval from Cashier! </Typography>
-              : user.status === 4
-                ?  <Typography variant="h4"> Please go to nearest branch and <br/> get your documents uploaded! </Typography>
-              : ''}
+            {user.status === 3 ? (
+              <Typography variant="h4">
+                {' '}
+                Pending approval from Cashier!{' '}
+              </Typography>
+            ) : user.status === 4 ? (
+              <Typography variant="h4">
+                {' '}
+                Please go to nearest branch and <br /> get your documents
+                uploaded!{' '}
+              </Typography>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>
