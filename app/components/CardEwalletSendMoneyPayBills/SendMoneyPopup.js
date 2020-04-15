@@ -12,9 +12,10 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import Link from '@material-ui/core/Link';
 import { API_URL } from '../../containers/App/constants';
 
-const dialogTilteStyles = theme => ({
+const dialogTilteStyles = () => ({
   root: {
     margin: 0,
     color: 'white',
@@ -23,8 +24,6 @@ const dialogTilteStyles = theme => ({
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
     color: 'white',
   },
 });
@@ -49,10 +48,11 @@ const DialogTitle = withStyles(dialogTilteStyles)(props => {
 
 const dialogStyles = () => ({
   paper: {
-    minHeight: '80%',
-    maxHeight: '80%',
-    minWidth: '80%',
-    maxWidth: '80%',
+    borderRadius: '20px',
+    minHeight: '70%',
+    maxHeight: '70%',
+    minWidth: '60%',
+    maxWidth: '60%',
   },
 });
 
@@ -93,7 +93,7 @@ const dialogContentStyles = makeStyles(theme => ({
   dialogTextFieldGrid: {
     paddingLeft: '1%',
     paddingRight: '1%',
-    paddingBottom: '1.5%',
+    paddingBottom: '1%',
   },
   dialogTextField: {
     paddingLeft: '1%',
@@ -101,11 +101,11 @@ const dialogContentStyles = makeStyles(theme => ({
   },
   dialogTextFieldGridErrorText: {
     color: 'red',
-    fontSize: '12px',
+    fontSize: '10px',
   },
   dialogTextFieldFullRow: {
     padding: '0.5%',
-    marginBottom: '10px',
+    marginBottom: '5px',
   },
   dialogSubHeader: {
     paddingBottom: '4%',
@@ -134,8 +134,12 @@ const dialogContentStyles = makeStyles(theme => ({
     color: '#fff',
     '&:hover': {
       background: '#1a841b',
-      color: '#333',
+      color: '#fff',
     },
+  },
+  toggleButtonDisabled: {
+    color: '#1a841b',
+    border: '1px solid #1a841b',
   },
   otpTextField: {
     margin: '80px',
@@ -147,6 +151,10 @@ const dialogContentStyles = makeStyles(theme => ({
     marginRight: '80px',
     marginLeft: '80px',
     marginBottom: '10px',
+  },
+  proceedButton: {
+    paddingTop: '1%',
+    paddingBottom: '1%',
   },
 }));
 
@@ -188,8 +196,6 @@ export default function SendMoneyPopup(props) {
         fullWidth
         open={props.open}
         onClose={handleClose}
-        disableEscapeKeyDown
-        disableBackdropClick
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -205,18 +211,24 @@ export default function SendMoneyPopup(props) {
               exclusive
             >
               <ToggleButton
-                key={1}
-                value="nonWallet"
-                className={isWallet ? classes.toggleButton : ''}
-              >
-                To Non Wallet
-              </ToggleButton>
-              <ToggleButton
                 key={2}
                 value="wallet"
-                className={!isWallet ? classes.toggleButton : ''}
+                className={
+                  !isWallet
+                    ? classes.toggleButton
+                    : classes.toggleButtonDisabled
+                }
               >
                 To Wallet
+              </ToggleButton>
+              <ToggleButton
+                key={1}
+                value="nonWallet"
+                className={
+                  isWallet ? classes.toggleButton : classes.toggleButtonDisabled
+                }
+              >
+                To Non Wallet
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
@@ -317,6 +329,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               autoFocus
                               id="form-phone-pre"
                               label="+91"
@@ -333,6 +346,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               autoFocus
                               error={
                                 errors.receiverMobile && touched.receiverMobile
@@ -365,6 +379,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverGivenName"
                               id="form-given-name"
                               label="Given Name"
@@ -395,6 +410,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverFamilyName"
                               id="form-family-name"
                               label="Family Name"
@@ -429,6 +445,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverAddress"
                               id="form-address"
                               label="Address"
@@ -452,6 +469,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverState"
                               id="form-state"
                               label="State"
@@ -472,6 +490,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverZip"
                               id="form-zip"
                               label="Zip Code"
@@ -495,6 +514,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverCountry"
                               id="form-country"
                               label="Country"
@@ -525,6 +545,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverEmail"
                               id="form-email"
                               label="Email"
@@ -552,6 +573,9 @@ export default function SendMoneyPopup(props) {
                           container
                           direction="column"
                           alignItems="flex-start"
+                          style={{
+                            marginTop: '25px',
+                          }}
                         >
                           <Grid
                             item
@@ -562,6 +586,9 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <FormControlLabel
+                              style={{
+                                color: '#9ea0a5',
+                              }}
                               control={
                                 <Checkbox
                                   name="withoutID"
@@ -576,12 +603,19 @@ export default function SendMoneyPopup(props) {
                                   }}
                                 />
                               }
-                              label="Require ID"
+                              label={
+                                <Typography variant="caption">
+                                  Require Id
+                                </Typography>
+                              }
                             />
                           </Grid>
 
                           <Grid item className={classes.dialogTextFieldGrid}>
                             <FormControlLabel
+                              style={{
+                                color: '#9ea0a5',
+                              }}
                               control={
                                 <Checkbox
                                   onChange={handleChange}
@@ -596,7 +630,11 @@ export default function SendMoneyPopup(props) {
                                   name="requireOTP"
                                 />
                               }
-                              label="Require OTP authentication"
+                              label={
+                                <Typography variant="caption">
+                                  Require OTP authentication
+                                </Typography>
+                              }
                             />
                           </Grid>
                         </Grid>
@@ -623,6 +661,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverIdentificationCountry"
                               id="form-identification-country"
                               label="Country"
@@ -643,6 +682,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverIdentificationType"
                               id="form-fidentification-type"
                               label="Type"
@@ -676,6 +716,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverIdentificationNumber"
                               id="form-identification-number"
                               label="Number"
@@ -706,6 +747,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="receiverIdentificationValidTill"
                               id="form-idetification-valid-till"
                               label="Valid Till"
@@ -742,6 +784,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               id="form-amount-pre"
                               label="XOF"
                               variant="outlined"
@@ -756,6 +799,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="sending_amount"
                               id="form-sending-amount"
                               label="Amount"
@@ -787,6 +831,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="note"
                               id="form-note"
                               fullWidth
@@ -807,26 +852,38 @@ export default function SendMoneyPopup(props) {
                           alignItems="flex-start"
                           className={classes.dialogTextFieldGrid}
                         >
-                          <Typography
-                            style={{
-                              color: 'rgb(53, 153, 51)',
-                              marginBottom: '10px',
-                              fontSize: '10px',
-                            }}
-                          >
+                          <Typography color="primary" variant="body1">
                             Total Fee $200 will be charged
                           </Typography>
                           <FormControlLabel
                             onChange={handleChange}
                             required
                             onBlur={handleBlur}
-                            control={<Checkbox name="terms" />}
+                            style={{
+                              color: '#9ea0a5',
+                            }}
+                            control={
+                              <Checkbox
+                                name="terms"
+                                style={{
+                                  color: 'rgb(53, 153, 51)',
+                                  '&$checked': {
+                                    color: 'rgb(53, 153, 51)',
+                                  },
+                                }}
+                              />
+                            }
                             value={values.receiverTermsAndCondition}
                             name="terms"
                             label={
-                              <span>
-                                I have read the <u> terms and conditions </u>
-                              </span>
+                              <Typography variant="caption">
+                                I have read the{' '}
+                                <Link
+                                  style={{ color: '#56575a' }}
+                                >
+                                  <u>terms and conditions.</u>
+                                </Link>
+                              </Typography>
                             }
                           />
                         </Grid>
@@ -847,7 +904,7 @@ export default function SendMoneyPopup(props) {
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                           >
-                            Proceed
+                            <Typography variant="h6">Proceed</Typography>
                           </Button>
                         </Grid>
                       </Grid>
@@ -926,6 +983,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               autoFocus
                               id="form-phone-pre"
                               label="+91"
@@ -941,6 +999,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               autoFocus
                               error={
                                 errors.receiverMobile && touched.receiverMobile
@@ -973,6 +1032,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               id="form-amount-pre"
                               label="XOF"
                               variant="outlined"
@@ -987,6 +1047,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="sending_amount"
                               id="form-sending-amount"
                               label="Amount"
@@ -1028,6 +1089,7 @@ export default function SendMoneyPopup(props) {
                             className={classes.dialogTextFieldGrid}
                           >
                             <TextField
+                              size="small"
                               name="note"
                               id="form-note"
                               fullWidth
@@ -1058,7 +1120,17 @@ export default function SendMoneyPopup(props) {
                             Total Fee $200 will be charged
                           </Typography>
                           <FormControlLabel
-                            control={<Checkbox name="gilad" />}
+                            control={
+                              <Checkbox
+                                name="gilad"
+                                style={{
+                                  color: 'rgb(53, 153, 51)',
+                                  '&$checked': {
+                                    color: 'rgb(53, 153, 51)',
+                                  },
+                                }}
+                              />
+                            }
                             label={
                               <span>
                                 I have read the <u> terms and conditions </u>
@@ -1083,7 +1155,7 @@ export default function SendMoneyPopup(props) {
                             disableElevation
                             disabled={isSubmitting}
                           >
-                            Proceed
+                            <Typography variant="h6">Proceed</Typography>
                           </Button>
                         </Grid>
                       </Grid>
@@ -1111,6 +1183,7 @@ export default function SendMoneyPopup(props) {
         <form autoComplete="on">
           <Grid container md={12} xs={12} justify="center" alignItems="center">
             <TextField
+              size="small"
               id="form-given-name"
               label="Enter Your OTP"
               placeholder="OTP"
