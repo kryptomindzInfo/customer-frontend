@@ -204,8 +204,8 @@ class UploadDocumentsPage extends Component {
   addHashes(list) {
     const data = {};
     const controller = 'saveUploadedDocsHash';
-    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
-    data.username = username;
+    const user = JSON.parse(localStorage.getItem('loggedUser'));
+    data.username = user.username;
     if (list.length > 0) {
       data.hashes = list;
     }
@@ -219,7 +219,9 @@ class UploadDocumentsPage extends Component {
             this.setState((prevState, props) => ({
               fileHashes: [],
             }));
-            history.push('/dashboard');
+            user.status = 3;
+            localStorage.setItem('loggedUser',JSON.stringify(user));
+            history.push('/user-verification');
           }
         } else {
           throw res.data.error;
@@ -234,18 +236,20 @@ class UploadDocumentsPage extends Component {
   }
 
   skipUpload = () => {
-    const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+    const user = JSON.parse(localStorage.getItem('loggedUser'));
     axios
-      .post(`${API_URL}/user/skipDocsUpload`, { username })
+      .post(`${API_URL}/user/skipDocsUpload`, user.username)
       .then(res => {
         if (res.data.status === 1) {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            this.setState((prevState, props) => ({
+            this.setState(() => ({
               fileHashes: [],
             }));
-            history.push('/dashboard');
+            user.status = 4;
+            localStorage.setItem('loggedUser',JSON.stringify(user));
+            history.push('/user-verification');
           }
         } else {
           throw res.data.error;
@@ -343,6 +347,7 @@ class UploadDocumentsPage extends Component {
                 direction="row"
               >
                 <Button
+                  disabled={this.state.fileHashes.length === 0}
                   variant="contained"
                   type="submit"
                   onClick={() => this.addHashes(this.state.fileHashes)}
