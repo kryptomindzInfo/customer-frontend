@@ -49,10 +49,17 @@ const DialogTitle = withStyles(dialogTilteStyles)(props => {
 const dialogStyles = () => ({
   paper: {
     borderRadius: '20px',
-    minHeight: '70%',
-    maxHeight: '70%',
+    minHeight: '80%',
+    maxHeight: '80%',
     minWidth: '60%',
     maxWidth: '60%',
+  },
+  toWalletPaper: {
+    borderRadius: '20px',
+    minHeight: '80%',
+    maxHeight: '80%',
+    minWidth: '70%',
+    maxWidth: '70%',
   },
 });
 
@@ -199,7 +206,7 @@ export default function SendMoneyPopup(props) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <DialogTitle style={{fontWeight:'600'}} id="customized-dialog-title" onClose={handleClose}>
           Send Money
         </DialogTitle>
         <Grid xs={12} md={12} container direction="column" alignItems="center">
