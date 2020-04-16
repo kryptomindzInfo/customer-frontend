@@ -6,19 +6,19 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { FormControlLabel, Typography, withStyles } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
 
-import { Form, Formik } from 'formik';
+import { Form, Formik, useField } from 'formik';
 
 import { boolean, mixed, object, string } from 'yup';
 
 import Link from '@material-ui/core/Link';
-import Checkbox from '@material-ui/core/Checkbox';
+import MuiCheckbox from '@material-ui/core/Checkbox';
 import { API_URL } from '../App/constants';
 
 const styles = theme => ({
@@ -108,6 +108,23 @@ const styles = theme => ({
   },
 });
 
+export const Checkbox = ({ ...props }) => {
+  const [field] = useField(props.name);
+
+  return (
+    <MuiCheckbox
+      {...field}
+      style={{
+        color: 'rgb(53, 153, 51)',
+        '&$checked': {
+          color: 'rgb(53, 153, 51)',
+        },
+      }}
+      checked={field.value}
+    />
+  );
+};
+
 const SignUpPage = props => (
   <Formik
     initialValues={{
@@ -121,9 +138,9 @@ const SignUpPage = props => (
     onSubmit={async values => {
       try {
         const res = await axios.post(`${API_URL}/user/verify`, values);
-        if (res.status == 200) {
+        if (res.data.status === 1) {
           if (res.data.error) {
-            throw res.data.error;
+            props.notify(res.data.error, 'error');
           } else {
             localStorage.setItem('customerMobile', values.mobile);
             localStorage.setItem('customerName', values.name);
@@ -133,10 +150,16 @@ const SignUpPage = props => (
             history.push('/sign-up-verify');
           }
         } else {
-          throw res.data.error;
+          props.notify(
+            'User already exist with either same email id or mobile number.',
+            'error',
+          );
         }
       } catch (err) {
-        props.notify(err, 'error');
+        props.notify(
+          'User already exist with either same email id or mobile number.',
+          'error',
+        );
       }
     }}
     validationSchema={object().shape({
@@ -147,9 +170,10 @@ const SignUpPage = props => (
       name: string()
         .max(15, 'Must be 15 characters or less')
         .required('Required'),
-      acceptedTerms: boolean()
-        .required('Required')
-        .oneOf([true], 'You must accept the terms and conditions.'),
+      acceptedTerms: boolean().oneOf(
+        [true],
+        'You must accept the terms and conditions.',
+      ),
     })}
   >
     {formikProps => {
@@ -286,32 +310,17 @@ const SignUpPage = props => (
                   )}
 
                   <div style={{ paddingTop: '15px', marginTop: '6%' }}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          style={{
-                            color: 'rgb(53, 153, 51)',
-                            '&$checked': {
-                              color: 'rgb(53, 153, 51)',
-                            },
-                          }}
-                          value={values.acceptedTerms}
-                          name="terms"
-                        />
-                      }
-                      label={
-                        <span>
-                          I have read the <u> terms and conditions </u>
-                        </span>
-                      }
-                    />
+                    <Checkbox name="acceptedTerms" />
+                    <span>
+                      I have read the <u> terms and conditions </u>
+                    </span>
                   </div>
-                  {errors.acceptedTerms && touched.acceptedTerms && (
+                  {errors.acceptedTerms && touched.acceptedTerms ? (
                     <div className={classes.inputFeedback}>
                       {errors.acceptedTerms}
                     </div>
+                  ) : (
+                    ''
                   )}
                   <Button
                     variant="contained"

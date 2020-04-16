@@ -82,7 +82,7 @@ class DocumentsTab extends React.Component {
           <div className={classes.documentsTab}>
             {this.state.documentList.length > 0 ? (
               this.state.documentList.map((value, index) => (
-                <a target="_blank" href={`${CONTRACT_URL}/${value.hash}`}>
+                <a target="_blank" href={`${CONTRACT_URL}${value.hash}`}>
                   <div key={index} className={classes.documentCard}>
                     <img
                       width={60}
