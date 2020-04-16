@@ -272,7 +272,9 @@ export default function SendMoneyPopup(props) {
                   if (res.data.error) {
                     props.notify(res.data.error, 'error');
                   } else {
-                    handleOnProceedClick();
+                    props.notify('Transaction Successful!', 'success');
+                    handleClose();
+                 //   handleOnProceedClick();
                   }
                 } else {
                   props.notify(res.data.error, 'error');
@@ -365,7 +367,7 @@ export default function SendMoneyPopup(props) {
                               fullWidth
                               placeholder=""
                               variant="outlined"
-                              type="number"
+                              type="text"
                               value={values.receiverMobile}
                               onChange={handleChange}
                               onBlur={handleBlur}
@@ -872,7 +874,7 @@ export default function SendMoneyPopup(props) {
                             }}
                             control={
                               <Checkbox
-                                name="terms"
+                                name="receiverTermsAndCondition"
                                 style={{
                                   color: 'rgb(53, 153, 51)',
                                   '&$checked': {
@@ -937,7 +939,9 @@ export default function SendMoneyPopup(props) {
                   if (res.data.error) {
                     props.notify(res.data.error, 'error');
                   } else {
-                    handleOnProceedClick();
+                    props.notify('Transaction Successful!', 'success');
+                    handleClose();
+                 //   handleOnProceedClick();
                   }
                 } else {
                   props.notify(res.data.error, 'error');
