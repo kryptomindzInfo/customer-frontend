@@ -4,11 +4,12 @@
  *
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 import { API_URL, STATIC_URL } from '../App/constants';
 import history from '../../utils/history';
@@ -54,6 +55,14 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  buttonProgress: {
+    color: 'green',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 });
 
 const ChooseYourBankPage = props => {
@@ -73,14 +82,19 @@ const ChooseYourBankPage = props => {
     listOfBanks: [],
   });
 
+  const [loading, setLoading] = React.useState(true);
+
   const fetchBanks = async () => {
     try {
       const res = await axios.get(`${API_URL}/user/getBanks`);
       if (res.status === 200) {
+        setLoading(false);
         return res;
       }
+      setLoading(false);
       return null;
     } catch (err) {
+      setLoading(false);
       throw err;
     }
   };
@@ -102,19 +116,25 @@ const ChooseYourBankPage = props => {
     }
   };
   return (
-    <div>
+    <Fragment>
       <Helmet>
         <title>Choose A Bank</title>
         <meta name="description" content="Description of ChooseYourBankPage" />
       </Helmet>
       <HeaderChooseYourBank />
-      <div>
-        <Grid container justify="center">
-          <Grid item md={12}>
-            <Typography className={classes.titleChooseBank} variant="h4">
-              Choose Your Bank
-            </Typography>
-          </Grid>
+      <Grid container justify="center">
+        <Grid item md={12}>
+          <Typography className={classes.titleChooseBank} variant="h4">
+            Choose Your Bank
+          </Typography>
+        </Grid>
+        {loading ? (
+          <CircularProgress
+            size={50}
+            thickness={5}
+            className={classes.buttonProgress}
+          />
+        ) : (
           <Grid item className={classes.listOfBanks} md={12}>
             <Grid
               container
@@ -142,9 +162,9 @@ const ChooseYourBankPage = props => {
               ))}
             </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </div>
+        )}
+      </Grid>
+    </Fragment>
   );
 };
 

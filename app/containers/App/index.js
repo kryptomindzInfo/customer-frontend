@@ -29,7 +29,6 @@ import ProfilePage from '../ProfilePage';
 import { ProtectedRoute } from './ProtectedRoute';
 
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import VerificationLandingPage from '../VerificationLandingPage';
 
 toast.configure({
@@ -50,8 +49,6 @@ toast.configure({
 // `;
 
 export default function App() {
-  const AUTH_TOKEN = localStorage.getItem('customerLogged');
-  axios.defaults.headers.common.Authorization = AUTH_TOKEN;
   const notify = (txt, type) => {
     if (txt && type) {
       if (type == 'success') {

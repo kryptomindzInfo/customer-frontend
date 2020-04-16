@@ -7,9 +7,11 @@ import { API_URL } from '../App/constants';
 
 const useStyles = makeStyles(() => ({
   bankIcons: {
-    width: '75px',
-    height: '75px',
+    width: '80px',
+    height: '80px',
     cursor: 'pointer',
+    color: '#fff',
+    background: 'rgba(92,155,5,0.8)',
   },
 }));
 
@@ -73,15 +75,19 @@ export default ({ notify }) => {
                     className={classes.bankIcons}
                   >
                     <Typography
-                      variant="h6"
-                      style={{ textTransform: 'capitalize' }}
+                      variant="h5"
+                      style={{ textTransform: 'capitalize', fontWeight: '700' }}
                     >
                       {Object.values(row.name)[0]}
                     </Typography>
                   </Avatar>
                   <Typography
                     variant="h6"
-                    style={{ textTransform: 'capitalize' }}
+                    style={{
+                      textTransform: 'capitalize',
+                      fontWeight: '600',
+                      paddingTop: '5%',
+                    }}
                   >
                     {row.name}
                   </Typography>
