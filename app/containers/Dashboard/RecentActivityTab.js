@@ -57,119 +57,6 @@ const DashboardTab = withStyles(theme => ({
   },
 }))(props => <Tab disableRipple {...props} />);
 
-const sampleRows = [
-  {
-    id: '11h1ioh21219',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '18230812n31lk22',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '312u3123129',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '418293818020',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '182389018295',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '1231p2838016',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '819389e81907',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '182188298',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '91829182',
-    date: 'Nov 17, 2020',
-    time: '01:00 PM',
-    action: 'TRANSFERED',
-    to: 'Sandeep',
-    keyword: 'to',
-    amount: 400.0,
-    source: 'Non Wallet',
-    status: 'COMPLETED',
-  },
-  {
-    id: '1op2jj312j12',
-    date: 'Nov 15, 2020',
-    time: '01:00 PM',
-    action: 'RECIEVED',
-    keyword: 'from',
-    to: 'Sandeep',
-    amount: 586.0,
-    source: 'Wallet',
-    status: 'COMPLETED',
-  },
-];
-
 TablePaginationActions.propTypes = {
   count: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
@@ -290,18 +177,22 @@ const getTransactionHistory = async notify => {
 
 export default ({ notify }) => {
   const classes = useStyles();
-  let rows = [];
+  const [fullRow, setRow] = useState([]);
+  const [allRow, setAllRow] = useState([]);
+  const [transferRow, setTransferRow] = useState([]);
+  const [receiveRow, setReceiveRow] = useState([]);
   useEffect(() => {
     getTransactionHistory(notify)
       .then(r => {
-        rows = r;
-        return rows;
+        setRow(r);
+        setAllRow(r);
+        setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
+        setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
       })
       .catch(error => {
         notify('Error while fetching history', 'error');
       });
-  }, rows);
-  const [fullRow, setRow] = useState(sampleRows);
+  }, '');
   const [value, setValue] = useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -319,22 +210,32 @@ export default ({ notify }) => {
   };
 
   const handleChange = (event, newValue) => {
+    setValue(newValue);
     switch (newValue) {
       case 0:
-        setRow(sampleRows);
+        setRow(allRow);
         break;
       case 1:
-        setRow(sampleRows.filter(row => row.action === 'TRANSFERED'));
         setPage(0);
+        setRow(transferRow);
         break;
       case 2:
-        setRow(sampleRows.filter(row => row.action === 'RECIEVED'));
         setPage(0);
+        setRow(receiveRow);
         break;
       default:
-        setRow(sampleRows);
+        setRow(allRow);
     }
-    setValue(newValue);
+  };
+
+  const getDate = timestamp => {
+    const date = new Date(timestamp);
+    return date.toDateString();
+  };
+
+  const getTime = timestamp => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString();
   };
 
   return (
@@ -414,27 +315,39 @@ export default ({ notify }) => {
                 )
                 : fullRow
               ).map(row => (
-                <TableRow key={row.id}>
+                <TableRow key={row.TxId}>
                   <TableCell>
-                    <Typography variant="subtitle1">{row.date}</Typography>
-                    <Typography variant="subtitle1">{row.time}</Typography>
+                    <Typography variant="subtitle1">
+                      {getDate(row.Timestamp)}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {getTime(row.Timestamp)}
+                    </Typography>
                   </TableCell>
-                  <TableCell component="th" scope="row">
-                    <Typography variant="subtitle1">{row.id}</Typography>
+                  <TableCell>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ maxWidth: '100px' }}
+                      noWrap
+                    >
+                      {row.TxId}
+                    </Typography>
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <Typography style={{ color: '#4a90e2' }} variant="h6">
-                      {row.action} {row.keyword} {row.to}
+                      {row.Value.remarks}
                     </Typography>
                     <Typography color="primary" variant="subtitle1">
-                      {row.status}
+                      {row.Value.action}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle1">{row.source}</Typography>
+                    <Typography variant="subtitle1">
+                      {row.Value.wallet_type}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="h6">${row.amount}</Typography>
+                    <Typography variant="h6">${row.Value.amount}</Typography>
                   </TableCell>
                 </TableRow>
               ))}
