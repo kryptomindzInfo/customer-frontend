@@ -149,12 +149,24 @@ const ChooseYourBankPage = props => {
                   key={i}
                   className={classes.bankCard}
                 >
-                  <Avatar
-                    alt="bank logo"
-                    onClick={() => saveBank(lob)}
-                    src={`${STATIC_URL}/${lob.logo}`}
-                    className={classes.bankIcons}
-                  />
+                  {lob.logo ? (
+                    <Avatar
+                      alt="bank logo"
+                      onClick={() => saveBank(lob)}
+                      src={`${STATIC_URL}/${lob.logo}`}
+                      className={classes.bankIcons}
+                    />
+                  ) : (
+                    <Avatar
+                      alt="bank logo"
+                      style={{
+                        height: '100px',
+                        width: '100px',
+                        background: '#173316',
+                      }}
+                      onClick={() => saveBank(lob)}
+                    />
+                  )}
                   <Typography variant="h5" className={classes.nameOfBank}>
                     {lob.name}
                   </Typography>

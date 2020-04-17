@@ -177,6 +177,7 @@ export default ({ notify }) => {
   useEffect(() => {
     getTransactionHistory(notify)
       .then(r => {
+        r.reverse();
         setRow(r);
         setAllRow(r);
         setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
