@@ -3,10 +3,11 @@ import { Grid, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { API_URL } from '../App/constants';
 
 const useStyles = makeStyles(() => ({
-  bankIcons: {
+  contactIcon: {
     width: '80px',
     height: '80px',
     cursor: 'pointer',
@@ -40,82 +41,94 @@ export default ({ notify }) => {
     getContactList(notify)
       .then(r => {
         rows = r;
+        setLoading(false);
         setRow(rows);
       })
       .catch(error => {
+        setLoading(false);
         notify('Error while fetching contacts', 'error');
       });
   }, rows);
   const [fullRow, setRow] = useState({});
+  const [loading, setLoading] = React.useState(true);
 
   return (
     <Fragment>
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        justify="flex-start"
-        className={classes.paper}
-      >
-        {Object.values(fullRow)
-          .flat()
-          .slice(0, 5)
-          .map(row => (
-            <Fragment>
-              <Grid item md={2}>
-                <Grid
-                  container
-                  direction="column"
-                  alignItems="center"
-                  justify="center"
-                >
-                  <Avatar
-                    alt="bank logo"
-                    onClick={{}}
-                    className={classes.bankIcons}
+      {loading ? (
+        <Grid container alignItems="center" justify="center">
+          <CircularProgress size={50} thickness={5} color="primary" />
+        </Grid>
+      ) : (
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justify="flex-start"
+          className={classes.paper}
+        >
+          {Object.values(fullRow)
+            .flat()
+            .slice(0, 5)
+            .map(row => (
+              <Fragment>
+                <Grid item md={2}>
+                  <Grid
+                    container
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
                   >
-                    <Typography
-                      variant="h5"
-                      style={{ textTransform: 'capitalize', fontWeight: '700' }}
+                    <Avatar
+                      alt="bank logo"
+                      onClick={{}}
+                      className={classes.contactIcon}
                     >
-                      {Object.values(row.name)[0]}
+                      <Typography
+                        variant="h5"
+                        style={{
+                          textTransform: 'capitalize',
+                          fontWeight: '700',
+                        }}
+                      >
+                        {Object.values(row.name)[0]}
+                      </Typography>
+                    </Avatar>
+                    <Typography
+                      variant="h6"
+                      style={{
+                        textTransform: 'capitalize',
+                        fontWeight: '600',
+                        paddingTop: '5%',
+                      }}
+                    >
+                      {row.name}
                     </Typography>
-                  </Avatar>
-                  <Typography
-                    variant="h6"
-                    style={{
-                      textTransform: 'capitalize',
-                      fontWeight: '600',
-                      paddingTop: '5%',
-                    }}
-                  >
-                    {row.name}
-                  </Typography>
+                  </Grid>
                 </Grid>
+              </Fragment>
+            ))}
+          {Object.values(fullRow).flat().length > 5 ? (
+            <Grid item md={2} xs={12}>
+              <Grid container alignItems="flex-end" justify="flex-end">
+                <Button
+                  size="large"
+                  variant="outlined"
+                  color="primary"
+                  style={{
+                    borderRadius: '50%',
+                    paddingTop: '20%',
+                    paddingBottom: '20%',
+                  }}
+                >
+                  See All
+                </Button>
               </Grid>
-            </Fragment>
-          ))}
-        {Object.values(fullRow).flat().length > 5 ? (
-          <Grid item md={2} xs={12}>
-            <Grid container alignItems="flex-end" justify="flex-end">
-              <Button
-                size="large"
-                variant="outlined"
-                color="primary"
-                style={{
-                  borderRadius: '50%',
-                  paddingTop: '20%',
-                  paddingBottom: '20%',
-                }}
-              >
-                See All
-              </Button>
             </Grid>
-          </Grid>
-        ) : (
-          ''
-        )}
-      </Grid>
+          ) : (
+            ''
+          )}
+        </Grid>
+      )}
     </Fragment>
   );
 };

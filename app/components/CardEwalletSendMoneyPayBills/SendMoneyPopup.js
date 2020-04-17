@@ -18,6 +18,7 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import Link from '@material-ui/core/Link';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { API_URL } from '../../containers/App/constants';
 
 const dialogTilteStyles = () => ({
@@ -177,6 +178,7 @@ export default function SendMoneyPopup(props) {
   const [verifyPopup, setVerifyPopup] = React.useState(false);
   const [isWallet, setIsWallet] = React.useState(true);
   const [format, setFormat] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
 
   const handleClose = () => {
     props.onClose();
@@ -201,7 +203,7 @@ export default function SendMoneyPopup(props) {
       setIsWallet(true);
     }
   };
-
+  const { mobile } = JSON.parse(localStorage.getItem('loggedUser'));
   return (
     <Fragment>
       <DialogModal
@@ -211,7 +213,11 @@ export default function SendMoneyPopup(props) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle style={{fontWeight:'600'}} id="customized-dialog-title" onClose={handleClose}>
+        <DialogTitle
+          style={{ fontWeight: '600' }}
+          id="customized-dialog-title"
+          onClose={handleClose}
+        >
           Send Money
         </DialogTitle>
         <Grid xs={12} md={12} container direction="column" alignItems="center">
@@ -268,6 +274,7 @@ export default function SendMoneyPopup(props) {
               sending_amount: '',
             }}
             onSubmit={async values => {
+              setLoading(true);
               try {
                 const res = await axios.post(
                   `${API_URL}/user/sendMoneyToNonWallet`,
@@ -278,14 +285,17 @@ export default function SendMoneyPopup(props) {
                     props.notify(res.data.error, 'error');
                   } else {
                     props.notify('Transaction Successful!', 'success');
+                    setLoading(false);
                     handleClose();
-                 //   handleOnProceedClick();
+                    // handleOnProceedClick();
                   }
                 } else {
                   props.notify(res.data.error, 'error');
                 }
+                setLoading(false);
               } catch (err) {
                 props.notify('Something went wrong', 'error');
+                setLoading(false);
               }
             }}
             validationSchema={Yup.object().shape({
@@ -917,7 +927,15 @@ export default function SendMoneyPopup(props) {
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                           >
-                            <Typography variant="h6">Proceed</Typography>
+                            {loading ? (
+                              <CircularProgress
+                                size={40}
+                                thickness={5}
+                                color="primary"
+                              />
+                            ) : (
+                              <Typography variant="h6">Proceed</Typography>
+                            )}
                           </Button>
                         </Grid>
                       </Grid>
@@ -935,6 +953,7 @@ export default function SendMoneyPopup(props) {
               sending_amount: '',
             }}
             onSubmit={async values => {
+              setLoading(true);
               try {
                 const res = await axios.post(
                   `${API_URL}/user/sendMoneyToWallet`,
@@ -945,23 +964,33 @@ export default function SendMoneyPopup(props) {
                     props.notify(res.data.error, 'error');
                   } else {
                     props.notify('Transaction Successful!', 'success');
+                    setLoading(false);
                     handleClose();
-                 //   handleOnProceedClick();
+                    //   handleOnProceedClick();
                   }
                 } else {
                   props.notify(res.data.error, 'error');
                 }
+                setLoading(false);
               } catch (err) {
                 props.notify('Something went wrong', 'error');
+                setLoading(false);
               }
             }}
             validationSchema={Yup.object().shape({
               receiverMobile: Yup.string()
+                .min(10, 'number should be atleast 10 digits')
+                .max(10, 'number cannot exceed 10 digits')
                 .matches(
                   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
                   'Mobile no must be valid',
                 )
-                .required('Mobile no is required'),
+                .required('Mobile no is required')
+                .test(
+                  'match',
+                  'Cannot transfer money to your own wallet.',
+                  receiverMobile => receiverMobile !== mobile,
+                ),
               sending_amount: Yup.number().required('Amount is required'),
             })}
           >
@@ -1170,7 +1199,15 @@ export default function SendMoneyPopup(props) {
                             disableElevation
                             disabled={isSubmitting}
                           >
-                            <Typography variant="h6">Proceed</Typography>
+                            {loading ? (
+                              <CircularProgress
+                                size={40}
+                                thickness={5}
+                                color="primary"
+                              />
+                            ) : (
+                              <Typography variant="h6">Proceed</Typography>
+                            )}
                           </Button>
                         </Grid>
                       </Grid>
