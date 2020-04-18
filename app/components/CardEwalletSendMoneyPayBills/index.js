@@ -150,6 +150,7 @@ class CardEwalletSendMoneyPayBills extends Component {
         </Grid>
         <SendMoneyPopup
           notify={notify}
+          balance= {this.state.balance}
           onClose={() => this.closeSendMoneyPopup()}
           open={this.state.sendMoneyPopup}
         />
