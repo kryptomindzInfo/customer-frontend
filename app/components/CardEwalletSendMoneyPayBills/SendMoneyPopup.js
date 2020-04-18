@@ -14,7 +14,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { API_URL } from '../../containers/App/constants';
+import { API_URL, CURRENCY } from '../../containers/App/constants';
 
 const dialogTilteStyles = () => ({
   root: {
@@ -174,6 +174,25 @@ export default function SendMoneyPopup(props) {
   const [isWallet, setIsWallet] = React.useState(true);
   const [format, setFormat] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
+  const [fee, setFee] = React.useState(0);
+
+  const getFee = async (event, amount, trans_type) => {
+    let method = '';
+    const { value } = event.target;
+    if (trans_type === 'Wallet To Wallet') {
+      method = 'checkWalToWalFee';
+    } else {
+      method = 'checkWalToNonWalFee';
+    }
+    if (value !== '') {
+      const res = await axios.post(`${API_URL}/user/${method}`, {
+        amount,
+      });
+      if (res.data.status === 1) {
+        setFee(res.data.fee);
+      }
+    }
+  };
 
   const handleClose = () => {
     props.onClose();
@@ -192,9 +211,11 @@ export default function SendMoneyPopup(props) {
   const handleOnchange = (e, value) => {
     setFormat(value);
     if (value === 'wallet') {
+      setFee(0);
       setIsWallet(false);
     }
     if (value === 'nonWallet') {
+      setFee(0);
       setIsWallet(true);
     }
   };
@@ -829,7 +850,13 @@ export default function SendMoneyPopup(props) {
                               type="number"
                               value={values.sending_amount}
                               onChange={handleChange}
-                              onBlur={handleBlur}
+                              onBlur={e =>
+                                getFee(
+                                  e,
+                                  values.sending_amount,
+                                  'Non Wallet To Wallet',
+                                )
+                              }
                               className={classes.dialogTextFieldGridFullRow}
                               error={
                                 errors.sending_amount && touched.sending_amount
@@ -873,7 +900,7 @@ export default function SendMoneyPopup(props) {
                           className={classes.dialogTextFieldGrid}
                         >
                           <Typography color="primary" variant="body1">
-                            Total Fee $200 will be charged
+                            Total Fee {CURRENCY} {fee} will be charged
                           </Typography>
                           <FormControlLabel
                             onChange={handleChange}
@@ -985,6 +1012,25 @@ export default function SendMoneyPopup(props) {
                   'match',
                   'Cannot transfer money to your own wallet.',
                   receiverMobile => receiverMobile !== mobile,
+                )
+                .test(
+                  'WalletCheck',
+                  'Wallet for this number does not exist!',
+                  function(value) {
+                    if (value.toString().length === 10) {
+                      return new Promise((resolve, reject) => {
+                        axios
+                          .post(`${API_URL}/user/getUser`, { mobile: value })
+                          .then(res => {
+                            if (res.data.error || res.data.user.status !== 1) {
+                              resolve(false);
+                            }
+                            resolve(true);
+                          })
+                          .catch(err => resolve(false));
+                      });
+                    }
+                  },
                 ),
               sending_amount: Yup.number().required('Amount is required'),
             })}
@@ -1052,7 +1098,6 @@ export default function SendMoneyPopup(props) {
                               type="number"
                               value={values.receiverMobile}
                               onChange={handleChange}
-                              onBlur={handleBlur}
                               className={classes.dialogTextFieldGrid}
                               helperText={
                                 errors.receiverMobile && touched.receiverMobile
@@ -1095,8 +1140,16 @@ export default function SendMoneyPopup(props) {
                               variant="outlined"
                               type="number"
                               value={values.sending_amount}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
+                              onChange={e => {
+                                handleChange(e);
+                              }}
+                              onBlur={e => {
+                                getFee(
+                                  e,
+                                  values.sending_amount,
+                                  'Wallet To Wallet',
+                                );
+                              }}
                               className={classes.dialogTextFieldGridFullRow}
                               error={
                                 errors.sending_amount && touched.sending_amount
@@ -1116,7 +1169,8 @@ export default function SendMoneyPopup(props) {
                               fontSize: '10px',
                             }}
                           >
-                            Total Amount:
+                            Wallet Balance: {CURRENCY}{' '}
+                            {props.balance - values.sending_amount}
                           </Typography>
                         </Grid>
 
@@ -1156,7 +1210,7 @@ export default function SendMoneyPopup(props) {
                               fontSize: '10px',
                             }}
                           >
-                            Total Fee $200 will be charged
+                            Total Fee {CURRENCY} {fee} will be charged
                           </Typography>
                           <FormControlLabel
                             control={
