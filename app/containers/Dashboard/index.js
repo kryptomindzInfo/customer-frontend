@@ -68,6 +68,7 @@ const styles = theme => ({
     background: 'white',
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
+    display: 'none',
     borderRadius: '7px',
 
     marginBottom: '1%',
@@ -84,6 +85,9 @@ const styles = theme => ({
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     padding: '2%',
     borderRadius: '7px',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
 
     marginBottom: '1%',
     textAlign: 'center',

@@ -61,7 +61,7 @@ const styles = theme => ({
   cardBankTitle: {
     paddingTop: '3%',
     fontSize: '12px',
-    marginRight: '20px',
+    marginRight: '45px',
     wordBreak: 'break-word',
   },
 });
@@ -103,6 +103,7 @@ class CardEwalletSendMoneyPayBills extends Component {
 
   render() {
     const { classes, notify } = this.props;
+    const { bank } = JSON.parse(localStorage.getItem('loggedUser'));
 
     return (
       <Paper elevation={0}>
@@ -110,9 +111,9 @@ class CardEwalletSendMoneyPayBills extends Component {
           <Grid item md={12} xs={12} sm={12}>
             <div className={classes.eWalletTitle}>
               <span className={classes.cardEwalletTitle}>E-WALLET</span>
-              {/* <span className={classes.cardBankTitle}> */}
-              {/*  Powered by Axis bank */}
-              {/* </span> */}
+               <span className={classes.cardBankTitle}>
+                Powered by { bank }
+               </span>
             </div>
             <Typography variant="subtitle2">Available:</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
@@ -120,6 +121,8 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Typography>
             <Grid
               container
+              xs={12}
+              md={12}
               spacing="4"
               style={{ marginTop: '20px', paddingBottom: '6%' }}
             >
@@ -127,7 +130,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                 <Button
                   variant="outlined"
                   color="primary"
-                  style={{ fontSize: '13px' }}
+                  style={{ fontSize: '11px' }}
                   onClick={this.showSendMoneyPopup}
                   startIcon={<Icon>send</Icon>}
                 >
@@ -138,7 +141,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                 <Button
                   variant="outlined"
                   color="primary"
-                  style={{ fontSize: '13px' }}
+                  style={{ fontSize: '11px' }}
                   onClick={this.goToBillsPaymentPage}
                   startIcon={<Icon>receipt</Icon>}
                 >
