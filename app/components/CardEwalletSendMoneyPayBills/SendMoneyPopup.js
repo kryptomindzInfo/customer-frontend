@@ -3,12 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, Grid, Typography } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -19,6 +14,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import { API_URL, CURRENCY } from '../../containers/App/constants';
 
 const dialogTilteStyles = () => ({
@@ -180,6 +176,7 @@ export default function SendMoneyPopup(props) {
   const [format, setFormat] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [fee, setFee] = React.useState(0);
+  const [walletUserName, setWalletUserName] = React.useState('');
 
   const getFee = async (event, amount, trans_type) => {
     let method = '';
@@ -222,6 +219,12 @@ export default function SendMoneyPopup(props) {
     if (value === 'nonWallet') {
       setFee(0);
       setIsWallet(true);
+    }
+  };
+
+  const handleReceiverMobileChange = mobile => {
+    if (mobile.length !== 10 && mobile === '') {
+      setWalletUserName('');
     }
   };
   const { mobile } = JSON.parse(localStorage.getItem('loggedUser'));
@@ -1022,14 +1025,16 @@ export default function SendMoneyPopup(props) {
                   'WalletCheck',
                   'Wallet for this number does not exist!',
                   function(value) {
-                    if (value.toString().length === 10) {
+                    if (value.length === 10) {
                       return new Promise((resolve, reject) => {
                         axios
                           .post(`${API_URL}/user/getUser`, { mobile: value })
                           .then(res => {
                             if (res.data.error || res.data.user.status !== 1) {
+                              setWalletUserName('');
                               resolve(false);
                             }
+                            setWalletUserName(res.data.user.name);
                             resolve(true);
                           })
                           .catch(err => resolve(false));
@@ -1099,10 +1104,30 @@ export default function SendMoneyPopup(props) {
                               label="Phone No"
                               fullWidth
                               placeholder=""
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <span
+                                      style={{
+                                        color: '#417505',
+                                        fontSize: '13px',
+                                        fontWeight: '600',
+                                      }}
+                                    >
+                                      {walletUserName}
+                                    </span>
+                                  </InputAdornment>
+                                ),
+                              }}
                               variant="outlined"
-                              type="number"
+                              type="text"
                               value={values.receiverMobile}
                               onChange={handleChange}
+                              onBlur={() =>
+                                handleReceiverMobileChange(
+                                  values.receiverMobile,
+                                )
+                              }
                               className={classes.dialogTextFieldGrid}
                               helperText={
                                 errors.receiverMobile && touched.receiverMobile
@@ -1202,21 +1227,58 @@ export default function SendMoneyPopup(props) {
                             />
                           </Grid>
                         </Grid>
+                       {/* <Grid
+                          container
+                          alignItems="flex-start"
+                          className={classes.dialogTextFieldGrid}
+                        >
+                          <RadioGroup
+                            aria-label="gender"
+                            name="fee"
+                            value=''
+                            row
+                            onChange={handleChange}
+                          >
+                            <FormControlLabel
+                              value="inclusive"
+                              control={<Radio />}
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    marginBottom: '10px',
+                                    fontSize: '10px',
+                                  }}
+                                >
+                                  Inclusive of Total Fee {CURRENCY} {fee} will
+                                  be charged
+                                </Typography>
+                              }
+                            />
+                            <FormControlLabel
+                              value="exclusive"
+                              control={<Radio />}
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    marginBottom: '10px',
+                                    fontSize: '10px',
+                                  }}
+                                >
+                                  Exlusive of Total Fee {CURRENCY} {fee} will be
+                                  charged
+                                </Typography>
+                              }
+                            />
+                          </RadioGroup>
+                        </Grid>*/}
                         <Grid
                           container
                           direction="column"
                           alignItems="flex-start"
                           className={classes.dialogTextFieldGrid}
                         >
-                          <Typography
-                            style={{
-                              color: 'rgb(53, 153, 51)',
-                              marginBottom: '10px',
-                              fontSize: '10px',
-                            }}
-                          >
-                            Total Fee {CURRENCY} {fee} will be charged
-                          </Typography>
                           <FormControlLabel
                             control={
                               <Checkbox
