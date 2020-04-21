@@ -83,38 +83,6 @@ class PersonalInfoTab extends React.Component {
   render() {
     const { classes } = this.props;
     const user = JSON.parse(localStorage.getItem('loggedUser'));
-    const updateUserName = async value => {
-      if (value) {
-        if (value === user.name) {
-          return;
-        }
-        if (value.match('^[a-zA-Z\\s]*$')) {
-          const res = await axios.post(`${API_URL}/user/updateName`, {
-            name: this.state.name,
-            username: user.username,
-          });
-          if (res.data.status === 1) {
-            user.name = value;
-            const updateUser = JSON.stringify(user);
-            localStorage.setItem('loggedUser', updateUser);
-            this.props.notify('Username successfully updated', 'success');
-            window.location.reload();
-          } else {
-            this.props.notify('Error while updating username', 'error');
-          }
-        } else {
-          this.setState({
-            nameErr: true,
-            nameErrorText: 'Please enter a valid name',
-          });
-        }
-      } else {
-        this.setState({
-          nameErr: true,
-          nameErrorText: 'Please enter a valid name',
-        });
-      }
-    };
     const updateUserEmail = async value => {
       if (value) {
         if (value === user.email) {
@@ -161,29 +129,11 @@ class PersonalInfoTab extends React.Component {
               <FormControl variant="outlined">
                 <OutlinedInput
                   id="name"
+                  disabled
                   error={this.state.nameErr}
                   type="text"
-                  onClick={() => updateUserEmail(this.state.email)}
                   className={classes.inputField}
                   value={this.state.name}
-                  onChange={e =>
-                    this.setState({
-                      name: e.target.value,
-                      nameErr: false,
-                      nameErrorText: '',
-                    })
-                  }
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <Button
-                        onClick={() => updateUserName(this.state.name)}
-                        size="small"
-                        className={classes.updateButton}
-                      >
-                        Update
-                      </Button>
-                    </InputAdornment>
-                  }
                   labelWidth={0}
                 />
                 <span className={classes.errorText}>
