@@ -111,9 +111,7 @@ class CardEwalletSendMoneyPayBills extends Component {
           <Grid item md={12} xs={12} sm={12}>
             <div className={classes.eWalletTitle}>
               <span className={classes.cardEwalletTitle}>E-WALLET</span>
-               <span className={classes.cardBankTitle}>
-                Powered by { bank }
-               </span>
+              <span className={classes.cardBankTitle}>Powered by {bank}</span>
             </div>
             <Typography variant="subtitle2">Available:</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
@@ -130,11 +128,12 @@ class CardEwalletSendMoneyPayBills extends Component {
                 <Button
                   variant="outlined"
                   color="primary"
-                  style={{ fontSize: '11px' }}
                   onClick={this.showSendMoneyPopup}
                   startIcon={<Icon>send</Icon>}
                 >
-                  Send Money
+                  <Typography style={{ fontSize: '11px' }} noWrap>
+                    Send Money
+                  </Typography>
                 </Button>
               </Grid>
               <Grid xs={12} md={6} item>
@@ -145,7 +144,9 @@ class CardEwalletSendMoneyPayBills extends Component {
                   onClick={this.goToBillsPaymentPage}
                   startIcon={<Icon>receipt</Icon>}
                 >
-                  Pay Bills
+                  <Typography style={{ fontSize: '11px' }} noWrap>
+                    Pay Bills
+                  </Typography>
                 </Button>
               </Grid>
             </Grid>
@@ -153,7 +154,7 @@ class CardEwalletSendMoneyPayBills extends Component {
         </Grid>
         <SendMoneyPopup
           notify={notify}
-          balance= {this.state.balance}
+          balance={this.state.balance}
           onClose={() => this.closeSendMoneyPopup()}
           open={this.state.sendMoneyPopup}
         />
