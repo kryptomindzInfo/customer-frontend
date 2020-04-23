@@ -1,9 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { Checkbox, FormControlLabel, Grid, Typography } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -16,6 +21,7 @@ import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { API_URL, CURRENCY } from '../../containers/App/constants';
+import Blur from '../Blur';
 
 const dialogTilteStyles = () => ({
   root: {
@@ -168,16 +174,80 @@ const dialogContentStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SendMoneyPopup(props) {
+const SendMoneyPopup = props => {
   const classes = dialogContentStyles();
   const [open, setOpen] = React.useState(props.open);
   const [verifyPopup, setVerifyPopup] = React.useState(false);
   const [isWallet, setIsWallet] = React.useState(true);
   const [format, setFormat] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
+  const [popupLoading, setPopupLoading] = React.useState(true);
   const [fee, setFee] = React.useState(0);
   const [isValidFee, setIsValidFee] = React.useState(false);
   const [walletUserName, setWalletUserName] = React.useState('');
+
+  useEffect(() => {
+    getFeeWithDummyValue('Non Wallet To Wallet');
+  }, isValidFee);
+
+  const getFeeWithDummyValue = transType => {
+    let method = '';
+    if (transType === 'Wallet To Wallet') {
+      method = 'checkWalToWalFee';
+    } else {
+      method = 'checkWalToNonWalFee';
+    }
+    setPopupLoading(true);
+    axios
+      .post(`${API_URL}/user/${method}`, {
+        amount: 45,
+      })
+      .then(res => {
+        if (res.data.error) {
+          setPopupLoading(false);
+          setIsValidFee(false);
+          props.notify(res.data.error, 'error');
+        }
+        if (res.data.status === 1) {
+          setPopupLoading(false);
+          setFee(res.data.fee);
+          setIsValidFee(true);
+        }
+      })
+      .catch(error => {
+        setPopupLoading(false);
+        setIsValidFee(false);
+        props.notify(error.response.data.error, 'error');
+      });
+  };
+
+  const getUser = value => {
+    if (value) {
+      if (value.length === 10) {
+        return new Promise((resolve, reject) => {
+          axios
+            .post(`${API_URL}/user/getUser`, {
+              mobile: value,
+            })
+            .then(res => {
+              if (res.data.error || res.data.user.status !== 1) {
+                setWalletUserName('');
+                resolve(false);
+              } else {
+                setWalletUserName(res.data.user.name);
+                resolve(true);
+              }
+            })
+            .catch(err => {
+              setWalletUserName('');
+              resolve(false);
+            });
+        });
+      }
+      return false;
+    }
+    return false;
+  };
 
   const getFee = (amount, trans_type) => {
     let method = '';
@@ -192,6 +262,7 @@ export default function SendMoneyPopup(props) {
       })
       .then(res => {
         if (res.data.error) {
+          setFee(0);
           setIsValidFee(false);
           props.notify(res.data.error, 'error');
         }
@@ -201,7 +272,9 @@ export default function SendMoneyPopup(props) {
         }
       })
       .catch(error => {
+        setPopupLoading(false);
         setIsValidFee(false);
+        setFee(0);
         props.notify(error.response.data.error, 'error');
       });
   };
@@ -223,26 +296,22 @@ export default function SendMoneyPopup(props) {
   const handleOnchange = (e, value) => {
     setFormat(value);
     if (value === 'wallet') {
+      getFeeWithDummyValue('Wallet To Wallet');
       setFee(0);
-      getFee(45, 'Wallet To Wallet');
       setIsWallet(false);
     }
     if (value === 'nonWallet') {
+      getFeeWithDummyValue('Non Wallet To Wallet');
       setFee(0);
-      getFee(45, 'Non Wallet To Wallet');
       setIsWallet(true);
     }
   };
 
-  const handleReceiverMobileChange = mobile => {
-    if (mobile.length !== 10 && mobile === '') {
-      setWalletUserName('');
-    }
-  };
   const { mobile } = JSON.parse(localStorage.getItem('loggedUser'));
   return (
     <Fragment>
       <DialogModal
+        disableBackdropClick
         maxWidth="lg"
         fullWidth
         open={props.open}
@@ -288,8 +357,15 @@ export default function SendMoneyPopup(props) {
             </ToggleButtonGroup>
           </Grid>
         </Grid>
-        {isWallet ? (
-          isValidFee ? (
+        {popupLoading ? (
+          <CircularProgress
+            size={40}
+            thickness={5}
+            color="primary"
+            style={{ position: 'absolute', bottom: '50%', left: '50%' }}
+          />
+        ) : isWallet ? (
+          <Blur isValidFee={isValidFee}>
             <Formik
               initialValues={{
                 note: '',
@@ -331,7 +407,7 @@ export default function SendMoneyPopup(props) {
                   }
                   setLoading(false);
                 } catch (err) {
-                  props.notify('Something went wrong', 'error');
+                  props.notify(err.response.data.error, 'error');
                   setLoading(false);
                 }
               }}
@@ -393,12 +469,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={2}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
                                 size="small"
-                                autoFocus
                                 id="form-phone-pre"
                                 label="+91"
                                 className={classes.formField}
@@ -410,10 +484,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={10}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 autoFocus
                                 error={
@@ -449,10 +523,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverGivenName"
                                 id="form-given-name"
@@ -480,10 +554,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverFamilyName"
                                 id="form-family-name"
@@ -519,10 +593,10 @@ export default function SendMoneyPopup(props) {
                               item
                               xs={12}
                               md={12}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverAddress"
                                 id="form-address"
@@ -547,10 +621,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverState"
                                 id="form-state"
@@ -568,10 +642,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverZip"
                                 id="form-zip"
@@ -596,10 +670,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverCountry"
                                 id="form-country"
@@ -627,10 +701,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverEmail"
                                 id="form-email"
@@ -677,6 +751,7 @@ export default function SendMoneyPopup(props) {
                                 }}
                                 control={
                                   <Checkbox
+                                    disabled={!isValidFee}
                                     name="withoutID"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -704,6 +779,7 @@ export default function SendMoneyPopup(props) {
                                 }}
                                 control={
                                   <Checkbox
+                                    disabled={!isValidFee}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     style={{
@@ -747,10 +823,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationCountry"
                                 id="form-identification-country"
@@ -778,10 +854,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationType"
                                 id="form-fidentification-type"
@@ -816,10 +892,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationNumber"
                                 id="form-identification-number"
@@ -847,10 +923,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={6}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationValidTill"
                                 id="form-idetification-valid-till"
@@ -888,7 +964,6 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={2}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
@@ -903,10 +978,10 @@ export default function SendMoneyPopup(props) {
                             <Grid
                               item
                               xs={10}
-                              alignItems="center"
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="sending_amount"
                                 id="form-sending-amount"
@@ -950,6 +1025,7 @@ export default function SendMoneyPopup(props) {
                               className={classes.dialogTextFieldGrid}
                             >
                               <TextField
+                                disabled={!isValidFee}
                                 size="small"
                                 name="note"
                                 id="form-note"
@@ -983,6 +1059,7 @@ export default function SendMoneyPopup(props) {
                               }}
                               control={
                                 <Checkbox
+                                  disabled={!isValidFee}
                                   name="receiverTermsAndCondition"
                                   style={{
                                     color: 'rgb(53, 153, 51)',
@@ -1039,400 +1116,369 @@ export default function SendMoneyPopup(props) {
                 );
               }}
             </Formik>
-          ) : (
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <Typography
-                variant="h6"
-                noWrap
-                style={{
-                  paddingTop: '10%',
-                  paddingBottom: '10%',
-                }}
-              >
-                This feature is not available.
-              </Typography>
-            </Grid>
-          )
-        ) : isValidFee ? (
-          <Formik
-            initialValues={{
-              note: '',
-              receiverMobile: '',
-              sending_amount: '',
-            }}
-            onSubmit={async values => {
-              setLoading(true);
-              try {
-                const res = await axios.post(
-                  `${API_URL}/user/sendMoneyToWallet`,
-                  values,
-                );
-                if (res.status === 200) {
-                  if (res.data.error) {
-                    props.notify(res.data.error, 'error');
-                  } else {
-                    props.notify('Transaction Successful!', 'success');
-                    setLoading(false);
-                    handleClose();
-                    //   handleOnProceedClick();
-                  }
-                } else {
-                  props.notify(res.data.error, 'error');
-                }
-                setLoading(false);
-              } catch (err) {
-                props.notify('Something went wrong', 'error');
-                setLoading(false);
-              }
-            }}
-            validationSchema={Yup.object().shape({
-              receiverMobile: Yup.string()
-                .min(10, 'number should be atleast 10 digits')
-                .max(10, 'number cannot exceed 10 digits')
-                .matches(
-                  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-                  'Mobile no must be valid',
-                )
-                .required('Mobile no is required')
-                .test(
-                  'match',
-                  'Cannot transfer money to your own wallet.',
-                  receiverMobile => receiverMobile !== mobile,
-                )
-                .test(
-                  'WalletCheck',
-                  'Wallet for this number does not exist!',
-                  function(value) {
-                    if (value.length === 10) {
-                      return new Promise((resolve, reject) => {
-                        axios
-                          .post(`${API_URL}/user/getUser`, { mobile: value })
-                          .then(res => {
-                            if (res.data.error || res.data.user.status !== 1) {
-                              setWalletUserName('');
-                              resolve(false);
-                            }
-                            setWalletUserName(res.data.user.name);
-                            resolve(true);
-                          })
-                          .catch(err => resolve(false));
-                      });
+          </Blur>
+        ) : (
+          <Blur isValidFee={isValidFee}>
+            <Formik
+              enableReinitialize
+              initialValues={{
+                note: '',
+                receiverMobile: '',
+                sending_amount: '',
+              }}
+              onSubmit={async values => {
+                setLoading(true);
+                try {
+                  const res = await axios.post(
+                    `${API_URL}/user/sendMoneyToWallet`,
+                    values,
+                  );
+                  if (res.status === 200) {
+                    if (res.data.error) {
+                      props.notify(res.data.error, 'error');
+                    } else {
+                      props.notify('Transaction Successful!', 'success');
+                      setLoading(false);
+                      handleClose();
+                      //   handleOnProceedClick();
                     }
-                  },
-                ),
-              sending_amount: Yup.number().required('Amount is required'),
-            })}
-          >
-            {formikProps => {
-              const {
-                values,
-                touched,
-                errors,
-                isSubmitting,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-              } = formikProps;
-              return (
-                <Form>
-                  <Grid
-                    container
-                    direction="row"
-                    alignItems="center"
-                    justify="center"
-                  >
-                    <Grid item md={6} xs={12}>
-                      <Grid
-                        container
-                        direction="column"
-                        spacing={2}
-                        style={{ marginTop: '10%' }}
-                      >
-                        <Grid container direction="row" alignItems="flex-start">
-                          <Grid
-                            item
-                            xs={2}
-                            alignItems="center"
-                            className={classes.dialogTextFieldGrid}
-                          >
-                            <TextField
-                              size="small"
-                              autoFocus
-                              id="form-phone-pre"
-                              label="+91"
-                              variant="outlined"
-                              type="text"
-                              disabled
-                            />
-                          </Grid>
-                          <Grid
-                            item
-                            xs={10}
-                            alignItems="center"
-                            className={classes.dialogTextFieldGrid}
-                          >
-                            <TextField
-                              size="small"
-                              autoFocus
-                              error={
-                                errors.receiverMobile && touched.receiverMobile
-                              }
-                              name="receiverMobile"
-                              id="form-phone"
-                              label="Phone No"
-                              fullWidth
-                              placeholder=""
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <span
-                                      style={{
-                                        color: '#417505',
-                                        fontSize: '13px',
-                                        fontWeight: '600',
-                                      }}
-                                    >
-                                      {walletUserName}
-                                    </span>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              type="text"
-                              value={values.receiverMobile}
-                              onChange={handleChange}
-                              onBlur={() =>
-                                handleReceiverMobileChange(
-                                  values.receiverMobile,
-                                )
-                              }
-                              className={classes.dialogTextFieldGrid}
-                              helperText={
-                                errors.receiverMobile && touched.receiverMobile
-                                  ? errors.receiverMobile
-                                  : ''
-                              }
-                            />
-                          </Grid>
-                        </Grid>
-
-                        <Grid container direction="row" alignItems="flex-start">
-                          <Grid
-                            item
-                            xs={2}
-                            alignItems="center"
-                            className={classes.dialogTextFieldGrid}
-                          >
-                            <TextField
-                              size="small"
-                              id="form-amount-pre"
-                              label="XOF"
-                              variant="outlined"
-                              type="text"
-                              disabled
-                            />
-                          </Grid>
-                          <Grid
-                            item
-                            xs={10}
-                            alignItems="center"
-                            className={classes.dialogTextFieldGrid}
-                          >
-                            <TextField
-                              size="small"
-                              name="sending_amount"
-                              id="form-sending-amount"
-                              label="Amount"
-                              fullWidth
-                              placeholder=""
-                              variant="outlined"
-                              type="number"
-                              value={values.sending_amount}
-                              onChange={e => {
-                                handleChange(e);
-                              }}
-                              onBlur={e => {
-                                getFee(
-                                  values.sending_amount,
-                                  'Wallet To Wallet',
-                                );
-                              }}
-                              className={classes.dialogTextFieldGridFullRow}
-                              error={
-                                errors.sending_amount && touched.sending_amount
-                              }
-                              helperText={
-                                errors.sending_amount && touched.sending_amount
-                                  ? errors.sending_amount
-                                  : ''
-                              }
-                            />
-                          </Grid>
-                          <Typography
-                            style={{
-                              color: 'rgb(53, 153, 51)',
-                              marginBottom: '20px',
-                              marginLeft: '10px',
-                              fontSize: '10px',
-                            }}
-                          >
-                            Wallet Balance: {CURRENCY}{' '}
-                            {props.balance - values.sending_amount}
-                          </Typography>
-                        </Grid>
-
-                        <Grid container direction="row" alignItems="flex-start">
-                          <Grid
-                            item
-                            xs={12}
-                            alignItems="center"
-                            className={classes.dialogTextFieldGrid}
-                          >
-                            <TextField
-                              size="small"
-                              name="note"
-                              id="form-note"
-                              fullWidth
-                              placeholder="Note"
-                              variant="outlined"
-                              multiline
-                              rows="4"
-                              type="text"
-                              value={values.note}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                          </Grid>
-                        </Grid>
-                        {/* <Grid
-                          container
-                          alignItems="flex-start"
-                          className={classes.dialogTextFieldGrid}
-                        >
-                          <RadioGroup
-                            aria-label="gender"
-                            name="fee"
-                            value=''
-                            row
-                            onChange={handleChange}
-                          >
-                            <FormControlLabel
-                              value="inclusive"
-                              control={<Radio />}
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    marginBottom: '10px',
-                                    fontSize: '10px',
-                                  }}
-                                >
-                                  Inclusive of Total Fee {CURRENCY} {fee} will
-                                  be charged
-                                </Typography>
-                              }
-                            />
-                            <FormControlLabel
-                              value="exclusive"
-                              control={<Radio />}
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    marginBottom: '10px',
-                                    fontSize: '10px',
-                                  }}
-                                >
-                                  Exlusive of Total Fee {CURRENCY} {fee} will be
-                                  charged
-                                </Typography>
-                              }
-                            />
-                          </RadioGroup>
-                        </Grid> */}
+                  } else {
+                    props.notify(res.data.error, 'error');
+                  }
+                  setLoading(false);
+                } catch (err) {
+                  props.notify('Something went wrong', 'error');
+                  setLoading(false);
+                }
+              }}
+              validationSchema={Yup.object().shape({
+                receiverMobile: Yup.string()
+                  .min(10, 'number should be atleast 10 digits')
+                  .max(10, 'number cannot exceed 10 digits')
+                  .matches(
+                    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+                    'Mobile no must be valid',
+                  )
+                  .required('Mobile no is required')
+                  .test(
+                    'match',
+                    'Cannot transfer money to your own wallet.',
+                    receiverMobile => receiverMobile !== mobile,
+                  )
+                  .test(
+                    'WalletCheck',
+                    'Wallet for this number does not exist!',
+                    value => getUser(value),
+                  ),
+                sending_amount: Yup.number().required('Amount is required'),
+              })}
+            >
+              {formikProps => {
+                const {
+                  values,
+                  touched,
+                  errors,
+                  isSubmitting,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                } = formikProps;
+                return (
+                  <Form>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justify="center"
+                    >
+                      <Grid item md={6} xs={12}>
                         <Grid
                           container
                           direction="column"
-                          alignItems="flex-start"
-                          className={classes.dialogTextFieldGrid}
+                          spacing={2}
+                          style={{ marginTop: '10%' }}
                         >
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                name="gilad"
-                                style={{
-                                  color: 'rgb(53, 153, 51)',
-                                  '&$checked': {
-                                    color: 'rgb(53, 153, 51)',
-                                  },
-                                }}
-                              />
-                            }
-                            label={
-                              <span>
-                                I have read the <u> terms and conditions </u>
-                              </span>
-                            }
-                          />
-                        </Grid>
-                        <Grid
-                          container
-                          direction="row"
-                          justify="space-between"
-                          alignItems="center"
-                          className={classes.dialogTextFieldGrid}
-                        >
-                          <Button
-                            type="submit"
-                            fullWidth
-                            onClick={handleSubmit}
-                            className={classes.proceedButton}
-                            variant="contained"
-                            color="primary"
-                            disableElevation
-                            disabled={isSubmitting || !isValidFee}
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="flex-start"
                           >
-                            {loading ? (
-                              <CircularProgress
-                                size={40}
-                                thickness={5}
-                                color="primary"
+                            <Grid
+                              item
+                              xs={2}
+                              className={classes.dialogTextFieldGrid}
+                            >
+                              <TextField
+                                size="small"
+                                id="form-phone-pre"
+                                label="+91"
+                                variant="outlined"
+                                type="text"
+                                disabled
                               />
-                            ) : (
-                              <Typography variant="h6">Proceed</Typography>
-                            )}
-                          </Button>
+                            </Grid>
+                            <Grid
+                              item
+                              xs={10}
+                              className={classes.dialogTextFieldGrid}
+                            >
+                              <TextField
+                                disabled={!isValidFee}
+                                size="small"
+                                error={
+                                  errors.receiverMobile &&
+                                  touched.receiverMobile
+                                }
+                                name="receiverMobile"
+                                id="form-phone"
+                                label="Phone No"
+                                fullWidth
+                                placeholder=""
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <span
+                                        style={{
+                                          color: '#417505',
+                                          fontSize: '13px',
+                                          fontWeight: '600',
+                                        }}
+                                      >
+                                        {walletUserName}
+                                      </span>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="outlined"
+                                type="text"
+                                value={values.receiverMobile}
+                                onChange={e => {
+                                  handleChange(e);
+                                  // getUser(values.receiverMobile);
+                                }}
+                                onBlur={e => {
+                                  handleBlur(e);
+                                  // getUser(values.receiverMobile);
+                                }}
+                                className={classes.dialogTextFieldGrid}
+                                helperText={
+                                  errors.receiverMobile &&
+                                  touched.receiverMobile
+                                    ? errors.receiverMobile
+                                    : ''
+                                }
+                              />
+                            </Grid>
+                          </Grid>
+
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="flex-start"
+                          >
+                            <Grid
+                              item
+                              xs={2}
+                              className={classes.dialogTextFieldGrid}
+                            >
+                              <TextField
+                                size="small"
+                                id="form-amount-pre"
+                                label="XOF"
+                                variant="outlined"
+                                type="text"
+                                disabled
+                              />
+                            </Grid>
+                            <Grid
+                              item
+                              xs={10}
+                              className={classes.dialogTextFieldGrid}
+                            >
+                              <TextField
+                                disabled={!isValidFee}
+                                size="small"
+                                name="sending_amount"
+                                id="form-sending-amount"
+                                label="Amount"
+                                fullWidth
+                                placeholder=""
+                                variant="outlined"
+                                type="number"
+                                value={values.sending_amount}
+                                onChange={e => {
+                                  handleChange(e);
+                                }}
+                                onBlur={e => {
+                                  handleBlur(e);
+                                  getFee(
+                                    values.sending_amount,
+                                    'Wallet To Wallet',
+                                  );
+                                }}
+                                className={classes.dialogTextFieldGridFullRow}
+                                error={
+                                  errors.sending_amount &&
+                                  touched.sending_amount
+                                }
+                                helperText={
+                                  errors.sending_amount &&
+                                  touched.sending_amount
+                                    ? errors.sending_amount
+                                    : ''
+                                }
+                              />
+                            </Grid>
+                            <Typography
+                              style={{
+                                color: 'rgb(53, 153, 51)',
+                                marginBottom: '20px',
+                                marginLeft: '10px',
+                                fontSize: '10px',
+                              }}
+                            >
+                              Wallet Balance: {CURRENCY}{' '}
+                              {props.balance - values.sending_amount}
+                            </Typography>
+                          </Grid>
+
+                          <Grid
+                            container
+                            direction="row"
+                            alignItems="flex-start"
+                          >
+                            <Grid
+                              item
+                              xs={12}
+                              className={classes.dialogTextFieldGrid}
+                            >
+                              <TextField
+                                disabled={!isValidFee}
+                                size="small"
+                                name="note"
+                                id="form-note"
+                                fullWidth
+                                placeholder="Note"
+                                variant="outlined"
+                                multiline
+                                rows="4"
+                                type="text"
+                                value={values.note}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                          </Grid>
+                          {/* <Grid
+                           container
+                           alignItems="flex-start"
+                           className={classes.dialogTextFieldGrid}
+                           >
+                           <RadioGroup
+                           aria-label="gender"
+                           name="fee"
+                           value=''
+                           row
+                           onChange={handleChange}
+                           >
+                           <FormControlLabel
+                           value="inclusive"
+                           control={<Radio />}
+                           label={
+                           <Typography
+                           style={{
+                           color: 'rgb(53, 153, 51)',
+                           marginBottom: '10px',
+                           fontSize: '10px',
+                           }}
+                           >
+                           Inclusive of Total Fee {CURRENCY} {fee} will
+                           be charged
+                           </Typography>
+                           }
+                           />
+                           <FormControlLabel
+                           value="exclusive"
+                           control={<Radio />}
+                           label={
+                           <Typography
+                           style={{
+                           color: 'rgb(53, 153, 51)',
+                           marginBottom: '10px',
+                           fontSize: '10px',
+                           }}
+                           >
+                           Exlusive of Total Fee {CURRENCY} {fee} will be
+                           charged
+                           </Typography>
+                           }
+                           />
+                           </RadioGroup>
+                           </Grid> */}
+                          <Grid
+                            container
+                            direction="column"
+                            alignItems="flex-start"
+                            className={classes.dialogTextFieldGrid}
+                          >
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="gilad"
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    '&$checked': {
+                                      color: 'rgb(53, 153, 51)',
+                                    },
+                                  }}
+                                />
+                              }
+                              label={
+                                <span>
+                                  I have read the <u> terms and conditions </u>
+                                </span>
+                              }
+                            />
+                          </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center"
+                            className={classes.dialogTextFieldGrid}
+                          >
+                            <Button
+                              type="submit"
+                              fullWidth
+                              onClick={handleSubmit}
+                              className={classes.proceedButton}
+                              variant="contained"
+                              color="primary"
+                              disableElevation
+                              disabled={
+                                isSubmitting ||
+                                !(!isValidFee && walletUserName === '')
+                              }
+                            >
+                              {loading ? (
+                                <CircularProgress
+                                  size={40}
+                                  thickness={5}
+                                  color="primary"
+                                />
+                              ) : (
+                                <Typography variant="h6">Proceed</Typography>
+                              )}
+                            </Button>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                </Form>
-              );
-            }}
-          </Formik>
-        ) : (
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Typography
-              variant="h6"
-              noWrap
-              style={{
-                paddingTop: '10%',
-                paddingBottom: '10%',
+                  </Form>
+                );
               }}
-            >
-              This feature is not available.
-            </Typography>
-          </Grid>
+            </Formik>
+          </Blur>
         )}
       </DialogModal>
 
@@ -1451,6 +1497,7 @@ export default function SendMoneyPopup(props) {
         <form autoComplete="on">
           <Grid container md={12} xs={12} justify="center" alignItems="center">
             <TextField
+              disabled={!isValidFee}
               size="small"
               id="form-given-name"
               label="Enter Your OTP"
@@ -1473,4 +1520,6 @@ export default function SendMoneyPopup(props) {
       </VerifyDialogModal>
     </Fragment>
   );
-}
+};
+
+export default SendMoneyPopup;
