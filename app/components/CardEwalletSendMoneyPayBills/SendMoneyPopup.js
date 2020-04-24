@@ -229,14 +229,17 @@ const SendMoneyPopup = props => {
               if (res.data.error || res.data.user.status !== 1) {
                 setWalletUserName('');
                 resolve(false);
+                return false;
               } else {
                 setWalletUserName(res.data.user.name);
                 resolve(true);
+                return true;
               }
             })
             .catch(err => {
               setWalletUserName('');
               resolve(false);
+              return false;
             });
         });
       }
