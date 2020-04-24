@@ -3,12 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, Grid, Typography } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -20,6 +15,7 @@ import axios from 'axios';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Radio from '@material-ui/core/Radio';
 import { API_URL, CURRENCY } from '../../containers/App/constants';
 import Blur from '../Blur';
 
@@ -57,8 +53,8 @@ const DialogTitle = withStyles(dialogTilteStyles)(props => {
 const dialogStyles = () => ({
   paper: {
     borderRadius: '20px',
-    minHeight: '80%',
-    maxHeight: '80%',
+    minHeight: '92%',
+    maxHeight: '92%',
     minWidth: '60%',
     maxWidth: '60%',
   },
@@ -311,7 +307,6 @@ const SendMoneyPopup = props => {
   return (
     <Fragment>
       <DialogModal
-        disableBackdropClick
         maxWidth="lg"
         fullWidth
         open={props.open}
@@ -385,9 +380,13 @@ const SendMoneyPopup = props => {
                 receiverIdentificationNumber: '',
                 receiverIdentificationValidTill: '',
                 sending_amount: '',
+                feeType: 'inclusive',
               }}
               onSubmit={async values => {
                 setLoading(true);
+                if (values.feeType === 'exclusive') {
+                  values.sending_amount += fee;
+                }
                 try {
                   const res = await axios.post(
                     `${API_URL}/user/sendMoneyToNonWallet`,
@@ -440,6 +439,7 @@ const SendMoneyPopup = props => {
                   'Date is required',
                 ),
                 sending_amount: Yup.number().required('Amount is required'),
+                feeType: Yup.mixed().required('Fee type is required'),
               })}
             >
               {formikProps => {
@@ -451,6 +451,7 @@ const SendMoneyPopup = props => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
+                  setFieldValue,
                 } = formikProps;
                 return (
                   <Form onSubmit={handleSubmit}>
@@ -1043,13 +1044,63 @@ const SendMoneyPopup = props => {
                           </Grid>
                           <Grid
                             container
+                            alignItems="flex-start"
+                            className={classes.dialogTextFieldGrid}
+                          >
+                            <FormControlLabel
+                              value="inclusive"
+                              control={
+                                <Radio
+                                  value="inclusive"
+                                  checked={values.feeType === 'inclusive'}
+                                  onChange={() =>
+                                    setFieldValue('feeType', 'inclusive')
+                                  }
+                                />
+                              }
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    fontSize: '13px',
+                                  }}
+                                >
+                                  Inclusive of Fee - Total {CURRENCY}{' '}
+                                  {values.sending_amount - fee} will be sent to
+                                  the receiver
+                                </Typography>
+                              }
+                            />
+                            <FormControlLabel
+                              value="exclusive"
+                              control={
+                                <Radio
+                                  value="exclusive"
+                                  checked={values.feeType === 'exclusive'}
+                                  onChange={() =>
+                                    setFieldValue('feeType', 'exclusive')
+                                  }
+                                />
+                              }
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    fontSize: '13px',
+                                  }}
+                                >
+                                  Exclusive of Fee - Total {CURRENCY}{' '}
+                                  {values.sending_amount + fee} will be charged
+                                </Typography>
+                              }
+                            />
+                          </Grid>
+                          <Grid
+                            container
                             direction="column"
                             alignItems="flex-start"
                             className={classes.dialogTextFieldGrid}
                           >
-                            <Typography color="primary" variant="body1">
-                              Total Fee {CURRENCY} {fee} will be charged
-                            </Typography>
                             <FormControlLabel
                               onChange={handleChange}
                               required
@@ -1125,6 +1176,7 @@ const SendMoneyPopup = props => {
                 note: '',
                 receiverMobile: '',
                 sending_amount: '',
+                feeType: 'inclusive',
               }}
               onSubmit={async values => {
                 setLoading(true);
@@ -1171,6 +1223,7 @@ const SendMoneyPopup = props => {
                     value => getUser(value),
                   ),
                 sending_amount: Yup.number().required('Amount is required'),
+                feeType: Yup.mixed().required('Fee type is required!'),
               })}
             >
               {formikProps => {
@@ -1182,6 +1235,7 @@ const SendMoneyPopup = props => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
+                  setFieldValue,
                 } = formikProps;
                 return (
                   <Form>
@@ -1369,52 +1423,59 @@ const SendMoneyPopup = props => {
                               />
                             </Grid>
                           </Grid>
-                          {/* <Grid
-                           container
-                           alignItems="flex-start"
-                           className={classes.dialogTextFieldGrid}
-                           >
-                           <RadioGroup
-                           aria-label="gender"
-                           name="fee"
-                           value=''
-                           row
-                           onChange={handleChange}
-                           >
-                           <FormControlLabel
-                           value="inclusive"
-                           control={<Radio />}
-                           label={
-                           <Typography
-                           style={{
-                           color: 'rgb(53, 153, 51)',
-                           marginBottom: '10px',
-                           fontSize: '10px',
-                           }}
-                           >
-                           Inclusive of Total Fee {CURRENCY} {fee} will
-                           be charged
-                           </Typography>
-                           }
-                           />
-                           <FormControlLabel
-                           value="exclusive"
-                           control={<Radio />}
-                           label={
-                           <Typography
-                           style={{
-                           color: 'rgb(53, 153, 51)',
-                           marginBottom: '10px',
-                           fontSize: '10px',
-                           }}
-                           >
-                           Exlusive of Total Fee {CURRENCY} {fee} will be
-                           charged
-                           </Typography>
-                           }
-                           />
-                           </RadioGroup>
-                           </Grid> */}
+                          <Grid
+                            container
+                            alignItems="flex-start"
+                            className={classes.dialogTextFieldGrid}
+                          >
+                            <FormControlLabel
+                              value="inclusive"
+                              control={
+                                <Radio
+                                  value="inclusive"
+                                  checked={values.feeType === 'inclusive'}
+                                  onChange={() =>
+                                    setFieldValue('feeType', 'inclusive')
+                                  }
+                                />
+                              }
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    fontSize: '14px',
+                                  }}
+                                >
+                                  Inclusive of Fee - Total {CURRENCY}{' '}
+                                  {values.sending_amount - fee} will be sent to
+                                  the receiver
+                                </Typography>
+                              }
+                            />
+                            <FormControlLabel
+                              value="exclusive"
+                              control={
+                                <Radio
+                                  value="exclusive"
+                                  checked={values.feeType === 'exclusive'}
+                                  onChange={() =>
+                                    setFieldValue('feeType', 'exclusive')
+                                  }
+                                />
+                              }
+                              label={
+                                <Typography
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    fontSize: '14px',
+                                  }}
+                                >
+                                  Exclusive of Fee - Total {CURRENCY}{' '}
+                                  {values.sending_amount + fee} will be charged
+                                </Typography>
+                              }
+                            />
+                          </Grid>
                           <Grid
                             container
                             direction="column"
@@ -1488,7 +1549,6 @@ const SendMoneyPopup = props => {
         open={verifyPopup}
         onClose={handleVerifyClose}
         disableEscapeKeyDown
-        disableBackdropClick
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleVerifyClose}>
