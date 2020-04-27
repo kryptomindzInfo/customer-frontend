@@ -12,6 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
 import { API_URL } from '../../containers/App/constants';
+import { TextField } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -127,7 +128,7 @@ class PersonalInfoTab extends React.Component {
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Name</span>
               <FormControl variant="outlined">
-                <OutlinedInput
+                <TextField
                   id="name"
                   disabled
                   error={this.state.nameErr}

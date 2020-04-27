@@ -206,7 +206,6 @@ const SendMoneyPopup = props => {
         }
         if (res.data.status === 1) {
           setPopupLoading(false);
-          setFee(res.data.fee);
           setIsValidFee(true);
         }
       })
@@ -230,11 +229,10 @@ const SendMoneyPopup = props => {
                 setWalletUserName('');
                 resolve(false);
                 return false;
-              } else {
-                setWalletUserName(res.data.user.name);
-                resolve(true);
-                return true;
               }
+              setWalletUserName(res.data.user.name);
+              resolve(true);
+              return true;
             })
             .catch(err => {
               setWalletUserName('');
@@ -255,27 +253,29 @@ const SendMoneyPopup = props => {
     } else {
       method = 'checkWalToNonWalFee';
     }
-    axios
-      .post(`${API_URL}/user/${method}`, {
-        amount,
-      })
-      .then(res => {
-        if (res.data.error) {
-          setFee(0);
+    if (amount) {
+      axios
+        .post(`${API_URL}/user/${method}`, {
+          amount,
+        })
+        .then(res => {
+          if (res.data.error) {
+            setFee(0);
+            setIsValidFee(false);
+            props.notify(res.data.error, 'error');
+          }
+          if (res.data.status === 1) {
+            setFee(res.data.fee);
+            setIsValidFee(true);
+          }
+        })
+        .catch(error => {
+          setPopupLoading(false);
           setIsValidFee(false);
-          props.notify(res.data.error, 'error');
-        }
-        if (res.data.status === 1) {
-          setFee(res.data.fee);
-          setIsValidFee(true);
-        }
-      })
-      .catch(error => {
-        setPopupLoading(false);
-        setIsValidFee(false);
-        setFee(0);
-        props.notify(error.response.data.error, 'error');
-      });
+          setFee(0);
+          props.notify(error.response.data.error, 'error');
+        });
+    }
   };
 
   const handleClose = () => {
@@ -383,7 +383,7 @@ const SendMoneyPopup = props => {
                 receiverIdentificationNumber: '',
                 receiverIdentificationValidTill: '',
                 sending_amount: '',
-                feeType: 'inclusive',
+                feeType: 'exclusive',
               }}
               onSubmit={async values => {
                 setLoading(true);
@@ -1045,11 +1045,7 @@ const SendMoneyPopup = props => {
                               />
                             </Grid>
                           </Grid>
-                          <Grid
-                            container
-                            alignItems="flex-start"
-                            className={classes.dialogTextFieldGrid}
-                          >
+                          <div>
                             <FormControlLabel
                               value="inclusive"
                               control={
@@ -1061,18 +1057,7 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               }
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    fontSize: '13px',
-                                  }}
-                                >
-                                  Inclusive of Fee - Total {CURRENCY}{' '}
-                                  {values.sending_amount - fee} will be sent to
-                                  the receiver
-                                </Typography>
-                              }
+                              label="Inclusive of Fee"
                             />
                             <FormControlLabel
                               value="exclusive"
@@ -1085,19 +1070,26 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               }
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    fontSize: '13px',
-                                  }}
-                                >
-                                  Exclusive of Fee - Total {CURRENCY}{' '}
-                                  {values.sending_amount + fee} will be charged
-                                </Typography>
-                              }
+                              label="Exclusive of Fee"
                             />
-                          </Grid>
+                          </div>
+                          <Typography
+                            style={{
+                              color: 'rgb(53, 153, 51)',
+                              fontSize: '14px',
+                            }}
+                          >
+                            {CURRENCY} {fee} will be charged as fee and{' '}
+                            {CURRENCY}{' '}
+                            {values.feeType === 'exclusive'
+                              ? values.sending_amount
+                                ? values.sending_amount
+                                : '0'
+                              : values.sending_amount
+                                ? values.sending_amount - fee
+                                : '0'}{' '}
+                            will be sent to the receiver
+                          </Typography>
                           <Grid
                             container
                             direction="column"
@@ -1179,7 +1171,7 @@ const SendMoneyPopup = props => {
                 note: '',
                 receiverMobile: '',
                 sending_amount: '',
-                feeType: 'inclusive',
+                feeType: 'exclusive',
               }}
               onSubmit={async values => {
                 setLoading(true);
@@ -1442,18 +1434,7 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               }
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    fontSize: '14px',
-                                  }}
-                                >
-                                  Inclusive of Fee - Total {CURRENCY}{' '}
-                                  {values.sending_amount - fee} will be sent to
-                                  the receiver
-                                </Typography>
-                              }
+                              label="Inclusive of Fee"
                             />
                             <FormControlLabel
                               value="exclusive"
@@ -1466,19 +1447,24 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               }
-                              label={
-                                <Typography
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    fontSize: '14px',
-                                  }}
-                                >
-                                  Exclusive of Fee - Total {CURRENCY}{' '}
-                                  {values.sending_amount + fee} will be charged
-                                </Typography>
-                              }
+                              label="Exclusive of Fee"
                             />
                           </Grid>
+                          <Typography
+                            style={{
+                              color: 'rgb(53, 153, 51)',
+                              fontSize: '14px',
+                            }}
+                          >
+                            {CURRENCY} {fee} will be charged as fee and{' '}
+                            {CURRENCY}{' '}
+                            {values.feeType === 'exclusive'
+                              ? values.sending_amount
+                              : values.sending_amount
+                                ? values.sending_amount - fee
+                                : 0}{' '}
+                            will be sent to the receiver
+                          </Typography>
                           <Grid
                             container
                             direction="column"
