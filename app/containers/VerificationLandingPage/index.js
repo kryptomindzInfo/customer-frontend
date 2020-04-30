@@ -31,7 +31,6 @@ class VerificationLandingPage extends React.Component {
 
   render() {
     const { classes, notify } = this.props;
-    const user = JSON.parse(localStorage.getItem('loggedUser'));
     return (
       <div>
         <HeaderChooseYourBank />
@@ -40,20 +39,11 @@ class VerificationLandingPage extends React.Component {
             <img alt="verifyLogo" src={verificationLogo} />
           </div>
           <div className={classes.rightContainer}>
-            {user.status === 3 ? (
-              <Typography variant="h4">
-                {' '}
-                Pending approval from Cashier!{' '}
-              </Typography>
-            ) : user.status === 4 ? (
-              <Typography variant="h4">
-                {' '}
-                Please go to nearest branch and <br /> get your documents
-                uploaded!{' '}
-              </Typography>
-            ) : (
-              ''
-            )}
+            <Typography variant="h4">
+              {' '}
+              Pending approval from Cashier! <br /> Please visit our nearest
+              bank branch or partner
+            </Typography>
           </div>
         </div>
       </div>
