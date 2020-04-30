@@ -750,7 +750,7 @@ const SendMoneyPopup = props => {
                           </Grid>
 
                           <Grid
-                            container
+                            item
                             direction="column"
                             alignItems="flex-start"
                             style={{
@@ -1033,12 +1033,16 @@ const SendMoneyPopup = props => {
                               style={{
                                 color: 'rgb(53, 153, 51)',
                                 fontSize: '12px',
+                                marginLeft: '1%',
+                                marginBottom: '2%',
                               }}
                             >
                               {CURRENCY} {fee} will be charged as fee and{' '}
                               {CURRENCY}{' '}
                               {!values.includeFee
                                 ? values.sending_amount
+                                  ? values.sending_amount
+                                  : 0
                                 : values.sending_amount
                                   ? values.sending_amount - fee
                                   : 0}{' '}
@@ -1074,35 +1078,12 @@ const SendMoneyPopup = props => {
                               />
                             </Grid>
                           </Grid>
-                          {/* <div>
-                            <FormControlLabel
-                              value="inclusive"
-                              control={
-                                <Radio
-                                  value="inclusive"
-                                  checked={values.includeFee === 'inclusive'}
-                                  onChange={() =>
-                                    setFieldValue('includeFee', 'inclusive')
-                                  }
-                                />
-                              }
-                              label="Inclusive of Fee"
-                            />
-                            <FormControlLabel
-                              value="exclusive"
-                              control={
-                                <Radio
-                                  value="exclusive"
-                                  checked={values.includeFee === 'exclusive'}
-                                  onChange={() =>
-                                    setFieldValue('includeFee', 'exclusive')
-                                  }
-                                />
-                              }
-                              label="Exclusive of Fee"
-                            />
-                          </div> */}
-                          <div>
+                          <Grid
+                            item
+                            direction="column"
+                            alignItems="flex-start"
+                            style={{ marginBottom: '-10px', marginLeft: '1%' }}
+                          >
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -1121,9 +1102,9 @@ const SendMoneyPopup = props => {
                                 </Typography>
                               }
                             />
-                          </div>
+                          </Grid>
                           <Grid
-                            container
+                            item
                             direction="column"
                             alignItems="flex-start"
                             className={classes.dialogTextFieldGrid}
@@ -1207,6 +1188,9 @@ const SendMoneyPopup = props => {
               onSubmit={async values => {
                 setLoading(true);
                 try {
+                  if (!values.includeFee) {
+                    values.sending_amount += fee;
+                  }
                   const res = await axios.post(
                     `${API_URL}/user/sendMoneyToWallet`,
                     values,
@@ -1333,7 +1317,7 @@ const SendMoneyPopup = props => {
                                 value={values.receiverMobile}
                                 onChange={e => {
                                   handleChange(e);
-                                  // getUser(values.receiverMobile);
+                                  setWalletUserName('');
                                 }}
                                 onBlur={e => {
                                   handleBlur(e);
@@ -1418,23 +1402,25 @@ const SendMoneyPopup = props => {
                             >
                               Wallet Balance: {CURRENCY}{' '}
                               {props.balance - values.sending_amount}
-                            </Typography>
-                            <Typography
-                              style={{
-                                color: 'rgb(53, 153, 51)',
-                                fontSize: '10px',
-                              }}
-                            >
-                              {CURRENCY} {fee} will be charged as fee and{' '}
-                              {CURRENCY}{' '}
-                              {!values.includeFee
-                                ? values.sending_amount
+                              <br />
+                              <br />
+                              <span
+                                style={{
+                                  color: 'rgb(53, 153, 51)',
+                                  fontSize: '10px',
+                                }}
+                              >
+                                {CURRENCY} {fee} will be charged as fee and{' '}
+                                {CURRENCY}{' '}
+                                {!values.includeFee
                                   ? values.sending_amount
-                                  : '0'
-                                : values.sending_amount
+                                    ? values.sending_amount
+                                    : '0'
+                                  : values.sending_amount
                                   ? values.sending_amount - fee
                                   : '0'}{' '}
-                              will be sent to the receiver
+                                will be sent to the receiver
+                              </span>
                             </Typography>
                           </Grid>
 
@@ -1465,12 +1451,27 @@ const SendMoneyPopup = props => {
                               />
                             </Grid>
                           </Grid>
-                          <Grid
-                            container
-                            direction="column"
-                            alignItems="flex-start"
-                            className={classes.dialogTextFieldGrid}
-                          >
+                          <div style={{ marginBottom: '-10px' }}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="includeFee"
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    '&$checked': {
+                                      color: 'rgb(53, 153, 51)',
+                                    },
+                                  }}
+                                />
+                              }
+                              label={
+                                <Typography variant="caption">
+                                  Receiver pays transaction fees
+                                </Typography>
+                              }
+                            />
+                          </div>
+                          <div>
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -1484,12 +1485,12 @@ const SendMoneyPopup = props => {
                                 />
                               }
                               label={
-                                <span>
+                                <Typography variant="caption">
                                   I have read the <u> terms and conditions </u>
-                                </span>
+                                </Typography>
                               }
                             />
-                          </Grid>
+                          </div>
                           <Grid
                             container
                             direction="row"
