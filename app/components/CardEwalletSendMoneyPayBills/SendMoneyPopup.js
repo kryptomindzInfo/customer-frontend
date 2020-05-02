@@ -11,6 +11,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Form, Formik, useField } from 'formik';
 import * as Yup from 'yup';
+import { boolean } from 'yup';
 import axios from 'axios';
 import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -185,6 +186,18 @@ const dialogContentStyles = makeStyles(theme => ({
     paddingTop: '1%',
     paddingBottom: '1%',
   },
+  inputFeedback: {
+    color: 'red',
+    marginBottom: '.5rem',
+    fontSize: '11px',
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    fontWeight: '600',
+    fontSize: '14px',
+  },
 }));
 
 const SendMoneyPopup = props => {
@@ -331,6 +344,7 @@ const SendMoneyPopup = props => {
         fullWidth
         open={props.open}
         onClose={handleClose}
+        disableBackdropClick
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle
@@ -338,7 +352,14 @@ const SendMoneyPopup = props => {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Send Money
+          <div>
+            <span>Send Money</span>
+          </div>
+          <div>
+            <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </div>
         </DialogTitle>
         <Grid xs={12} md={12} container direction="column" alignItems="center">
           <Grid item>
@@ -395,18 +416,15 @@ const SendMoneyPopup = props => {
                 receiverCountry: '',
                 receiverEmail: '',
                 receiverIdentificationCountry: '',
-                receiverTermsAndCondition: false,
+                acceptedTerms: false,
                 receiverIdentificationType: '',
                 receiverIdentificationNumber: '',
                 receiverIdentificationValidTill: '',
                 sending_amount: '',
-                includeFee: false,
+                isInclusive: false,
               }}
               onSubmit={async values => {
                 setLoading(true);
-                if (!values.includeFee) {
-                  values.sending_amount += fee;
-                }
                 try {
                   const res = await axios.post(
                     `${API_URL}/user/sendMoneyToNonWallet`,
@@ -437,12 +455,6 @@ const SendMoneyPopup = props => {
                     'Mobile no must be valid',
                   )
                   .required('Mobile no is required'),
-                // receiverGivenName: Yup.string().required(
-                //   'Given Name is required',
-                // ),
-                // receiverFamilyName: Yup.string().required(
-                //   'Family Name is required',
-                // ),
                 receiverIdentificationCountry: Yup.string().required(
                   'Country is required',
                 ),
@@ -459,6 +471,10 @@ const SendMoneyPopup = props => {
                   'Date is required',
                 ),
                 sending_amount: Yup.number().required('Amount is required'),
+                acceptedTerms: boolean().oneOf(
+                  [true],
+                  'You must accept the terms and conditions.',
+                ),
               })}
             >
               {formikProps => {
@@ -470,7 +486,6 @@ const SendMoneyPopup = props => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
-                  setFieldValue,
                 } = formikProps;
                 return (
                   <Form onSubmit={handleSubmit}>
@@ -943,7 +958,41 @@ const SendMoneyPopup = props => {
                               xs={6}
                               className={classes.dialogTextFieldGrid}
                             >
-                              <TextField
+                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                  id="date-picker-dialog"
+                                  label="Valid Till"
+                                  size="small"
+                                  fullWidth
+                                  disabled={!isValidFee}
+                                  inputVariant="outlined"
+                                  format="dd/MM/yyyy"
+                                  InputLabelProps={{
+                                    shrink: true,
+                                  }}
+                                  value={values.receiverIdentificationValidTill}
+                                  onChange={date =>
+                                    handleDateChange(
+                                      date,
+                                      'senderIdentificationValidTill',
+                                    )
+                                  }
+                                  KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                  }}
+                                  error={
+                                    errors.receiverIdentificationValidTill &&
+                                    touched.receiverIdentificationValidTill
+                                  }
+                                  helperText={
+                                    errors.receiverIdentificationValidTill &&
+                                    touched.receiverIdentificationValidTill
+                                      ? errors.receiverIdentificationValidTill
+                                      : ''
+                                  }
+                                />
+                              </MuiPickersUtilsProvider>
+                             {/* <TextField
                                 disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationValidTill"
@@ -970,7 +1019,7 @@ const SendMoneyPopup = props => {
                                     ? errors.receiverIdentificationValidTill
                                     : ''
                                 }
-                              />
+                              />*/}
                             </Grid>
                           </Grid>
 
@@ -1039,7 +1088,7 @@ const SendMoneyPopup = props => {
                             >
                               {CURRENCY} {fee} will be charged as fee and{' '}
                               {CURRENCY}{' '}
-                              {!values.includeFee
+                              {!values.isInclusive
                                 ? values.sending_amount
                                   ? values.sending_amount
                                   : 0
@@ -1087,7 +1136,7 @@ const SendMoneyPopup = props => {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  name="includeFee"
+                                  name="isInclusive"
                                   style={{
                                     color: 'rgb(53, 153, 51)',
                                     '&$checked': {
@@ -1119,16 +1168,10 @@ const SendMoneyPopup = props => {
                               control={
                                 <Checkbox
                                   disabled={!isValidFee}
-                                  name="receiverTermsAndCondition"
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    '&$checked': {
-                                      color: 'rgb(53, 153, 51)',
-                                    },
-                                  }}
+                                  name="acceptedTerms"
                                 />
                               }
-                              name="terms"
+                              name="acceptedTerms"
                               label={
                                 <Typography variant="caption">
                                   I have read the{' '}
@@ -1138,6 +1181,13 @@ const SendMoneyPopup = props => {
                                 </Typography>
                               }
                             />
+                            {errors.acceptedTerms && touched.acceptedTerms ? (
+                              <div className={classes.inputFeedback}>
+                                {errors.acceptedTerms}
+                              </div>
+                            ) : (
+                              ''
+                            )}
                           </Grid>
                           <Grid
                             container
@@ -1154,7 +1204,7 @@ const SendMoneyPopup = props => {
                               color="primary"
                               disableElevation
                               onClick={handleSubmit}
-                              disabled={isSubmitting || !isValidFee}
+                              disabled={isSubmitting || !isValidFee || !values.acceptedTerms }
                             >
                               {loading ? (
                                 <CircularProgress
@@ -1183,14 +1233,12 @@ const SendMoneyPopup = props => {
                 note: '',
                 receiverMobile: '',
                 sending_amount: '',
-                includeFee: false,
+                isInclusive: false,
+                acceptedTerms: false,
               }}
               onSubmit={async values => {
                 setLoading(true);
                 try {
-                  if (!values.includeFee) {
-                    values.sending_amount += fee;
-                  }
                   const res = await axios.post(
                     `${API_URL}/user/sendMoneyToWallet`,
                     values,
@@ -1233,6 +1281,10 @@ const SendMoneyPopup = props => {
                     value => getUser(value),
                   ),
                 sending_amount: Yup.number().required('Amount is required'),
+                acceptedTerms: boolean().oneOf(
+                  [true],
+                  'You must accept the terms and conditions.',
+                ),
               })}
             >
               {formikProps => {
@@ -1244,7 +1296,6 @@ const SendMoneyPopup = props => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
-                  setFieldValue,
                 } = formikProps;
                 return (
                   <Form>
@@ -1412,7 +1463,7 @@ const SendMoneyPopup = props => {
                               >
                                 {CURRENCY} {fee} will be charged as fee and{' '}
                                 {CURRENCY}{' '}
-                                {!values.includeFee
+                                {!values.isInclusive
                                   ? values.sending_amount
                                     ? values.sending_amount
                                     : '0'
@@ -1455,7 +1506,7 @@ const SendMoneyPopup = props => {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  name="includeFee"
+                                  name="isInclusive"
                                   style={{
                                     color: 'rgb(53, 153, 51)',
                                     '&$checked': {
@@ -1473,23 +1524,20 @@ const SendMoneyPopup = props => {
                           </div>
                           <div>
                             <FormControlLabel
-                              control={
-                                <Checkbox
-                                  name="gilad"
-                                  style={{
-                                    color: 'rgb(53, 153, 51)',
-                                    '&$checked': {
-                                      color: 'rgb(53, 153, 51)',
-                                    },
-                                  }}
-                                />
-                              }
+                              control={<Checkbox name="acceptedTerms" />}
                               label={
                                 <Typography variant="caption">
                                   I have read the <u> terms and conditions </u>
                                 </Typography>
                               }
                             />
+                            {errors.acceptedTerms && touched.acceptedTerms ? (
+                              <div className={classes.inputFeedback}>
+                                {errors.acceptedTerms}
+                              </div>
+                            ) : (
+                              ''
+                            )}
                           </div>
                           <Grid
                             container
@@ -1508,7 +1556,9 @@ const SendMoneyPopup = props => {
                               disableElevation
                               disabled={
                                 isSubmitting ||
-                                !(!isValidFee && walletUserName === '')
+                                !isValidFee ||
+                                walletUserName === ''
+                                || !values.acceptedTerms
                               }
                             >
                               {loading ? (
