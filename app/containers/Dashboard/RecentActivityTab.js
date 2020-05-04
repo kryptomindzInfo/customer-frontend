@@ -348,7 +348,7 @@ export default ({ notify }) => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="h6">${row.Value.amount}</Typography>
+                    <Typography variant="h6">XOF:{row.Value.amount}</Typography>
                   </TableCell>
                 </TableRow>
               ))}
