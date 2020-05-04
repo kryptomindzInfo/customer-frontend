@@ -167,7 +167,7 @@ class UploadDocumentsPage extends Component {
           if (res.data.error) {
             throw res.data.error;
           } else {
-            doc.hash = res.data.name;
+            doc.hash = res.data.hash;
             this.setState((prevState, props) => ({
               [key]: res.data.name,
               fileHashes: [...prevState.fileHashes, doc],

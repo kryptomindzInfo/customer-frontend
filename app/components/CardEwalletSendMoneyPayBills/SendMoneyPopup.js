@@ -17,8 +17,12 @@ import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MuiCheckbox from '@material-ui/core/Checkbox/Checkbox';
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { API_URL, CURRENCY } from '../../containers/App/constants';
 import Blur from '../Blur';
+import CountrySelectBox from '../Selectors/CountrySelectBox';
+import TypeSelectBox from '../Selectors/TypeSelectBox';
 
 const dialogTilteStyles = () => ({
   root: {
@@ -356,7 +360,11 @@ const SendMoneyPopup = props => {
             <span>Send Money</span>
           </div>
           <div>
-            <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
+            <IconButton
+              aria-label="close"
+              className={classes.closeButton}
+              onClick={handleClose}
+            >
               <CloseIcon />
             </IconButton>
           </div>
@@ -405,6 +413,7 @@ const SendMoneyPopup = props => {
             <Formik
               initialValues={{
                 note: '',
+                ccode: '+221',
                 withoutID: false,
                 requireOTP: false,
                 receiverMobile: '',
@@ -413,9 +422,9 @@ const SendMoneyPopup = props => {
                 receiverAddress: '',
                 receiverState: '',
                 receiverZip: '',
-                receiverCountry: '',
+                receiverCountry: 'Senegal',
                 receiverEmail: '',
-                receiverIdentificationCountry: '',
+                receiverIdentificationCountry: 'Senegal',
                 acceptedTerms: false,
                 receiverIdentificationType: '',
                 receiverIdentificationNumber: '',
@@ -486,7 +495,30 @@ const SendMoneyPopup = props => {
                   handleChange,
                   handleBlur,
                   handleSubmit,
+                  setFieldValue,
                 } = formikProps;
+
+                const handleDateChange = (date, field) => {
+                  const formattedDate = new Date(date).toLocaleDateString();
+                  setFieldValue(field, formattedDate, true);
+                };
+
+                const countryChange = event => {
+                  const { value, name } = event.target;
+                  const { title } = event.target.options[
+                    event.target.selectedIndex
+                  ];
+                  if (name === 'receiverCountry') {
+                    setFieldValue('ccode', title, true);
+                  }
+                  setFieldValue(name, value, true);
+                };
+
+                const receiverIdentificationTypeChange = event => {
+                  const { value } = event.target;
+                  setFieldValue('receiverIdentificationType', value, true);
+                };
+
                 return (
                   <Form onSubmit={handleSubmit}>
                     <Grid container direction="row">
@@ -509,9 +541,10 @@ const SendMoneyPopup = props => {
                               <TextField
                                 size="small"
                                 id="form-phone-pre"
-                                label="+91"
+                                label={values.ccode}
                                 className={classes.formField}
                                 variant="outlined"
+                                name="ccode"
                                 type="text"
                                 disabled
                               />
@@ -566,10 +599,6 @@ const SendMoneyPopup = props => {
                                 name="receiverGivenName"
                                 id="form-given-name"
                                 label="Given Name"
-                                /* error={
-                                 errors.receiverGivenName &&
-                                 touched.receiverGivenName
-                                 } */
                                 fullWidth
                                 placeholder=""
                                 variant="outlined"
@@ -578,12 +607,6 @@ const SendMoneyPopup = props => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={classes.dialogTextFieldGrid}
-                                /* helperText={
-                                 errors.receiverGivenName &&
-                                 touched.receiverGivenName
-                                 ? errors.receiverGivenName
-                                 : ''
-                                 } */
                               />
                             </Grid>
                             <Grid
@@ -707,30 +730,21 @@ const SendMoneyPopup = props => {
                               xs={6}
                               className={classes.dialogTextFieldGrid}
                             >
-                              <TextField
+                              <CountrySelectBox
                                 disabled={!isValidFee}
                                 size="small"
-                                name="receiverCountry"
-                                id="form-country"
                                 label="Country"
                                 fullWidth
-                                placeholder=""
-                                variant="outlined"
                                 type="text"
-                                value={values.receiverCountry}
-                                onChange={handleChange}
+                                name="receiverCountry"
+                                id="form-country"
+                                placeholder=""
                                 onBlur={handleBlur}
-                                className={classes.dialogTextFieldGrid}
-                                /* error={
-                                 errors.receiverCountry &&
-                                 touched.receiverCountry
-                                 }
-                                 helperText={
-                                 errors.receiverCountry &&
-                                 touched.receiverCountry
-                                 ? errors.receiverCountry
-                                 : ''
-                                 } */
+                                value={values.receiverCountry}
+                                onChange={countryChange}
+                                data-change="ccode"
+                                className={classes.dialogTextField}
+                                required
                               />
                             </Grid>
                             <Grid
@@ -858,62 +872,70 @@ const SendMoneyPopup = props => {
                               xs={6}
                               className={classes.dialogTextFieldGrid}
                             >
-                              <TextField
+                              <CountrySelectBox
                                 disabled={!isValidFee}
                                 size="small"
-                                name="receiverIdentificationCountry"
-                                id="form-identification-country"
                                 label="Country"
                                 fullWidth
-                                placeholder=""
-                                variant="outlined"
                                 type="text"
-                                value={values.receiverIdentificationCountry}
-                                onChange={handleChange}
+                                name="receiverIdentificationCountry"
+                                placeholder=""
+                                id="form-identification-country"
                                 onBlur={handleBlur}
+                                value={values.receiverIdentificationCountry}
+                                onChange={countryChange}
                                 className={classes.dialogTextField}
-                                error={
-                                  errors.receiverIdentificationCountry &&
-                                  touched.receiverIdentificationCountry
-                                }
-                                helperText={
-                                  errors.receiverIdentificationCountry &&
-                                  touched.receiverIdentificationCountry
-                                    ? errors.receiverIdentificationCountry
-                                    : ''
-                                }
+                                required
                               />
+                              <Typography
+                                style={{
+                                  fontSize: '10px',
+                                  color: 'red',
+                                  paddingLeft: '5px',
+                                  paddingBottom: '5px',
+                                }}
+                              >
+                                {errors.receiverIdentificationCountry &&
+                                touched.receiverIdentificationCountry
+                                  ? errors.receiverIdentificationCountry
+                                  : ''}
+                              </Typography>
                             </Grid>
                             <Grid
                               item
                               xs={6}
                               className={classes.dialogTextFieldGrid}
                             >
-                              <TextField
+                              <TypeSelectBox
+                                type="text"
                                 disabled={!isValidFee}
                                 size="small"
-                                name="receiverIdentificationType"
                                 id="form-fidentification-type"
                                 label="Type"
                                 fullWidth
                                 placeholder=""
-                                variant="outlined"
-                                type="text"
-                                value={values.receiverIdentificationType}
-                                onChange={handleChange}
+                                name="receiverIdentificationType"
                                 onBlur={handleBlur}
-                                className={classes.dialogTextFieldGrid}
-                                error={
-                                  errors.receiverIdentificationType &&
-                                  touched.receiverIdentificationType
-                                }
-                                helperText={
-                                  errors.receiverIdentificationType &&
-                                  touched.receiverIdentificationType
-                                    ? errors.receiverIdentificationType
-                                    : ''
-                                }
+                                className={classes.dialogTextField}
+                                value={values.receiverIdentificationType}
+                                onChange={receiverIdentificationTypeChange}
+                                required
                               />
+                              {errors.receiverIdentificationType &&
+                              touched.receiverIdentificationType ? (
+                                <div
+                                  style={{
+                                    fontSize: '10px',
+                                    color: 'red',
+                                    paddingLeft: '5px',
+                                    paddingBottom: '5px',
+                                  }}
+                                >
+                                  {errors.receiverIdentificationType}
+                                </div>
+                              ) : (
+                                ''
+                              )}
                             </Grid>
                           </Grid>
 
@@ -974,7 +996,7 @@ const SendMoneyPopup = props => {
                                   onChange={date =>
                                     handleDateChange(
                                       date,
-                                      'senderIdentificationValidTill',
+                                      'receiverIdentificationValidTill',
                                     )
                                   }
                                   KeyboardButtonProps={{
@@ -992,7 +1014,7 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               </MuiPickersUtilsProvider>
-                             {/* <TextField
+                              {/* <TextField
                                 disabled={!isValidFee}
                                 size="small"
                                 name="receiverIdentificationValidTill"
@@ -1019,7 +1041,7 @@ const SendMoneyPopup = props => {
                                     ? errors.receiverIdentificationValidTill
                                     : ''
                                 }
-                              />*/}
+                              /> */}
                             </Grid>
                           </Grid>
 
@@ -1204,7 +1226,11 @@ const SendMoneyPopup = props => {
                               color="primary"
                               disableElevation
                               onClick={handleSubmit}
-                              disabled={isSubmitting || !isValidFee || !values.acceptedTerms }
+                              disabled={
+                                isSubmitting ||
+                                !isValidFee ||
+                                !values.acceptedTerms
+                              }
                             >
                               {loading ? (
                                 <CircularProgress
@@ -1557,8 +1583,8 @@ const SendMoneyPopup = props => {
                               disabled={
                                 isSubmitting ||
                                 !isValidFee ||
-                                walletUserName === ''
-                                || !values.acceptedTerms
+                                walletUserName === '' ||
+                                !values.acceptedTerms
                               }
                             >
                               {loading ? (
