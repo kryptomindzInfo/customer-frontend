@@ -29,7 +29,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
 
-
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Row from 'react-bootstrap/Row';
@@ -168,6 +167,10 @@ class BillPaymentsBillList extends Component {
   };
   closeViewBillPopup = () => {
     this.setState({ viewBillPopup: false });
+  };
+
+  componentDidMount = () => {
+    this.props.dispatch(getAllMerchantsList());
   };
   render() {
     const { classes } = this.props;
@@ -315,7 +318,7 @@ class BillPaymentsBillList extends Component {
             <Formik
               initialValues={{
                 mobileNumber: '',
-                ID:'',
+                ID: '',
                 amount: '',
                 note: '',
                 balance: 0,
@@ -403,7 +406,8 @@ class BillPaymentsBillList extends Component {
                             >
                               <span style={{ color: 'red' }}>* </span>I have
                               read the{' '}
-                              <a style={{textDecoration: 'underline'}}
+                              <a
+                                style={{ textDecoration: 'underline' }}
                                 onClick={() => window.open('/termsConditions')}
                               >
                                 {' '}
