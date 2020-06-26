@@ -207,7 +207,10 @@ class BillPaymentsBillList extends Component {
       })
       .then(res => {
         if (res.data.status === 1) {
+          // window.alert(res.data.message);
           this.props.location.notify(res.data.message, 'success');
+          history.push('/dashboard');
+          // window.location.reload();
           // this.setState({ checkMerchantFee: res.data });
         }
         console.log('res of /user/payInvoice', res);

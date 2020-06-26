@@ -19,7 +19,32 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <title>React.js Boilerplate</title>
+    <title>E-Wallet</title>
+
+    <style>
+      #snackbar {
+        visibility: hidden; /* Hidden by default. Visible on click */
+        min-width: 250px; /* Set a default minimum width */
+
+        background-color: #333; /* Black background color */
+        color: #fff; /* White text color */
+        text-align: center; /* Centered text */
+        border-radius: 2px; /* Rounded borders */
+        padding: 16px; /* Padding */
+        position: fixed; /* Sit on top of the screen */
+        z-index: 9999999999999999999999; /* Add a z-index if needed */
+        left: 50%; /* Center the snackbar */
+        top: 30px; /* 30px from the bottom */
+        transform: translateX(-50%);
+      }
+
+      #snackbar.show {
+        visibility: visible;
+
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+    </style>
   </head>
 
   <body>
@@ -32,12 +57,34 @@
 
     <!-- The app hooks into this div -->
     <div id="app"></div>
+    <div id="snackbar"></div>
 
     <!-- Open Sans Font -->
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
       rel="stylesheet"
     />
+
+    <script>
+      function toast(message) {
+        // Get the snackbar DIV
+        var x = document.getElementById('snackbar');
+
+        x.innerHTML = message;
+        // Add the "show" class to DIV
+        x.className = 'show';
+
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function() {
+          x.className = x.className.replace('show', '');
+        }, 10000);
+      }
+
+      window.alert = function(msg) {
+        toast(msg);
+        // whatever you want to do with 'msg' here
+      };
+    </script>
 
     <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically injects all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this file. Don't add any assets here! (Check out webpack.dev.babel.js and webpack.prod.babel.js if you want to know more) -->
   </body>
