@@ -291,7 +291,7 @@ class BillPaymentsPage extends Component {
                                 () =>
                                   history.push({
                                     pathname: `/bill-list/${row._id}`,
-                                    notify: this.props.location.notify,
+                                    // notify: this.props.location.notify,
                                     // secDetailsID: section,
                                   })
                                 // history.push(`/bill-list/${row._id}`)

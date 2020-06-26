@@ -217,7 +217,15 @@ class BillPaymentsBillList extends Component {
       })
       .catch(error => {});
 
-    this.setState({ viewBillPopup: true });
+    // this.setState({ viewBillPopup: true });
+
+    setTimeout(() => {
+      this.setState({ viewBillPopup: true });
+    }, 2000);
+
+    // setTimeout = () => {
+    //   this.setState({ viewBillPopup: true }), 3000;
+    // };
   };
 
   payBill = _id => {
@@ -420,20 +428,25 @@ class BillPaymentsBillList extends Component {
                           this.state.invoiceDetails.invoices.map(row => (
                             <TableRow key={row._id}>
                               <TableCell component="th" scope="row">
-                                {row.name}
+                                {/* {row.name} */}
+                                {row.name ? row.name : '-'}
                               </TableCell>
 
                               <TableCell component="th" scope="row">
-                                {row.mobile}
+                                {row.mobile ? row.mobile : '-'}
                               </TableCell>
                               <TableCell component="th" scope="row">
-                                {row.bill_date}
+                                {row.bill_date ? row.bill_date : '-'}
+                                {/* {row.bill_date} */}
                               </TableCell>
                               <TableCell component="th" scope="row">
-                                {row.number}
+                                {/* {row.number} */}
+
+                                {row.number ? row.number : '-'}
                               </TableCell>
                               <TableCell component="th" scope="row">
-                                {row.amount}
+                                {/* {row.amount} */}
+                                {row.amount ? row.amount : '-'}
                               </TableCell>
 
                               <TableCell
@@ -631,26 +644,40 @@ class BillPaymentsBillList extends Component {
               </Grid>
               <Grid item xs={6}>
                 <Typography color="primary" align="left">
-                  {this.state.filteredInvoice.number}
+                  {this.state.filteredInvoice.number
+                    ? this.state.filteredInvoice.number
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
-                  {this.state.filteredInvoice.name}
+                  {this.state.filteredInvoice.name
+                    ? this.state.filteredInvoice.name
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
                   {CURRENCY}
-                  {this.state.filteredInvoice.amount}
+                  {this.state.filteredInvoice.amount
+                    ? this.state.filteredInvoice.amount
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
-                  {this.state.filteredInvoice.due_date}
+                  {this.state.filteredInvoice.due_date
+                    ? this.state.filteredInvoice.due_date
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
-                  {this.state.filteredInvoice.description}
+                  {this.state.filteredInvoice.description
+                    ? this.state.filteredInvoice.description
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
-                  {this.state.filteredInvoice.mobile}
+                  {this.state.filteredInvoice.mobile
+                    ? this.state.filteredInvoice.mobile
+                    : '-'}
                 </Typography>
                 <Typography color="primary" align="left">
-                  {this.state.checkMerchantFee.fee}
+                  {this.state.checkMerchantFee.fee
+                    ? this.state.checkMerchantFee.fee
+                    : '-'}
                 </Typography>
               </Grid>
             </Grid>

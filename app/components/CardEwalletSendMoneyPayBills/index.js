@@ -86,7 +86,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   goToBillsPaymentPage = () => {
     history.push({
       pathname: `/bill-payments-merchants`,
-      notify: this.props.notify,
+      // notify: this.props.notify,
       // secDetailsID: section,
     });
     // history.push('/bill-payments-merchants');
