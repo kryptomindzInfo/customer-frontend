@@ -18,6 +18,9 @@ import makeSelectBillPaymentsBillList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+
+import { getAllMerchantsList } from './actions';
+
 import MainHeader from '../MainHeader';
 
 import history from 'utils/history';
@@ -28,7 +31,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
-
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -47,6 +49,8 @@ import { withStyles, Grid, Typography } from '@material-ui/core';
 
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
+
+import axios from 'axios';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -131,7 +135,7 @@ const styles = theme => ({
     marginBottom: '3%',
     marginTop: '3%',
     color: theme.palette.white,
-    width: '100%',
+    width: '88%',
     '&:hover': {
       background: theme.palette.primary.hover,
     },
@@ -160,17 +164,117 @@ class BillPaymentsBillList extends Component {
     super(props);
     this.state = {
       viewBillPopup: false,
+      dataMerchantList: {},
+      checkMerchantFee: {},
+      invoiceDetails: {},
+      filteredInvoice: {},
     };
   }
 
-  showViewBillPopup = () => {
+  handleView = _id => {
+    console.log('_id', _id);
+
+    const tempInvoice = this.state.invoiceDetails.invoices.filter(i => {
+      if (i._id == _id) {
+        return i;
+      }
+    });
+    console.log('tempInvoice', tempInvoice[0]);
+    this.setState({ filteredInvoice: tempInvoice[0] });
+
+    axios
+      .post(`${API_URL}/user/checkMerchantFee`, {
+        merchant_id: tempInvoice[0].merchant_id,
+        amount: tempInvoice[0].amount,
+      })
+      .then(res => {
+        if (res.data.status === 1) {
+          this.setState({ checkMerchantFee: res.data });
+        }
+        console.log('res of /user/checkMerchantFee', res);
+      })
+      .catch(error => {});
+
+    this.setState({ viewBillPopup: true });
+  };
+
+  payBill = _id => {
+    console.log('invoice_id', _id);
+    axios
+      .post(`${API_URL}/user/payInvoice`, {
+        invoice_id: _id,
+        amount: this.state.filteredInvoice.amount,
+      })
+      .then(res => {
+        if (res.data.status === 1) {
+          this.props.location.notify(res.data.message, 'success');
+          // this.setState({ checkMerchantFee: res.data });
+        }
+        console.log('res of /user/payInvoice', res);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    this.setState({ viewBillPopup: false });
+  };
+
+  showViewBillPopup = _id => {
+    console.log("merchant's _id", _id);
     this.setState({ viewBillPopup: true });
   };
   closeViewBillPopup = () => {
     this.setState({ viewBillPopup: false });
   };
+
+  componentWillMount = () => {
+    const { id } = this.props.match.params;
+    const { notify } = this.props.location;
+    console.log('this.props', this.props);
+    console.log('this.props.location', this.props.location);
+    this.getParticularMerchantData(id);
+    this.getInvoices();
+    // this.props.dispatch(getAllMerchantsList());
+  };
+
+  getParticularMerchantData = id => {
+    console.log('_id', id);
+    console.log('this.props.match.params._id', this.props.match.params.id);
+
+    let method = '';
+    axios
+      .post(`${API_URL}/user/getMerchantDetails`, {
+        merchant_id: id,
+      })
+      .then(res => {
+        if (res.data.status === 1) {
+          this.setState({ dataMerchantList: res.data.merchant });
+        }
+        console.log('res of /user/getMerchantDetails', res);
+      })
+      .catch(error => {});
+  };
+
+  getInvoices = () => {
+    // console.log('_id', id);
+    // console.log('this.props.match.params.id', this.props.match.params.id);
+    axios
+      .post(`${API_URL}/user/getInvoices`)
+      .then(res => {
+        if (res.data.status === 1) {
+          this.setState({ invoiceDetails: res.data });
+        }
+        console.log('res of /user/getInvoices', res);
+      })
+      .catch(error => {});
+  };
+
   render() {
     const { classes } = this.props;
+
+    if (this.state.dataMerchantList === undefined) {
+      return console.log('loading');
+    }
 
     return (
       <div>
@@ -216,13 +320,10 @@ class BillPaymentsBillList extends Component {
                 className={classes.amountReceivedMessage}
                 variant="h5"
               >
-                Merchant 1
-                <Typography variant="subtitle2">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book.
+                {this.state.dataMerchantList.name}
+
+                <Typography style={{ paddingTop: 5 }} variant="subtitle2">
+                  {this.state.dataMerchantList.description}
                 </Typography>
               </Typography>
               <ActionBar
@@ -249,57 +350,94 @@ class BillPaymentsBillList extends Component {
                 xs={6}
               >
                 <div className={classes.recentActivitiesTable}>
-                  {/* <a  href="/contact">
-                    <i className="material-icons">arrow_back</i>
-                  </a> */}
                   <Typography
                     style={{ margin: '0% 3% 0 3%', paddingTop: '2%' }}
                     variant="h5"
                   >
-                    Merchant List
+                    Bills List
                     <Typography
                       style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
                       variant="body1"
                     >
-                      Pay bills safely
+                      {/* Pay bills safely */}
                     </Typography>
                   </Typography>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell />
-                        <TableCell align="left" />
-                        <TableCell align="right" />
-                        <TableCell align="right" />
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map(row => (
-                        <TableRow key={row.id}>
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
 
-                          <TableCell align="right">{row.calories}</TableCell>
-                          <TableCell align="right">{row.fat}</TableCell>
-                          <TableCell
-                            style={{ color: '#417505', fontWeight: 600 }}
-                            onClick={this.showViewBillPopup}
-                            align="right"
-                          >
-                            {row.carbs}
-                          </TableCell>
+                  {this.state.dataMerchantList != undefined &&
+                  this.state.dataMerchantList == null ? (
+                    <Typography
+                      style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
+                      variant="body1"
+                    >
+                      No details present
+                    </Typography>
+                  ) : (
+                    <Table className={classes.table}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Mobile No.</TableCell>
+                          <TableCell>Bill Date</TableCell>
+
+                          <TableCell>Bill No.</TableCell>
+                          <TableCell>Amount</TableCell>
+                          <TableCell align="left" />
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHead>
+                      <TableBody>
+                        {console.log(
+                          'this.state.invoiceDetails',
+                          this.state.invoiceDetails,
+                        )}
+                        {this.state.invoiceDetails.invoices != undefined &&
+                        this.state.invoiceDetails != null ? (
+                          this.state.invoiceDetails.invoices.map(row => (
+                            <TableRow key={row._id}>
+                              <TableCell component="th" scope="row">
+                                {row.name}
+                              </TableCell>
+
+                              <TableCell component="th" scope="row">
+                                {row.mobile}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {row.bill_date}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {row.number}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {row.amount}
+                              </TableCell>
+
+                              <TableCell
+                                style={{ color: '#417505', fontWeight: 600 }}
+                                onClick={() => this.handleView(row._id)}
+                                align="right"
+                              >
+                                View
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        ) : (
+                          <Typography
+                            variant="body1"
+                            style={{ padding: '1rem', width: '100%' }}
+                            align="center"
+                          >
+                            Invoice details will be displayed here...
+                          </Typography>
+                        )}
+                      </TableBody>
+                    </Table>
+                  )}
                 </div>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
 
-        {this.state.viewBillPopup ? (
+        {/* {this.state.viewBillPopup ? (
           <Popup close={this.closeViewBillPopup.bind(this)}>
             <div
               style={{
@@ -315,7 +453,7 @@ class BillPaymentsBillList extends Component {
             <Formik
               initialValues={{
                 mobileNumber: '',
-                ID:'',
+                ID: '',
                 amount: '',
                 note: '',
                 balance: 0,
@@ -403,7 +541,8 @@ class BillPaymentsBillList extends Component {
                             >
                               <span style={{ color: 'red' }}>* </span>I have
                               read the{' '}
-                              <a style={{textDecoration: 'underline'}}
+                              <a
+                                style={{ textDecoration: 'underline' }}
                                 onClick={() => window.open('/termsConditions')}
                               >
                                 {' '}
@@ -439,6 +578,66 @@ class BillPaymentsBillList extends Component {
               }}
             </Formik>
           </Popup>
+        ) : null} */}
+
+        {this.state.viewBillPopup ? (
+          <Popup close={this.closeViewBillPopup.bind(this)}>
+            <div
+              style={{
+                // color: 'black',
+                textAlign: 'center',
+                fontSize: '1.5rem',
+                paddingBottom: '1rem',
+              }}
+            >
+              Pay Bill
+            </div>
+
+            <Grid container style={{ padding: '2rem' }}>
+              <Grid item xs={6}>
+                <Typography align="left">Invoice No.</Typography>
+                <Typography align="left">Name</Typography>
+                <Typography align="left">Amount</Typography>
+                <Typography align="left">Due Date</Typography>
+                <Typography align="left">Description</Typography>
+                <Typography align="left">Mobile</Typography>
+                <Typography align="left">Fee</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography color="primary" align="left">
+                  {this.state.filteredInvoice.number}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {this.state.filteredInvoice.name}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {CURRENCY}
+                  {this.state.filteredInvoice.amount}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {this.state.filteredInvoice.due_date}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {this.state.filteredInvoice.description}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {this.state.filteredInvoice.mobile}
+                </Typography>
+                <Typography color="primary" align="left">
+                  {this.state.checkMerchantFee.fee}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={() => this.payBill(this.state.filteredInvoice._id)}
+              // disabled={isSubmitting}
+              className={classes.signUpButton}
+            >
+              Pay Bill
+            </Button>
+          </Popup>
         ) : null}
       </div>
     );
@@ -464,4 +663,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default withStyles(styles)(BillPaymentsBillList);
+export default compose(withConnect)(withStyles(styles)(BillPaymentsBillList));

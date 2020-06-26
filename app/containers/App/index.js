@@ -112,7 +112,7 @@ export default function App() {
         />
         <ProtectedRoute
           exact
-          path="/bill-list"
+          path="/bill-list/:id"
           component={BillPaymentsBillList}
         />
 

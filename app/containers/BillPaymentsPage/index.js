@@ -29,7 +29,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
 
+import axios from 'axios';
+
 import MainHeader from '../MainHeader';
+
+import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
@@ -124,8 +128,38 @@ const rows = [
 ];
 
 class BillPaymentsPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewBillPopup: false,
+      dataMerchantList: {},
+    };
+  }
   // useInjectReducer({ key: 'billPaymentsPage', reducer });
   // useInjectSaga({ key: 'billPaymentsPage', saga });
+  componentWillMount = () => {
+    this.getAllMerchants();
+    // this.props.dispatch(getAllMerchantsList());
+  };
+
+  getAllMerchants = () => {
+    let method = '';
+    axios
+      .get(`${API_URL}/user/listMerchants`)
+      .then(res => {
+        if (res.data.status === 1) {
+          this.setState({ dataMerchantList: res.data });
+        }
+        console.log('res of /user/listMerchants', res);
+        if (res.data.error) {
+          this.props.notify(res.data.error, 'error');
+        }
+      })
+      .catch(error => {
+        this.props.notify(error.response.data.error, 'error');
+      });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -221,29 +255,64 @@ class BillPaymentsPage extends Component {
                   <Table className={classes.table}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Merchants</TableCell>
+                        <TableCell>Logo</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Mobile No.</TableCell>
+                        <TableCell>Email ID</TableCell>
                         <TableCell align="left" />
-                        {/* <TableCell align="right">Fat (g)</TableCell>
-                        <TableCell align="right">Carbs (g)</TableCell> */}
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {rows.map(row => (
-                        <TableRow key={row.id}>
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
-                          <TableCell
-                            style={{ color: '#417505', fontWeight: 600 }}
-                            onClick={() => history.push('/bill-list')}
-                            align="left"
+                      {/* {console.log(
+                          'this.state.dataMerchantList',
+                          this.state.dataMerchantList,
+                        )} */}
+
+                      {/* {this.state.dataMerchantList.list != undefined ? this.state.dataMerchantList.list[0].name : "error"} */}
+                      {this.state.dataMerchantList.list != undefined ? (
+                        this.state.dataMerchantList.list.map(row => (
+                          <TableRow key={row._id}>
+                            <TableCell component="th" scope="row">
+                              <img
+                                src={row.logo}
+                                style={{ width: '2rem', borderRadius: 20 }}
+                              />
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {row.name}
+                            </TableCell>
+
+                            <TableCell align="left">{row.mobile}</TableCell>
+                            <TableCell align="left">{row.email}</TableCell>
+                            <TableCell
+                              style={{ color: '#417505', fontWeight: 600 }}
+                              // onClick={() => this.showViewBillPopup(row._id)}
+                              onClick={
+                                () =>
+                                  history.push({
+                                    pathname: `/bill-list/${row._id}`,
+                                    notify: this.props.location.notify,
+                                    // secDetailsID: section,
+                                  })
+                                // history.push(`/bill-list/${row._id}`)
+                              }
+                              align="right"
+                            >
+                              More details
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <Grid container justify="center">
+                          <Typography
+                            variant="body1"
+                            style={{ padding: '1rem', width: '100%' }}
+                            align="center"
                           >
-                            {row.calories}
-                          </TableCell>
-                          {/* <TableCell align="right">{row.fat}</TableCell>
-                          <TableCell align="right">{row.carbs}</TableCell> */}
-                        </TableRow>
-                      ))}
+                            List of merchants will be displayed here...
+                          </Typography>
+                        </Grid>
+                      )}
                     </TableBody>
                   </Table>
                 </div>

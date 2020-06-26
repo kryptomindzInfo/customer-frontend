@@ -98,17 +98,18 @@ const styles = theme => ({
 });
 
 const redirectUser = user => {
+  console.log('inside redirect user', user);
   switch (user.status) {
     case 1:
       history.push('/dashboard');
       break;
-    case 2:
+    case 0:
       history.push('/choose-bank');
       break;
-    case 3:
+    case 2:
       history.push('/user-verification');
       break;
-    case 4:
+    case 3:
       history.push('/user-verification');
       break;
     default:
@@ -132,6 +133,8 @@ const SignInPage = props => (
           if (res.data.error) {
             throw res.data.error;
           } else {
+            console.log('in else ');
+
             localStorage.setItem('customerLogged', res.data.token);
             const loggedUser = JSON.stringify(res.data.user);
             localStorage.setItem('loggedUser', loggedUser);
