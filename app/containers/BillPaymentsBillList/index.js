@@ -50,6 +50,17 @@ import { withStyles, Grid, Typography } from '@material-ui/core';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure({
+  position: 'bottom-right',
+  autoClose: 4000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+});
+
 import axios from 'axios';
 
 const styles = theme => ({
@@ -164,12 +175,23 @@ class BillPaymentsBillList extends Component {
     super(props);
     this.state = {
       viewBillPopup: false,
+      notification: '',
       dataMerchantList: {},
       checkMerchantFee: {},
       invoiceDetails: {},
       filteredInvoice: {},
     };
+    this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
+    this.warn = this.warn.bind(this);
+
+    // this.closePopup = this.closePopup.bind(this);
   }
+  success = () => toast.success(this.state.notification);
+
+  error = () => toast.error(this.state.notification);
+
+  warn = () => toast.warn(this.state.notification);
 
   handleView = _id => {
     console.log('_id', _id);
@@ -206,12 +228,13 @@ class BillPaymentsBillList extends Component {
         amount: this.state.filteredInvoice.amount,
       })
       .then(res => {
+        this.setState({ notification: res.data.message });
+
         if (res.data.status === 1) {
-          // window.alert(res.data.message);
-          this.props.location.notify(res.data.message, 'success');
           history.push('/dashboard');
-          // window.location.reload();
-          // this.setState({ checkMerchantFee: res.data });
+          this.success();
+        } else {
+          this.error();
         }
         console.log('res of /user/payInvoice', res);
       })
