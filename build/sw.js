@@ -1,12 +1,12 @@
 var __wpo = {
   "assets": {
     "main": [
-      "/35f82b674c658fbfc581cfbbe252d0d4.png",
+      "/c5a2f04dd4dff8e09cc56e94f1acd0e2.png",
       "/favicon.ico",
       "/npm.intl.4f570d628d17626bef82.chunk.ewallet.js",
       "/1.febe6bf4a5e4f581b458.chunk.ewallet.js",
-      "/main.28750c4c9a73d99bf390.chunk.ewallet.js",
-      "/npm.axios.70530bb128bc32b32304.chunk.ewallet.js",
+      "/main.378c7f7ceec34f30ee02.chunk.ewallet.js",
+      "/npm.axios.a27a18f4bafe49f79687.chunk.ewallet.js",
       "/npm.babel.73078096e40eb33b08b7.chunk.ewallet.js",
       "/npm.core-js.1735cf27fe566e6f4047.chunk.ewallet.js",
       "/npm.date-fns.b36f9a2fef4b86b256b9.chunk.ewallet.js",
@@ -26,12 +26,12 @@ var __wpo = {
   },
   "externals": [],
   "hashesMap": {
-    "97e08903249cbeb459b4d7f0e51f95ecd8bbb90c": "/35f82b674c658fbfc581cfbbe252d0d4.png",
+    "61d7c31c975ddc4262b6f697a15ed24ba2a2e839": "/c5a2f04dd4dff8e09cc56e94f1acd0e2.png",
     "5e53ef208f3fa79a48f8374488f473c76e1233de": "/favicon.ico",
     "dd0a1da9fa779d9ab7980ea9cf6b1801303aa7fd": "/npm.intl.4f570d628d17626bef82.chunk.ewallet.js",
     "303bdb7873ba1f2864861a4ead34fce084b4031b": "/1.febe6bf4a5e4f581b458.chunk.ewallet.js",
-    "c2954c1815fb98b2d2de6e7d195fae159d339a81": "/main.28750c4c9a73d99bf390.chunk.ewallet.js",
-    "3b2b864e5d5f675cf29410c379e950343ab16e88": "/npm.axios.70530bb128bc32b32304.chunk.ewallet.js",
+    "18c005bbf42c596e179807f62c4e6f50f50ccc2e": "/main.378c7f7ceec34f30ee02.chunk.ewallet.js",
+    "3b2b864e5d5f675cf29410c379e950343ab16e88": "/npm.axios.a27a18f4bafe49f79687.chunk.ewallet.js",
     "608fb74c106764e2d9384cfd2d3a5e13d50a3743": "/npm.babel.73078096e40eb33b08b7.chunk.ewallet.js",
     "c167b7137c8348a3e7b49cc7de047c7b0a55e6f1": "/npm.core-js.1735cf27fe566e6f4047.chunk.ewallet.js",
     "7385cf3e2efb61acef2d6edfd77954bc58bd8a8d": "/npm.date-fns.b36f9a2fef4b86b256b9.chunk.ewallet.js",
@@ -44,11 +44,11 @@ var __wpo = {
     "c261676daa125c5e8c224e5e37c53b2b952f4cd2": "/13.701b6bc5e19667c612c1.chunk.ewallet.js",
     "d27d5a04824e73730d5dbd3d350dff4e69d1cf7a": "/14.a2e4711412a54d16a503.chunk.ewallet.js",
     "528421186dfa176d103bd92bfc3a6101a2c8cae1": "/15.6c0555ee43d202aaf492.chunk.ewallet.js",
-    "91ca211a44a4f3df1bdb0c9d50c61ac0a13e85f5": "/"
+    "f404296e0ea23f2ae74ca00ead3292a82873fa1c": "/"
   },
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "5/4/2020, 8:54:29 PM",
+  "version": "6/26/2020, 12:21:11 PM",
   "name": "webpack-offline",
   "pluginVersion": "5.0.6",
   "relativePaths": false
