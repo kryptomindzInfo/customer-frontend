@@ -6,7 +6,8 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import withStyles from '@material-ui/core/styles';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
