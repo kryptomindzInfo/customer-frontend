@@ -1,10 +1,11 @@
 # build environment
-FROM node:12 as react-build
+FROM node:12 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY package.json ./
+COPY package.json /app
 RUN npm install
-COPY . ./
+RUN npm install react-scripts -g
+COPY . /app
 RUN npm run build
 
 # production environment
