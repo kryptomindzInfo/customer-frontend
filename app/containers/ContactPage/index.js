@@ -25,7 +25,8 @@ import ActionBar from 'components/ActionBar';
 import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import {withStyles}  from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 

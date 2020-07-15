@@ -9,7 +9,8 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 
 import history from 'utils/history';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import {withStyles}  from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import UploadArea from '../../components/UploadArea';

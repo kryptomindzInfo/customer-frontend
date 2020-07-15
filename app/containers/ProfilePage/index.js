@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { withStyles } from '@material-ui/core';
+import {withStyles}  from '@material-ui/core/styles'
 import userIcon from '../../images/user-icon.png';
 import documentIcon from '../../images/file-document-outline.png';
 import ProfileTab from '../../components/Profile/ProfileTab';

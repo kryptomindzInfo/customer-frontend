@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import {withStyles}  from '@material-ui/core/styles'
 
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
 import MainHeader from '../MainHeader';

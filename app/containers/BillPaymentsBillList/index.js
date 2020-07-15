@@ -45,7 +45,8 @@ import { object, string, number, email, boolean } from 'yup';
 
 import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import {withStyles}  from '@material-ui/core/styles'
 
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
