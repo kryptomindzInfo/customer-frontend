@@ -3,7 +3,8 @@ coverage
 node_modules
 stats.json
 README.md
-build
+package-lock.json
+#build
 
 # Cruft
 .DS_Store
