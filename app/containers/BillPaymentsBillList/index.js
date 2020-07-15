@@ -34,8 +34,8 @@ import ActionBar from 'components/ActionBar';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Row from '../../components/Row';
-import Col from '../../components/Col';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Popup from 'components/Popup';
 
@@ -45,8 +45,8 @@ import { object, string, number, email, boolean } from 'yup';
 
 import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 
-import { Grid, Typography } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles';
+import { withStyles, Grid, Typography } from '@material-ui/core';
+
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
 

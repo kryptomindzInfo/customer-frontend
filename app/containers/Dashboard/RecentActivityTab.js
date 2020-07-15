@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {
   Grid,
+  makeStyles,
   Tab,
   Tabs,
   Typography,
+  withStyles,
 } from '@material-ui/core';
-import { makeStyles, withStyles}  from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Icon from '@material-ui/core/Icon';
 import axios from 'axios';

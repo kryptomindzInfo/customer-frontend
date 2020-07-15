@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import withStyles from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';

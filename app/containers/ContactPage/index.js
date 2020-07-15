@@ -25,8 +25,7 @@ import ActionBar from 'components/ActionBar';
 import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
-import { Grid, Typography } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles';
+import { withStyles, Grid, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -45,9 +44,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import Row from '../../components/Row';
-import Col from '../../components/Col';
-import Container from '../../components/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Popup from 'components/Popup';
 
 const styles = theme => ({

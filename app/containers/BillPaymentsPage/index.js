@@ -18,8 +18,7 @@ import makeSelectBillPaymentsPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { Grid, Typography } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles';
+import { withStyles, Grid, Typography } from '@material-ui/core';
 
 import history from 'utils/history';
 

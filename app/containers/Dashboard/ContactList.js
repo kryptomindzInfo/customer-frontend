@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';

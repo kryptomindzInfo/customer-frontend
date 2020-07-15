@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles';
+import { Grid, Typography, withStyles } from '@material-ui/core';
 
 import appStore from 'images/appStore.png';
 import GooglePlayLogo from 'images/GooglePlayLogo.png';

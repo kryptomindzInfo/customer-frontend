@@ -7,8 +7,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { Typography } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles';
+import { Typography, withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
