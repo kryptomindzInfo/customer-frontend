@@ -27,7 +27,7 @@ const PopupBody = styled.div`
   background: #fff;
   textalign: center;
   border-radius: 6px;
-  width: 37%;
+  width: ${props => (props.bigBody ? '65%' : '37%')};
   padding: 20px;
   margin: 45px auto;
   position: relative;

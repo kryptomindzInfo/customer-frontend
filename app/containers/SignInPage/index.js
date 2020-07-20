@@ -4,9 +4,10 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { Typography } from '@material-ui/core';
 import {withStyles}  from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
@@ -119,189 +120,214 @@ const redirectUser = user => {
   }
 };
 
-const SignInPage = props => (
-  // useInjectReducer({ key: 'signInPage', reducer });
-  // useInjectSaga({ key: 'signInPage', saga });
-  <Formik
-    initialValues={{
-      username: '',
-      password: '',
-    }}
-    onSubmit={async values => {
-      try {
-        const res = await axios.post(`${API_URL}/user/login`, values);
-        if (res.data.status === 1) {
-          if (res.data.error) {
-            throw res.data.error;
-          } else {
-            console.log('in else ');
 
-            localStorage.setItem('customerLogged', res.data.token);
-            const loggedUser = JSON.stringify(res.data.user);
-            localStorage.setItem('loggedUser', loggedUser);
-            return redirectUser(res.data.user);
-          }
-        } else {
-          throw res.data.error;
+const SignInPage = props => {
+
+  const [visiblity, setvisiblity] = React.useState(false);
+
+  const toggleVisiblity = () =>{
+    visiblity ? setvisiblity(false) : setvisiblity(true);
+  }
+
+  return(
+    <Formik
+      initialValues={{
+        username: '',
+        password: '',
+      }}
+      onSubmit={async values => {
+        const obj = {
+          username: values.username.trim(),
+          password: values.password,
         }
-      } catch (err) {
-        // notify(err, 'error');
-        props.notify(err, 'error');
-      }
-    }}
-    validationSchema={Yup.object().shape({
-      username: Yup.mixed(),
-      // .max(15, 'Must be 15 characters or less')
-      // .required('Required'),
+        try {
+          const res = await axios.post(`${API_URL}/user/login`, obj);
+          if (res.data.status === 1) {
+            if (res.data.error) {
+              throw res.data.error;
+            } else {
+              console.log('in else ');
 
-      password: Yup.string().required('Required'),
-    })}
-  >
-    {formikProps => {
-      const {
-        values,
-        touched,
-        errors,
-        isSubmitting,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-      } = formikProps;
+              localStorage.setItem('customerLogged', res.data.token);
+              const loggedUser = JSON.stringify(res.data.user);
+              localStorage.setItem('loggedUser', loggedUser);
+              return redirectUser(res.data.user);
+            }
+          } else {
+            throw res.data.message;
+          }
+        } catch (err) {
+          // notify(err, 'error');
+          props.notify(err, 'error');
+        }
+      }}
+      validationSchema={Yup.object().shape({
+        username: Yup.mixed(),
+        // .max(15, 'Must be 15 characters or less')
+        // .required('Required'),
 
-      const { classes } = props;
+        password: Yup.string().required('Required'),
+      })}
+    >
+      {formikProps => {
+        const {
+          values,
+          touched,
+          errors,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+        } = formikProps;
 
-      return (
-        <Fragment>
-          <Helmet>
-            <title>SignInPage</title>
-            <meta name="description" content="Description of SignInPage" />
-          </Helmet>
+        const { classes } = props;
 
-          <div className={classes.root}>
-            <Grid container justify="center">
-              <Grid item md={6} className={classes.setupPageLeftSide}>
-                <Typography className={classes.setupPageTitle} variant="h1">
-                  E-WALLET
-                </Typography>
-                <Typography variant="h5" className={classes.setupPageSubtitle2}>
-                  Welcome to E-wallet <br />
-                  Create your wallet for easy transfering <br />
-                  of money to your friends and family
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                md={6}
-                sm={12}
-                xs={12}
-                className={classes.setupPageRightSide}
-              >
-                <Typography variant="h5">Login to your account</Typography>
-                <Typography
-                  variant="subtitle2"
-                  style={{
-                    fontSize: '14px',
-                    color: '#9ea0a5',
-                    paddingTop: '1%',
-                    paddingBottom: '7%',
-                  }}
+        return (
+          <Fragment>
+            <Helmet>
+              <title>SignInPage</title>
+              <meta name="description" content="Description of SignInPage" />
+            </Helmet>
+
+            <div className={classes.root}>
+              <Grid container justify="center">
+                <Grid item md={6} className={classes.setupPageLeftSide}>
+                  <Typography className={classes.setupPageTitle} variant="h1">
+                    E-WALLET
+                  </Typography>
+                  <Typography variant="h5" className={classes.setupPageSubtitle2}>
+                    Welcome to E-wallet <br />
+                    Create your wallet for easy transfering <br />
+                    of money to your friends and family
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  sm={12}
+                  xs={12}
+                  className={classes.setupPageRightSide}
                 >
-                  Use your Mobile number to Login
-                </Typography>
-                <Form>
-                  <TextField
-                    label="Mobile Number"
-                    placeholder="Mobile Number"
-                    className={classes.textField}
-                    margin="normal"
-                    variant="outlined"
-                    name="username"
-                    value={values.username}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <TextField
-                    name="password"
-                    label="Password"
-                    className={classes.textField}
-                    type="password"
-                    autoComplete="current-password"
-                    margin="normal"
-                    variant="outlined"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.password && touched.password && (
-                    <div className={classes.inputFeedback}>
-                      {errors.password}
-                    </div>
-                  )}
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={classes.signInButton}
+                  <Typography variant="h5">Login to your account</Typography>
+                  <Typography
+                    variant="subtitle2"
+                    style={{
+                      fontSize: '14px',
+                      color: '#9ea0a5',
+                      paddingTop: '1%',
+                      paddingBottom: '7%',
+                    }}
                   >
-                    SIGN IN
-                  </Button>
-                  <Grid container>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          color: '#9ea0a5',
-                          fontSize: '14px',
-                          paddingTop: '5%',
-                          width: '85%',
-                        }}
-                      >
-                        Don't have an account?
-                        <Link
-                          color="primary"
+                    Use your Mobile number to Login
+                  </Typography>
+                  <Form>
+                    <TextField
+                      label="Mobile Number"
+                      placeholder="Mobile Number"
+                      className={classes.textField}
+                      margin="normal"
+                      variant="outlined"
+                      name="username"
+                      value={values.username}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <div>
+                    <TextField
+                      name="password"
+                      label="Password"
+                      className={classes.textField}
+                      type={ visiblity ? "text" :"password"}
+                      autoComplete="current-password"
+                      margin="normal"
+                      variant="outlined"
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <span 
+                      onClick={toggleVisiblity}
+                      style={{ 
+                        position: 'relative',
+                        top: '30px',
+                        right: '33px'
+                      }}>
+                      <i>
+                        {visiblity ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
+                      </i>
+                    </span>
+                    </div>
+                    {errors.password && touched.password && (
+                      <div className={classes.inputFeedback}>
+                        {errors.password}
+                      </div>
+                    )}
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={classes.signInButton}
+                    >
+                      SIGN IN
+                    </Button>
+                    <Grid container>
+                      <Grid item md={6} sm={12} xs={12}>
+                        <Typography
                           style={{
-                            fontWeightBold: '700',
-                            paddingLeft: '4px',
-                            fontSize: '14px',
-                            fontWeight: '600',
-                          }}
-                          href="/sign-up"
-                        >
-                          Sign Up
-                        </Link>
-                      </Typography>
-                    </Grid>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          fontSize: '14px',
-                          paddingTop: '5%',
-                          // textAlign: 'end'
-                          // paddingLeft: '5%',
-                        }}
-                      >
-                        <Link
-                          color="primary"
-                          style={{
-                            fontWeightBold: '900',
+                            color: '#9ea0a5',
                             fontSize: '14px',
                             paddingTop: '5%',
-                            fontWeight: '600',
+                            width: '85%',
                           }}
-                          href="/forgot-password"
                         >
-                          Forgot password?
-                        </Link>
-                      </Typography>
+                          Don't have an account?
+                          <Link
+                            color="primary"
+                            style={{
+                              fontWeightBold: '700',
+                              paddingLeft: '4px',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                            }}
+                            href="/sign-up"
+                          >
+                            Sign Up
+                          </Link>
+                        </Typography>
+                      </Grid>
+                      <Grid item md={6} sm={12} xs={12}>
+                        <Typography
+                          style={{
+                            fontSize: '14px',
+                            paddingTop: '5%',
+                            // textAlign: 'end'
+                            // paddingLeft: '5%',
+                          }}
+                        >
+                          <Link
+                            color="primary"
+                            style={{
+                              fontWeightBold: '900',
+                              fontSize: '14px',
+                              paddingTop: '5%',
+                              fontWeight: '600',
+                            }}
+                            href="/forgot-password"
+                          >
+                            Forgot password?
+                          </Link>
+                        </Typography>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Form>
+                  </Form>
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
-        </Fragment>
-      );
-    }}
-  </Formik>
-);
+            </div>
+          </Fragment>
+        );
+      }}
+    </Formik>
+  );
+};
 
 export default withStyles(styles)(SignInPage);
