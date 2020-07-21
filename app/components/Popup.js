@@ -48,7 +48,7 @@ const PopupBody = styled.div`
     background: #cc8819;
     color: #fff;
     :hover {
-      background-color: #9c660e ;
+      background-color: #9c660e;
     }
   }
   .popInfoLeft {
@@ -91,9 +91,11 @@ class Popup extends Component {
       this.props.close();
     }
   };
+
   componentDidMount() {
     console.log(this.props);
   }
+
   render() {
     return (
       <PopupWrap

@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -120,16 +120,14 @@ const redirectUser = user => {
   }
 };
 
-
 const SignInPage = props => {
-
   const [visiblity, setvisiblity] = React.useState(false);
 
-  const toggleVisiblity = () =>{
+  const toggleVisiblity = () => {
     visiblity ? setvisiblity(false) : setvisiblity(true);
-  }
+  };
 
-  return(
+  return (
     <Formik
       initialValues={{
         username: '',
@@ -139,7 +137,7 @@ const SignInPage = props => {
         const obj = {
           username: values.username.trim(),
           password: values.password,
-        }
+        };
         try {
           const res = await axios.post(`${API_URL}/user/login`, obj);
           if (res.data.status === 1) {
@@ -195,7 +193,10 @@ const SignInPage = props => {
                   <Typography className={classes.setupPageTitle} variant="h1">
                     E-WALLET
                   </Typography>
-                  <Typography variant="h5" className={classes.setupPageSubtitle2}>
+                  <Typography
+                    variant="h5"
+                    className={classes.setupPageSubtitle2}
+                  >
                     Welcome to E-wallet <br />
                     Create your wallet for easy transfering <br />
                     of money to your friends and family
@@ -233,29 +234,34 @@ const SignInPage = props => {
                       onBlur={handleBlur}
                     />
                     <div>
-                    <TextField
-                      name="password"
-                      label="Password"
-                      className={classes.textField}
-                      type={ visiblity ? "text" :"password"}
-                      autoComplete="current-password"
-                      margin="normal"
-                      variant="outlined"
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <span 
-                      onClick={toggleVisiblity}
-                      style={{ 
-                        position: 'relative',
-                        top: '30px',
-                        right: '33px'
-                      }}>
-                      <i>
-                        {visiblity ? <VisibilityIcon></VisibilityIcon> : <VisibilityOffIcon></VisibilityOffIcon>}
-                      </i>
-                    </span>
+                      <TextField
+                        name="password"
+                        label="Password"
+                        className={classes.textField}
+                        type={visiblity ? 'text' : 'password'}
+                        autoComplete="current-password"
+                        margin="normal"
+                        variant="outlined"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <span
+                        onClick={toggleVisiblity}
+                        style={{
+                          position: 'relative',
+                          top: '30px',
+                          right: '33px',
+                        }}
+                      >
+                        <i>
+                          {visiblity ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </i>
+                      </span>
                     </div>
                     {errors.password && touched.password && (
                       <div className={classes.inputFeedback}>
