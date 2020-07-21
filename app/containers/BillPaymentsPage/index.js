@@ -275,7 +275,7 @@ class BillPaymentsPage extends Component {
                           <TableRow key={row._id}>
                             <TableCell component="th" scope="row">
                               <img
-                                src={row.logo}
+                                src={`${STATIC_URL}${row.logo}`}
                                 style={{ width: '2rem', borderRadius: 20 }}
                               />
                             </TableCell>

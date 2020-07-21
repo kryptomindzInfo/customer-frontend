@@ -325,13 +325,6 @@ export default ({ notify }) => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="subtitle1"
-                      style={{ maxWidth: '100px' }}
-                      noWrap
-                    >
-                      {row.TxId}
-                    </Typography>
                   </TableCell>
                   <TableCell component="th" scope="row">
                     <Typography style={{ color: '#4a90e2' }} variant="h6">

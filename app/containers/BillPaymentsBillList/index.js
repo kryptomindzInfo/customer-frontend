@@ -464,18 +464,55 @@ class BillPaymentsBillList extends Component {
             </div>
             <div>
               <Grid container style={{ padding: '2rem' }}>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Typography align="left">Invoice No.</Typography>
-                  <Typography align="left">Amount</Typography>
-                  <Typography align="left">Fee</Typography>
-                  <Typography align="left">Due Date</Typography>
+                  <Typography align="left">Name</Typography>
+                  <Typography align="left">Mobile</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <Typography color="primary" align="left">
                     {this.state.filteredInvoice.number
                       ? this.state.filteredInvoice.number
                       : '-'}
                   </Typography>
+                  <Typography color="primary" align="left">
+                    {this.state.filteredInvoice.name
+                      ? this.state.filteredInvoice.name
+                      : '-'}
+                  </Typography>
+                  <Typography color="primary" align="left">
+                    {this.state.filteredInvoice.mobile
+                      ? this.state.filteredInvoice.mobile
+                      : '-'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography align="left">Due Date</Typography>
+                  <Typography align="left">Bill Date</Typography>
+                  <Typography align="left">Bill Period</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography color="primary" align="left">
+                    {this.state.filteredInvoice.due_date
+                      ? this.state.filteredInvoice.due_date
+                      : '-'}
+                  </Typography>
+                  <Typography color="primary" align="left">
+                    {this.state.filteredInvoice.bill_date
+                      ? this.state.filteredInvoice.bill_date
+                      : '-'}
+                  </Typography>
+                  <Typography color="primary" align="left">
+                    {this.state.filteredInvoice.bill_period
+                      ? this.state.filteredInvoice.bill_period
+                      : '-'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography align="left">Amount</Typography>
+                  <Typography align="left">fee</Typography>
+                </Grid>
+                <Grid item xs={2}>
                   <Typography color="primary" align="left">
                     {this.state.filteredInvoice.amount
                       ? this.state.filteredInvoice.amount
@@ -486,39 +523,13 @@ class BillPaymentsBillList extends Component {
                       ? this.state.checkMerchantFee.fee
                       : '-'}
                   </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.due_date
-                      ? this.state.filteredInvoice.due_date
-                      : '-'}
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography align="left">Name</Typography>
-                  <Typography align="left">Description</Typography>
-                  <Typography align="left">Mobile</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.name
-                      ? this.state.filteredInvoice.name
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.description
-                      ? this.state.filteredInvoice.description
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.mobile
-                      ? this.state.filteredInvoice.mobile
-                      : '-'}
-                  </Typography>
                 </Grid>
               </Grid>
               <Table marginTop="34px" smallTd>
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
                     <TableCell>Denomination</TableCell>
                     <TableCell>Unit of measure</TableCell>
                     <TableCell>Unit price</TableCell>
@@ -533,7 +544,10 @@ class BillPaymentsBillList extends Component {
                         <TableRow key={item._id}>
                         <TableCell component="th" scope="row">
                           {item.item_desc.name}
-                          </TableCell>
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {item.item_desc.description}
+                        </TableCell>
                         <TableCell component="th" scope="row">
                             {item.item_desc.denomination}
                         </TableCell>
@@ -555,20 +569,21 @@ class BillPaymentsBillList extends Component {
                 </TableBody>
               </Table>
             </div>
-            <Button
-              variant="contained"
-              type="submit"
-              onClick={() => this.payBill(this.state.filteredInvoice._id)}
-              // disabled={isSubmitting}
-              className={classes.signUpButton}
-            >
-              Pay XOF{' '}
               {this.state.filteredInvoice.amount &&
               this.state.checkMerchantFee.fee
-                ? this.state.checkMerchantFee.fee +
-                  this.state.filteredInvoice.amount
-                : 0}
-            </Button>
+                ? (<Button
+                variant="contained"
+                type="submit"
+                onClick={() => this.payBill(this.state.filteredInvoice._id)}
+                // disabled={isSubmitting}
+                className={classes.signUpButton}
+              >
+                Pay XOF{' '}
+                    { this.state.checkMerchantFee.fee +
+                    this.state.filteredInvoice.amount}
+              </Button>
+                ): <h5>Can't process transaction right now </h5>}
+
           </Popup>
         ) : null}
       </div>
