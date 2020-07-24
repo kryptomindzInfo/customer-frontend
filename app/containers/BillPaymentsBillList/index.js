@@ -504,7 +504,7 @@ class BillPaymentsBillList extends Component {
                   </Typography>
                   <Typography color="primary" align="left">
                     {this.state.filteredInvoice.bill_period
-                      ? this.state.filteredInvoice.bill_period
+                      ? this.state.filteredInvoice.bill_period.period_name
                       : '-'}
                   </Typography>
                 </Grid>
