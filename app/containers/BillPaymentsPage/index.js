@@ -288,14 +288,11 @@ class BillPaymentsPage extends Component {
                             <TableCell
                               style={{ color: '#417505', fontWeight: 600 }}
                               // onClick={() => this.showViewBillPopup(row._id)}
-                              onClick={
-                                () =>
+                              onClick={() =>
                                   history.push({
                                     pathname: `/bill-list/${row._id}`,
-                                    // notify: this.props.location.notify,
-                                    // secDetailsID: section,
                                   })
-                                // history.push(`/bill-list/${row._id}`)
+                                  //localStorage.setItem('merchant',row);
                               }
                               align="right"
                             >

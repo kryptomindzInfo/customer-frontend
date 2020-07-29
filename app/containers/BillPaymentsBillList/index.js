@@ -34,6 +34,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
+import OtherBillPopup  from './OtherBillPopup'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -167,6 +168,7 @@ class BillPaymentsBillList extends Component {
       checkMerchantFee: {},
       invoiceDetails: {},
       filteredInvoice: {},
+      payBillsPopup: false,
     };
     this.success = this.success.bind(this);
     this.error = this.error.bind(this);
@@ -210,6 +212,10 @@ class BillPaymentsBillList extends Component {
     // setTimeout = () => {
     //   this.setState({ viewBillPopup: true }), 3000;
     // };
+  };
+
+  onPayBillsPopupClose = () => {
+    this.setState({payBillsPopup:false });
   };
 
   payBill = _id => {
@@ -445,6 +451,15 @@ class BillPaymentsBillList extends Component {
                       </TableBody>
                     </Table>
                   )}
+                    <Button 
+                      onClick={() => {
+                        this.setState({payBillsPopup:true});
+                      }}
+                      className={classes.signUpButton}
+                      style={{width:'20%'}}
+                    >
+                      Pay Other Bill
+                    </Button>
                 </div>
               </Grid>
             </Grid>
@@ -586,6 +601,14 @@ class BillPaymentsBillList extends Component {
 
           </Popup>
         ) : null}
+        {this.state.payBillsPopup ? (
+        <OtherBillPopup
+          close={() => this.onPayBillsPopupClose()}
+          merchantid={this.props.match.params.id}
+        />
+      ) : (
+        ''
+      )}
       </div>
     );
   }
