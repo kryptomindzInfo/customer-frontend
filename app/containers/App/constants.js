@@ -20,6 +20,7 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 
 // for server
 export const API_URL = 'http://91d90ac373dc.sn.mynetname.net:30301/api';
-export const STATIC_URL = 'http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/';
-export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:30301/ipfs/';
+export const STATIC_URL =
+  'http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/';
+export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:30880/ipfs/';
 export const CURRENCY = 'XOF';
