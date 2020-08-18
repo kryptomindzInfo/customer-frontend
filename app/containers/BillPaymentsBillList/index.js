@@ -20,26 +20,20 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
 import Loader from '../../components/Loader';
-
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Popup from 'components/Popup';
 import { Formik, useField, Form } from 'formik';
-
 import { object, string, number, email, boolean } from 'yup';
-
 import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
-
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
-import OtherBillPopup  from './OtherBillPopup'
-
+import OtherBillPopup  from './OtherBillPopup';
+import ConfirmPaymentPopup from './ConfirmPaymentPopup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import axios from 'axios';
 import MainHeader from '../MainHeader';
 import FormGroup from '../../components/FormGroup';
@@ -153,14 +147,6 @@ function createData(name, calories, fat, carbs, protein) {
   return { id, name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData('2 November', 444444, 'Hatim', 'View Bill'),
-  createData('2 November', 444444, 'Hatim', 'View Bill'),
-  // createData('Eclair', 262, 16.0, 24, 6.0),
-  // createData('Cupcake', 305, 3.7, 67, 4.3),
-  // createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 class BillPaymentsBillList extends Component {
   constructor(props) {
     super(props);
@@ -173,6 +159,7 @@ class BillPaymentsBillList extends Component {
       filteredInvoice: {},
       loading: false,
       payBillsPopup: false,
+      confirmationPopup: false,
       feeList: [],
       selectedInvoices: [],
       totalAmount: 0,
@@ -193,7 +180,7 @@ class BillPaymentsBillList extends Component {
   warn = () => toast.warn(this.state.notification);
 
   handleView = _id => {
-    const tempInvoice = this.state.invoiceDetails.invoices.filter(i => {
+    const tempInvoice = this.state.invoiceDetails.filter(i => {
       if (i._id == _id) {
         return i;
       }
@@ -227,6 +214,14 @@ class BillPaymentsBillList extends Component {
     this.setState({payBillsPopup:false });
   };
 
+  showConfirmationPopup = _id => {
+    this.setState({ confirmationPopup: true });
+  };
+
+  onConfirmationPopupClose = () => {
+    this.setState({confirmationPopup: false });
+  };
+
   payBill = (ids) => {
     const { id } = this.props.match.params;
     axios
@@ -250,10 +245,6 @@ class BillPaymentsBillList extends Component {
 
     this.setState({ viewBillPopup: false });
   };
-
-  handleMultipleInvoiceSubmit = () => {
-
-  }
 
   showViewBillPopup = _id => {
     this.setState({ viewBillPopup: true });
@@ -445,7 +436,7 @@ class BillPaymentsBillList extends Component {
     }
 
     if (this.state.loading === true) {
-      return <Loader  />;
+      return <Loader fullPage/>;
     }
 
     return (
@@ -628,7 +619,8 @@ class BillPaymentsBillList extends Component {
                     </Table>
                     {this.state.totalAmount > 0 ? (
                       <Button
-                        onClick={() => this.payBill(this.state.invoiceDetails)}
+                        // onClick={() => this.payBill(this.state.selectedInvoices)}
+                        onClick={() => this.showConfirmationPopup()}
                         className={classes.signUpButton}
                         style={{width:'100%'}}
                       >
@@ -794,13 +786,19 @@ class BillPaymentsBillList extends Component {
           </Popup>
         ) : null}
         {this.state.payBillsPopup ? (
-        <OtherBillPopup
-          close={() => this.onPayBillsPopupClose()}
-          merchantid={this.props.match.params.id}
-        />
-      ) : (
+          <OtherBillPopup
+            close={() => this.onPayBillsPopupClose()}
+            merchantid={this.props.match.params.id}
+          />
+        ) : (
         ''
-      )}
+        )}
+        {this.state.confirmationPopup ? (
+          <ConfirmPaymentPopup
+            close={() => this.onConfirmationPopupClose()}
+            pay={() => this.payBill(this.state.selectedInvoices)}
+          />
+        ):null}
       </div>
     );
   }
