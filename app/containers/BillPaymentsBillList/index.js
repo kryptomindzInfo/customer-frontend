@@ -140,6 +140,7 @@ const styles = theme => ({
     // paddingBottom: 0
   },
 });
+const currentDate = new Date(); 
 
 let id = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -161,6 +162,7 @@ class BillPaymentsBillList extends Component {
       payBillsPopup: false,
       confirmationPopup: false,
       feeList: [],
+      penaltyList: [],
       selectedInvoices: [],
       totalAmount: 0,
       totalFee: 0,
@@ -226,7 +228,7 @@ class BillPaymentsBillList extends Component {
     const { id } = this.props.match.params;
     axios
       .post(`${API_URL}/user/payInvoice`, {
-        invoice_ids: ids,
+        invoices: ids,
         merchant_id: id,
       })
       .then(res => {
@@ -254,22 +256,115 @@ class BillPaymentsBillList extends Component {
     this.setState({ viewBillPopup: false });
   };
 
+  getParticularMerchantData = async(id) => {
+    try {
+      const res = await axios.post(`${API_URL}/user/getMerchantDetails`, {
+        merchant_id: id,
+      });
+      if (res.status === 200) {
+        if (res.data.status === 0) {
+          return {list: []};
+        } else {
+          return {list: res.data.invoices.filter(i => i.paid === 0), merchant: res.data.merchant};
+        }
+      }
+    } catch (err) {
+      return {list: []};
+    }
+  };
+
+  getPenaltyRule = async (id) => {
+    try {
+      const res = await axios.post(`${API_URL}/user/getMerchantPenaltyRule`, {
+        merchant_id: id,
+      });
+      console.log(res);
+      if (res.status === 200) {
+        if (res.data.status === 0) {
+          toast.error(res.data.message);
+          return { rule: {}, loading: false };
+        }
+        return { rule: res.data.rule, loading: false };
+      }
+      toast.error(res.data.message);
+      return { rule: {}, loading: false };
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
+      return { rule: {}, loading: false };
+    }
+  };
+
+  calculatePenalty = async(rule,list) => {
+    const penaltylist = list.map(async invoice => {
+      if (invoice.amount < 0) {
+        return (0);
+      }
+      const datesplit = invoice.due_date.split("/");
+      const dueDate = new Date(datesplit[0],datesplit[1],datesplit[2]);
+      console.log(rule);
+      if (rule.type === 'once') {
+        if( currentDate.getTime() <= dueDate.getTime()){
+          return (0);
+        } else {
+          return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
+        }
+      } else {
+        if( currentDate.getTime() <= dueDate.getTime()){
+          return (0);
+        } else {
+          const diffTime = Math.abs(currentDate - dueDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          return ((rule.fixed_amount + invoice.amount/rule.percentage)*diffDays);
+        }
+      }
+    })
+    const result= await Promise.all(penaltylist);
+    return(result);
+  }
+
+  getFeeList = async(res, penaltylist) => {
+    if (res.length>0) {
+      const feelist = res.map(async (invoice,index) => {
+        if (invoice.amount < 0) {
+          const data = await this.checkFee({
+            merchant_id: invoice.merchant_id,
+            amount: invoice.amount * -1,
+          });
+          return (-data.fee);
+        } else {
+          const data = await this.checkFee({
+            merchant_id: invoice.merchant_id,
+            amount: invoice.amount + penaltylist[index],
+          });
+          return (data.fee);
+        }
+      })
+      const result= await Promise.all(feelist);
+      return {loading: false, result: result};
+    }
+  };
+
   componentWillMount = async() => {
     const { id } = this.props.match.params;
-    console.log(id);
     const { notify } = this.props.location;
     this.setState({ loading: true });
-    this.getParticularMerchantData(id);
-    const res = await this.getInvoices();
-    this.setState({ invoiceDetails: res.list });
-    console.log(res.list);
-    if(res.list.length>0){
-      const res2 = await this.getFeeList(res.list);
-      console.log(res2);
-      this.setState({ feeList: res2.result });
-      this.setState({ loading: res2.loading });
-    }else{
-      this.setState({ loading: false });
+    const res1= await this.getPenaltyRule(id);
+    console.log(res1);
+    const res2= await this.getParticularMerchantData(id);
+    console.log(res2);
+    this.setState({ invoiceDetails: res2.list });
+    this.setState({ dataMerchantList: res2.merchant });
+    console.log(res2);
+    if (res2.list.length > 0){
+      const res3 = await this.calculatePenalty(res1.rule,res2.list);
+      this.setState({ penaltyList: res3 });
+      console.log(res3);
+      const res4 = await this.getFeeList(res2.list,res3);
+      this.setState({ feeList: res4.result });
+      this.setState({ loading: res4.loading });
+    } else {
+      this.setState({ loading: false});
     }
   };
 
@@ -293,84 +388,46 @@ class BillPaymentsBillList extends Component {
     }
   };
 
-  getParticularMerchantData = id => {
-    const method = '';
-    axios
-      .post(`${API_URL}/user/getMerchantDetails`, {
-        merchant_id: id,
-      })
-      .then(res => {
-        if (res.data.status === 1) {
-          this.setState({ dataMerchantList: res.data.merchant });
-        }
-      })
-      .catch(error => {});
-  };
-
-  getInvoices = async() => {
-    try{
-      const res = await axios.post(`${API_URL}/user/getInvoices`)
-      if (res.status === 200) {
-        if (res.data.status === 0) {
-          return { list: [] };
-        }
-        console.log(res.data.invoices.filter((val) => val.paid === 0));
-        return { list: res.data.invoices.filter((val) => val.paid === 0)};
-      }
-      return { list: [] };
-    } catch (err) {
-      return { list: [] };
-    }
-  };
-
-  getFeeList = async(res) => {
-    if (res.length>0) {
-      const feelist = res.map(async invoice => {
-        if (invoice.amount < 0) {
-          const data = await this.checkFee({
-            merchant_id: invoice.merchant_id,
-            amount: invoice.amount * -1,
-          });
-          return (-data.fee);
-        } else {
-          const data = await this.checkFee({
-            merchant_id: invoice.merchant_id,
-            amount: invoice.amount,
-          });
-          return (data.fee);
-        }
-      })
-      const result= await Promise.all(feelist);
-      return {loading: false, result: result};
-    }
-  };
-
   handleCheckboxClick = async (e, invoice, index) => {
     this.setState({ buttonLoading: true });
     if(e.target.checked) {
       if(invoice.has_counter_invoice === true){
         const counterInvoice = this.state.invoiceDetails.filter((val) => val.number === `${invoice.number}C`);
-        console.log(counterInvoice);
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
-          amount: this.state.totalAmount + invoice.amount + counterInvoice[0].amount,
+          amount: this.state.totalAmount + invoice.amount + counterInvoice[0].amount + this.state.penaltyList[index],
         });
-        const updatedTotalAmount = this.state.totalAmount + invoice.amount + counterInvoice[0].amount ;
+        const obj1 = {
+          id: invoice._id,
+          penalty: this.state.penaltyList[index],
+        }
+        const obj2 = {
+          id: counterInvoice[0]._id,
+          penalty: 0,
+        }
+        const updatedTotalAmount = this.state.totalAmount + invoice.amount + counterInvoice[0].amount + this.state.penaltyList[index];
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ totalFee: data.fee });
-        const updatedList = [...this.state.selectedInvoices,invoice._id, counterInvoice[0]._id];
+        const updatedList = [...this.state.selectedInvoices];
+        updatedList.push(obj1);
+        updatedList.push(obj2);
         this.setState({selectedInvoices: updatedList});
         console.log(this.state.selectedInvoices);
         this.setState({ buttonLoading: false });
       } else {
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
-          amount: this.state.totalAmount + invoice.amount,
+          amount: this.state.totalAmount + invoice.amount + this.state.penaltyList[index],
         });
-        const updatedTotalAmount = this.state.totalAmount + invoice.amount;
+        const updatedTotalAmount = this.state.totalAmount + invoice.amount + this.state.penaltyList[index];
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ totalFee: data.fee });
-        const updatedList = [...this.state.selectedInvoices,invoice._id];
+        const obj1 = {
+          id: invoice._id,
+          penalty: this.state.penaltyList[index],
+        }
+        const updatedList = [...this.state.selectedInvoices];
+        updatedList.push(obj1);
         this.setState({selectedInvoices: updatedList});
         console.log(this.state.selectedInvoices);
         this.setState({ buttonLoading: false });
@@ -380,25 +437,25 @@ class BillPaymentsBillList extends Component {
         const counterInvoice = this.state.invoiceDetails.filter((val) => val.number === `${invoice.number}C`);
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
-          amount: this.state.totalAmount - invoice.amount - counterInvoice[0].amount,
+          amount: this.state.totalAmount - invoice.amount - counterInvoice[0].amount - this.state.penaltyList[index],
         });
         this.setState({ totalFee: data.fee });
-        const updatedList = this.state.selectedInvoices.filter((val) => val !== invoice._id  &&  val !== counterInvoice[0]._id);
+        const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id  &&  val.id !== counterInvoice[0]._id);
         this.setState({selectedInvoices: updatedList });
-        const updatedTotalAmount = this.state.totalAmount - invoice.amount - counterInvoice[0].amount;
+        const updatedTotalAmount = this.state.totalAmount - invoice.amount - counterInvoice[0].amount - this.state.penaltyList[index];
         console.log(this.state.selectedInvoices);
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ buttonLoading: false });
       } else {
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
-          amount: this.state.totalAmount - invoice.amount,
+          amount: this.state.totalAmount - invoice.amount - this.state.penaltyList[index],
         });
         this.setState({ totalFee: data.fee });
-        const updatedList = this.state.selectedInvoices.filter((val) => val !== invoice._id);
+        const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id);
         this.setState({selectedInvoices: updatedList });
         console.log(this.state.selectedInvoices);
-        const updatedTotalAmount = this.state.totalAmount - invoice.amount;
+        const updatedTotalAmount = this.state.totalAmount - invoice.amount - this.state.penaltyList[index];
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ buttonLoading: false });
       }
@@ -529,6 +586,7 @@ class BillPaymentsBillList extends Component {
                           <TableCell>Due Date</TableCell>
                           <TableCell>Bill No.</TableCell>
                           <TableCell>Amount</TableCell>
+                          <TableCell>Penalty</TableCell>
                           <TableCell>Fees</TableCell>
                           <TableCell>Amount with Fees</TableCell>
                           <TableCell align="left" />
@@ -542,7 +600,7 @@ class BillPaymentsBillList extends Component {
                               <TableCell component="th" scope="row">
                                 {row.is_counter ? (
                                   <div>
-                                    {this.state.selectedInvoices.includes(row._id) ? (
+                                    {this.state.selectedInvoices.map(a => a.id).includes(row._id) ? (
                                       <FormGroup>
                                         <input
                                           type="checkbox"
@@ -590,11 +648,15 @@ class BillPaymentsBillList extends Component {
                               </TableCell>
                               <TableCell component="th" scope="row">
                                 {/* {row.amount} */}
+                                {this.state.penaltyList[index] }
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {/* {row.amount} */}
                                 {this.state.feeList[index] > 0 ? this.state.feeList[index] : 'NA' }
                               </TableCell>
                               <TableCell component="th" scope="row">
                                 {/* {row.amount} */}
-                                {this.state.feeList[index]+row.amount > 0 ? this.state.feeList[index]+row.amount : 'NA'}
+                                {this.state.feeList[index]+row.amount+this.state.penaltyList[index] > 0 ? this.state.feeList[index]+row.amount+this.state.penaltyList[index] : 'NA'}
                               </TableCell>
 
                               <TableCell
