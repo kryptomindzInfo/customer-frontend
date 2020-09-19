@@ -68,8 +68,8 @@ const styles = theme => ({
 });
 
 class CardEwalletSendMoneyPayBills extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       balance: 0,
       sendMoneyPopup: false,
@@ -158,12 +158,14 @@ class CardEwalletSendMoneyPayBills extends Component {
             </Grid>
           </Grid>
         </Grid>
-        <SendMoneyPopup
-          notify={notify}
-          balance={this.state.balance}
-          onClose={() => this.closeSendMoneyPopup()}
-          open={this.state.sendMoneyPopup}
-        />
+        {this.state.sendMoneyPopup ? (
+            <SendMoneyPopup
+            notify={notify}
+            balance={this.state.balance}
+            onClose={() => this.closeSendMoneyPopup()}
+            open={this.state.sendMoneyPopup}
+          />
+        ) : null}
       </Paper>
     );
   }

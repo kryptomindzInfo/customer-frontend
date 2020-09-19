@@ -216,39 +216,37 @@ const SendMoneyPopup = props => {
   const [isValidFee, setIsValidFee] = React.useState(false);
   const [walletUserName, setWalletUserName] = React.useState('');
 
-  useEffect(() => {
-    getFeeWithDummyValue('Non Wallet To Wallet');
-  }, isValidFee);
-
-  const getFeeWithDummyValue = transType => {
+  const getFeeWithDummyValue = async transType => {
     let method = '';
     if (transType === 'Wallet To Wallet') {
       method = 'checkWalToWalFee';
     } else {
       method = 'checkWalToNonWalFee';
     }
-    setPopupLoading(true);
-    axios
-      .post(`${API_URL}/user/${method}`, {
+    try{
+      const res = await axios.post(`${API_URL}/user/${method}`, {
         amount: 45,
-      })
-      .then(res => {
-        if (res.data.error) {
-          setPopupLoading(false);
-          setIsValidFee(false);
-          props.notify(res.data.error, 'error');
-        }
-        if (res.data.status === 1) {
-          setPopupLoading(false);
-          setIsValidFee(true);
-        }
-      })
-      .catch(error => {
+      });
+      if (res.data.status === 1) {
+        setIsValidFee(true);
+        setPopupLoading(false);
+      } else {
         setPopupLoading(false);
         setIsValidFee(false);
-        props.notify(error.response.data.error, 'error');
-      });
+        props.notify(res.data.message, 'error');
+      }
+    }catch (e) {
+      console.log('fwfwfwwf');
+      setPopupLoading(false);
+      setIsValidFee(false);
+      props.notify(error.response.data.error, 'error');
+    }
   };
+
+  useEffect(() => {
+    console.log(popupLoading);
+    getFeeWithDummyValue('Non Wallet To Wallet');
+  }, [isValidFee]);
 
   const getUser = value => {
     if (value) {
@@ -354,7 +352,7 @@ const SendMoneyPopup = props => {
         <DialogTitle
           style={{ fontWeight: '600' }}
           id="customized-dialog-title"
-          onClose={handleClose}
+          // onClose={handleClose}
         >
           <div>
             <span>Send Money</span>
@@ -1108,7 +1106,7 @@ const SendMoneyPopup = props => {
                                 marginBottom: '2%',
                               }}
                             >
-                              {CURRENCY} {fee} will be charged as fee and{' '}
+                              {CURRENCY} {fee.toFixed(2)} will be charged as fee and{' '}
                               {CURRENCY}{' '}
                               {!values.isInclusive
                                 ? values.sending_amount
@@ -1487,7 +1485,7 @@ const SendMoneyPopup = props => {
                                   fontSize: '10px',
                                 }}
                               >
-                                {CURRENCY} {fee} will be charged as fee and{' '}
+                                {CURRENCY} {fee.toFixed(2)} will be charged as fee and{' '}
                                 {CURRENCY}{' '}
                                 {!values.isInclusive
                                   ? values.sending_amount
