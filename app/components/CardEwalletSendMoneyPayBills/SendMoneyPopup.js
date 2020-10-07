@@ -213,6 +213,8 @@ const SendMoneyPopup = props => {
   const [loading, setLoading] = React.useState(false);
   const [popupLoading, setPopupLoading] = React.useState(true);
   const [fee, setFee] = React.useState(0);
+  const [interbank, setInterBank] = React.useState(true);
+  const [amount, setAmount] = React.useState('');
   const [isValidFee, setIsValidFee] = React.useState(false);
   const [walletUserName, setWalletUserName] = React.useState('');
 
@@ -278,17 +280,29 @@ const SendMoneyPopup = props => {
     return false;
   };
 
-  const getFee = (amount, trans_type) => {
+  const getFee = (amount) => {
     let method = '';
-    if (trans_type === 'Wallet To Wallet') {
-      method = 'checkWalToWalFee';
+    let type = '';
+    if (isWallet) {
+      if(interbank){
+        method = 'interBank/checkFee'
+        type= 'IBWNW'
+      } else {
+        method = 'checkWalToNonWalFee';
+      }
     } else {
-      method = 'checkWalToNonWalFee';
+      if(interbank){
+        method = 'interBank/checkFee'
+        type= 'IBWW'
+      } else {
+        method = 'checkWalToWalFee';
+      }
     }
     if (amount) {
       axios
         .post(`${API_URL}/user/${method}`, {
           amount,
+          type,
         })
         .then(res => {
           if (res.data.error) {
@@ -308,6 +322,11 @@ const SendMoneyPopup = props => {
           props.notify(error.response.data.error, 'error');
         });
     }
+  };
+
+  const handleFeeTypeChange = (inter ,amount) => {
+    setAmount(amount);
+    setInterBank(inter);
   };
 
   const handleClose = () => {
@@ -337,6 +356,10 @@ const SendMoneyPopup = props => {
       setIsWallet(true);
     }
   };
+
+  useEffect(() => {
+    getFee(amount);
+  }, [interbank]);
 
   const { mobile } = JSON.parse(localStorage.getItem('loggedUser'));
   return (
@@ -429,17 +452,24 @@ const SendMoneyPopup = props => {
                 receiverIdentificationValidTill: '',
                 sending_amount: '',
                 isInclusive: false,
+                interbank: true,
               }}
               onSubmit={async values => {
                 setLoading(true);
                 try {
+                  let API = "";
+                  if(values.interbank){
+                    API = 'user/interBank/sendMoneyToNonWallet';
+                  } else {
+                    API = 'user/sendMoneyToNonWallet';
+                  }
                   const res = await axios.post(
-                    `${API_URL}/user/sendMoneyToNonWallet`,
+                    `${API_URL}/${API}`,
                     values,
                   );
                   if (res.status === 200) {
-                    if (res.data.error) {
-                      props.notify(res.data.error, 'error');
+                    if (res.data.status===0) {
+                      props.notify(res.data.message, 'error');
                     } else {
                       props.notify('Transaction Successful!', 'success');
                       setLoading(false);
@@ -1012,34 +1042,6 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               </MuiPickersUtilsProvider>
-                              {/* <TextField
-                                disabled={!isValidFee}
-                                size="small"
-                                name="receiverIdentificationValidTill"
-                                id="form-idetification-valid-till"
-                                label="Valid Till"
-                                fullWidth
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                placeholder=""
-                                variant="outlined"
-                                type="date"
-                                value={values.receiverIdentificationValidTill}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={classes.dialogTextFieldGrid}
-                                error={
-                                  errors.receiverIdentificationValidTill &&
-                                  touched.receiverIdentificationValidTill
-                                }
-                                helperText={
-                                  errors.receiverIdentificationValidTill &&
-                                  touched.receiverIdentificationValidTill
-                                    ? errors.receiverIdentificationValidTill
-                                    : ''
-                                }
-                              /> */}
                             </Grid>
                           </Grid>
 
@@ -1079,12 +1081,12 @@ const SendMoneyPopup = props => {
                                 type="number"
                                 value={values.sending_amount}
                                 onChange={handleChange}
-                                onBlur={e =>
+                                onBlur={e => {
+                                  handleBlur(e);
                                   getFee(
-                                    values.sending_amount,
-                                    'Non Wallet To Wallet',
-                                  )
-                                }
+                                    values.sending_amount
+                                  );
+                                }}
                                 className={classes.dialogTextFieldGridFullRow}
                                 error={
                                   errors.sending_amount &&
@@ -1176,6 +1178,32 @@ const SendMoneyPopup = props => {
                             item
                             direction="column"
                             alignItems="flex-start"
+                            style={{ marginBottom: '-10px', marginLeft: '1%' }}
+                          >
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  name="interbank"
+                                  onChange={handleFeeTypeChange(values.interbank, values.sending_amount)}
+                                  style={{
+                                    color: 'rgb(53, 153, 51)',
+                                    '&$checked': {
+                                      color: 'rgb(53, 153, 51)',
+                                    },
+                                  }}
+                                />
+                              }
+                              label={
+                                <Typography variant="caption">
+                                  Receiver can recieve from any bank
+                                </Typography>
+                              }
+                            />
+                          </Grid>
+                          <Grid
+                            item
+                            direction="column"
+                            alignItems="flex-start"
                             className={classes.dialogTextFieldGrid}
                           >
                             <FormControlLabel
@@ -1259,17 +1287,24 @@ const SendMoneyPopup = props => {
                 sending_amount: '',
                 isInclusive: false,
                 acceptedTerms: false,
+                interbank: true,
               }}
               onSubmit={async values => {
                 setLoading(true);
+                let API = "";
+                  if(values.interbank){
+                    API = 'user/interBank/sendMoneyToWallet';
+                  } else {
+                    API = 'user/sendMoneyToWallet';
+                  }
                 try {
                   const res = await axios.post(
-                    `${API_URL}/user/sendMoneyToWallet`,
+                    `${API_URL}/${API}`,
                     values,
                   );
                   if (res.status === 200) {
-                    if (res.data.error) {
-                      props.notify(res.data.error, 'error');
+                    if (res.data.status === 0) {
+                      props.notify(res.data.message, 'error');
                     } else {
                       props.notify('Transaction Successful!', 'success');
                       setLoading(false);
@@ -1450,8 +1485,7 @@ const SendMoneyPopup = props => {
                                 onBlur={e => {
                                   handleBlur(e);
                                   getFee(
-                                    values.sending_amount,
-                                    'Wallet To Wallet',
+                                    values.sending_amount
                                   );
                                 }}
                                 className={classes.dialogTextFieldGridFullRow}
@@ -1530,7 +1564,8 @@ const SendMoneyPopup = props => {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  name="isInclusive"
+                                  name="interbank"
+                                  onChange={handleFeeTypeChange(values.interbank, values.sending_amount)}
                                   style={{
                                     color: 'rgb(53, 153, 51)',
                                     '&$checked': {
@@ -1541,7 +1576,7 @@ const SendMoneyPopup = props => {
                               }
                               label={
                                 <Typography variant="caption">
-                                  Receiver pays transaction fees
+                                  Receiver can recieve from any bank
                                 </Typography>
                               }
                             />
