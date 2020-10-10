@@ -30,7 +30,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
-import OtherBillPopup  from './OtherBillPopup';
+import PayBillPopup  from './PayBillPopup';
 import ConfirmPaymentPopup from './ConfirmPaymentPopup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -140,7 +140,8 @@ const styles = theme => ({
     // paddingBottom: 0
   },
 });
-const currentDate = new Date(); 
+const currentDate = new Date();
+const bankID = localStorage.getItem('bankId');
 
 let id = 0;
 function createData(name, calories, fat, carbs, protein) {
@@ -226,8 +227,15 @@ class BillPaymentsBillList extends Component {
 
   payBill = (ids) => {
     const { id } = this.props.match.params;
+    let API = '';
+    console.log(this.state.dataMerchantList.bank_id,bankID);
+    if (this.state.dataMerchantList.bank_id === bankID) {
+      API = '/user/payInvoice';
+    } else {
+      API = '/user/interBank/payInvoice';
+    }
     axios
-      .post(`${API_URL}/user/payInvoice`, {
+      .post(`${API_URL}/${API}`, {
         invoices: ids,
         merchant_id: id,
       })
@@ -302,25 +310,23 @@ class BillPaymentsBillList extends Component {
       }
       const datesplit = invoice.due_date.split("/");
       const dueDate = new Date(datesplit[0],datesplit[1],datesplit[2]);
-      console.log(rule);
-      if (rule.type === 'once') {
-        if( currentDate.getTime() <= dueDate.getTime()){
-          return (0);
-        } else {
-          return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
-        }
+      if (currentDate <= dueDate) {
+        return (0);
+    } else {
+      if(rule.type === 'once') {
+        return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
       } else {
-        if( currentDate.getTime() <= dueDate.getTime()){
-          return (0);
-        } else {
-          const diffTime = Math.abs(currentDate - dueDate);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          return ((rule.fixed_amount + invoice.amount/rule.percentage)*diffDays);
-        }
+        // To calculate the time difference of two dates 
+        var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
+        // To calculate the no. of days between two dates 
+        var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
+        console.log(currentDate,dueDate,Difference_In_Days);     
+        return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
       }
-    })
-    const result= await Promise.all(penaltylist);
-    return(result);
+    }
+  });
+  const result= await Promise.all(penaltylist);
+  return(result);
   }
 
   getFeeList = async(res, penaltylist) => {
@@ -848,9 +854,9 @@ class BillPaymentsBillList extends Component {
           </Popup>
         ) : null}
         {this.state.payBillsPopup ? (
-          <OtherBillPopup
+          <PayBillPopup
             close={() => this.onPayBillsPopupClose()}
-            merchantid={this.props.match.params.id}
+            merchant={this.state.dataMerchantList}
           />
         ) : (
         ''

@@ -7,7 +7,7 @@ padding: ${props => props.accentedBtn ? '7px' : '5px' };
 text-align:center;
 border-radius: 4px;
 float: ${props => props.float? props.float : 'none'};
-background-color: ${props => props.filledBtn ? props.theme.primary : '#fff' };
+background-color: ${props => props.filledBtn ? '#1c3302' : '#1c3302' };
 background-color: ${props => props.accentedBtn ? props.theme.accent : 'sdf' };
 background-color: ${props => props.accentedOutline ? 'transparent' : 'sdf' };
 border: ${props => props.accentedBtn ? 'none' : '1px solid #417505' };

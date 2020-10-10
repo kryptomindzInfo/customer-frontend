@@ -123,12 +123,15 @@ function OtherBillPopup(props) {
           mobile: '',
           }}
           onSubmit={async (values) => {
-            console.log(values);
             axios
-            .post(`${API_URL}/user/getInvoices`, {values})
+            .post(`${API_URL}/user/getInvoicesForMobile`,
+              {
+                mobile: values.mobile,
+                merchant_id: props.merchantid,
+              })
             .then(res => {
               if (res.data.status === 1) {
-                setInvoiceList(res.data.invoices);
+                setInvoiceList(res.data.invoices.filter(i => i.paid===0));
               }
             })
             .catch(error => {});
@@ -157,12 +160,10 @@ function OtherBillPopup(props) {
                       name="mobile"
                       onFocus={(e) => {
                         handleChange(e);
-                        inputFocus(e);
                       }}
                       onBlur={(e) => {
                         handleBlur(e);
                         handleChange(e);
-                        inputBlur(e);
                       }}
                       onChange={handleChange}
                       required
