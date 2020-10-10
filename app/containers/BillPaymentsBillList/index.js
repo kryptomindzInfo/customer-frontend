@@ -230,9 +230,9 @@ class BillPaymentsBillList extends Component {
     let API = '';
     console.log(this.state.dataMerchantList.bank_id,bankID);
     if (this.state.dataMerchantList.bank_id === bankID) {
-      API = '/user/payInvoice';
+      API = 'user/payInvoice';
     } else {
-      API = '/user/interBank/payInvoice';
+      API = 'user/interBank/payInvoice';
     }
     axios
       .post(`${API_URL}/${API}`, {
