@@ -481,7 +481,7 @@ const SendMoneyPopup = props => {
                   }
                   setLoading(false);
                 } catch (err) {
-                  props.notify(err.response.data.error, 'error');
+                  props.notify("Something went wrong", 'error');
                   setLoading(false);
                 }
               }}
