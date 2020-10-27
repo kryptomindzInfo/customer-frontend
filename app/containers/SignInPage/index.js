@@ -142,7 +142,7 @@ const SignInPage = props => {
           const res = await axios.post(`${API_URL}/user/login`, obj);
           if (res.data.status === 1) {
             if (res.data.error) {
-              throw res.data.error;
+              throw res.data.message;
             } else {
               localStorage.setItem('customerLogged', res.data.token);
               const loggedUser = JSON.stringify(res.data.user);

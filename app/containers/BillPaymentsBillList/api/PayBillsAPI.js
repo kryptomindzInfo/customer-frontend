@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../App/constants';
+
 const bankID = localStorage.getItem('bankId');
+
 const getUserInvoices = async (mobile, merchant_id) => {
   try {
     const res = await axios.post(`${API_URL}/user/getInvoicesForMobile`, {
@@ -68,6 +70,7 @@ const getInvoiceByCustomerCode = async (customerCode, merchant_id) => {
 
 const payInvoice = async (values, bankid) => {
   let API = '';
+  console.log(bankid,bankID);
   if (bankid === bankID) {
     API = 'user/payInvoice';
   } else {
