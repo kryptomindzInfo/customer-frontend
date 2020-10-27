@@ -144,12 +144,10 @@ const SignInPage = props => {
             if (res.data.error) {
               throw res.data.error;
             } else {
-              console.log(res);
-
               localStorage.setItem('customerLogged', res.data.token);
               const loggedUser = JSON.stringify(res.data.user);
               localStorage.setItem('loggedUser', loggedUser);
-              localStorage.setItem('bankId', res.data.bank_id);
+              localStorage.setItem('bankId', res.data.user.bank_id);
               return redirectUser(res.data.user);
             }
           } else {

@@ -91,6 +91,7 @@ export default function App() {
         <ProtectedRoute
           exact
           path="/choose-bank"
+          notify={notify}
           component={ChooseYourBankPage}
         />
         <ProtectedRoute
@@ -108,7 +109,9 @@ export default function App() {
         <ProtectedRoute
           exact
           path="/bill-payments-merchants"
+          notify={notify}
           component={BillPaymentsPage}
+
         />
         <ProtectedRoute
           exact

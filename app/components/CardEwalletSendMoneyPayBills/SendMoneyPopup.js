@@ -219,15 +219,16 @@ const SendMoneyPopup = props => {
   const [walletUserName, setWalletUserName] = React.useState('');
 
   const getFeeWithDummyValue = async transType => {
-    let method = '';
+    let trans_type = '';
     if (transType === 'Wallet To Wallet') {
-      method = 'checkWalToWalFee';
+      trans_type = 'Wallet to Wallet'
     } else {
-      method = 'checkWalToNonWalFee';
+      trans_type = 'Wallet to Non Wallet'
     }
     try{
-      const res = await axios.post(`${API_URL}/user/${method}`, {
+      const res = await axios.post(`${API_URL}/user/checkFee`, {
         amount: 45,
+        trans_type,
       });
       if (res.data.status === 1) {
         setIsValidFee(true);
@@ -283,19 +284,22 @@ const SendMoneyPopup = props => {
   const getFee = (amount) => {
     let method = '';
     let type = '';
+    let trans_type = '';
     if (isWallet) {
       if(interbank){
         method = 'interBank/checkFee'
         type= 'IBWNW'
       } else {
-        method = 'checkWalToNonWalFee';
+        method = 'checkFee';
+        trans_type = 'Wallet to Non Wallet'
       }
     } else {
       if(interbank){
         method = 'interBank/checkFee'
         type= 'IBWW'
       } else {
-        method = 'checkWalToWalFee';
+        method = 'checkFee';
+        trans_type = 'Wallet to Wallet'
       }
     }
     if (amount) {
@@ -303,6 +307,7 @@ const SendMoneyPopup = props => {
         .post(`${API_URL}/user/${method}`, {
           amount,
           type,
+          trans_type,
         })
         .then(res => {
           if (res.data.error) {

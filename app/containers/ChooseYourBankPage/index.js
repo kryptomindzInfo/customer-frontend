@@ -106,14 +106,14 @@ const ChooseYourBankPage = props => {
       const res = await axios.post(`${API_URL}/user/assignBank`, {
         bank_id: bank._id,
       });
-      if (res.data.status === 1) {
-        history.push('/upload-documents');
+      console.log(res);
+      if (res.data.status === 0) {
+        throw res.data.message;
       } else {
-        props.notify('Error while saving the bank', 'error');
-        throw res.data.error;
+        history.push('/upload-documents');
       }
     } catch (err) {
-      props.notify(err, 'error');
+       props.notify(err, 'error');
     }
   };
   return (
@@ -152,9 +152,10 @@ const ChooseYourBankPage = props => {
                 >
                   {lob.logo ? (
                     <Avatar
-                      alt="bank logo"
+                      alt="banklogo"
                       onClick={() => saveBank(lob)}
-                      src={`${STATIC_URL}/${lob.logo}`}
+                      // src='http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/5f9171a5aaf1aa0007d83842/joy.jpg'
+                      src={`${STATIC_URL}${lob.logo}`}
                       className={classes.bankIcons}
                     />
                   ) : (
