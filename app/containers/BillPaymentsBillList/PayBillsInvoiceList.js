@@ -261,7 +261,7 @@ const PayBillsInvoiceList = props => {
           </div>
         </div>
         <div />
-        <Table marginTop="34px" smallTd>
+        <Table marginTop="34px" smallTd style={{wordBreak: 'initial'}}>
           <TableHead>
             <TableRow>
               <TableCell></TableCell>

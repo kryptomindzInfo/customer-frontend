@@ -36,6 +36,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import MainHeader from '../MainHeader';
+import PayBillsInvoiceDetails from './PayBillsInvoiceDetails';
 import FormGroup from '../../components/FormGroup';
 import Col from '../../components/Col';
 import Row from '../../components/Row';
@@ -165,6 +166,7 @@ class BillPaymentsBillList extends Component {
       feeList: [],
       penaltyList: [],
       selectedInvoices: [],
+      filteredPenalty:"",
       totalAmount: 0,
       totalFee: 0,
       buttonLoading: false,
@@ -182,13 +184,13 @@ class BillPaymentsBillList extends Component {
 
   warn = () => toast.warn(this.state.notification);
 
-  handleView = _id => {
+  handleView = (_id, penalty) => {
     const tempInvoice = this.state.invoiceDetails.filter(i => {
       if (i._id == _id) {
         return i;
       }
     });
-    this.setState({ filteredInvoice: tempInvoice[0] });
+    this.setState({ filteredInvoice: tempInvoice[0], filteredPenalty: penalty });
 
     axios
       .post(`${API_URL}/user/checkMerchantFee`, {
@@ -309,7 +311,7 @@ class BillPaymentsBillList extends Component {
         return (0);
       }
       const datesplit = invoice.due_date.split("/");
-      const dueDate = new Date(datesplit[0],datesplit[1],datesplit[2]);
+      const dueDate = new Date(datesplit[2],datesplit[1]-1,datesplit[0]);
       if (currentDate <= dueDate) {
         return (0);
     } else {
@@ -323,6 +325,7 @@ class BillPaymentsBillList extends Component {
         console.log(currentDate,dueDate,Difference_In_Days);     
         return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
       }
+      
     }
   });
   const result= await Promise.all(penaltylist);
@@ -594,7 +597,7 @@ class BillPaymentsBillList extends Component {
                           <TableCell>Amount</TableCell>
                           <TableCell>Penalty</TableCell>
                           <TableCell>Fees</TableCell>
-                          <TableCell>Amount with Fees</TableCell>
+                          <TableCell>Total Amount</TableCell>
                           <TableCell align="left" />
                         </TableRow>
                       </TableHead>
@@ -667,7 +670,7 @@ class BillPaymentsBillList extends Component {
 
                               <TableCell
                                 style={{ color: '#417505', fontWeight: 600 }}
-                                onClick={() => this.handleView(row._id)}
+                                onClick={() => this.handleView(row._id,this.state.penaltyList[index])}
                                 align="right"
                               >
                                 View
@@ -718,139 +721,17 @@ class BillPaymentsBillList extends Component {
           </Grid>
         </Grid>
         {this.state.viewBillPopup ? (
-          <Popup bigBody close={this.closeViewBillPopup.bind(this)}>
-            <div
-              style={{
-                // color: 'black',
-                textAlign: 'center',
-                fontSize: '1.5rem',
-                paddingBottom: '1rem',
+          <Popup accentedH1 bigBody close={this.closeViewBillPopup}>
+            <PayBillsInvoiceDetails
+              merchantId={this.state.filteredInvoice.merchant_id}
+              showOTPPopup={values => {
+                this.payBill(values);
               }}
-            >
-              Pay Bill
-            </div>
-            <div>
-              <Grid container style={{ padding: '2rem' }}>
-                <Grid item xs={2}>
-                  <Typography align="left">Invoice No.</Typography>
-                  <Typography align="left">Name</Typography>
-                  <Typography align="left">Mobile</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.number
-                      ? this.state.filteredInvoice.number
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.name
-                      ? this.state.filteredInvoice.name
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.mobile
-                      ? this.state.filteredInvoice.mobile
-                      : '-'}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography align="left">Due Date</Typography>
-                  <Typography align="left">Bill Date</Typography>
-                  <Typography align="left">Bill Period</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.due_date
-                      ? this.state.filteredInvoice.due_date
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.bill_date
-                      ? this.state.filteredInvoice.bill_date
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.bill_period
-                      ? this.state.filteredInvoice.bill_period.period_name
-                      : '-'}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography align="left">Amount</Typography>
-                  <Typography align="left">fee</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography color="primary" align="left">
-                    {this.state.filteredInvoice.amount
-                      ? this.state.filteredInvoice.amount
-                      : '-'}
-                  </Typography>
-                  <Typography color="primary" align="left">
-                    {this.state.checkMerchantFee.fee
-                      ? this.state.checkMerchantFee.fee
-                      : '-'}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Table marginTop="34px" smallTd>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{`  `}Name</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Denomination</TableCell>
-                    <TableCell>Unit of measure</TableCell>
-                    <TableCell>Unit price</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.filteredInvoice &&
-                  this.state.filteredInvoice.items.length > 0
-                    ? this.state.filteredInvoice.items.map(item => (
-                        <TableRow key={item._id}>
-                        <TableCell component="th" scope="row">
-                          {item.item_desc.name}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {item.item_desc.description}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                            {item.item_desc.denomination}
-                        </TableCell>
-                          <TableCell component="th" scope="row">
-                          {item.item_desc.unit_of_measure}
-                          </TableCell>
-                        <TableCell component="th" scope="row">
-                            {item.item_desc.unit_price}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {item.quantity}
-                          </TableCell>
-                        <TableCell component="th" scope="row">
-                            {item.total_amount}
-                        </TableCell>
-                        </TableRow>
-                    ))
-                    : null}
-                </TableBody>
-              </Table>
-            </div>
-              {this.state.filteredInvoice.amount &&
-              this.state.checkMerchantFee.fee
-                ? (<Button
-                variant="contained"
-                type="submit"
-                onClick={() => this.payBill([this.state.filteredInvoice._id])}
-                // disabled={isSubmitting}
-                className={classes.signUpButton}
-              >
-                Pay XOF{' '}
-                    { this.state.checkMerchantFee.fee +
-                    this.state.filteredInvoice.amount}
-              </Button>
-                ): <h5>Can't process transaction right now </h5>}
-
+              penalty={this.state.filteredPenalty}
+              close={this.closeViewBillPopup}
+              invoice={this.state.filteredInvoice}
+              merchant={this.state.dataMerchantList}
+            />
           </Popup>
         ) : null}
         {this.state.payBillsPopup ? (

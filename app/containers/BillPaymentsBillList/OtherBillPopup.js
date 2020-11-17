@@ -256,7 +256,7 @@ function OtherBillPopup(props) {
             </Typography>
           </Grid>
         </Grid>
-        <Table marginTop="34px" smallTd>
+        <Table style={{wordBreak: 'initial'}} marginTop="34px" smallTd>
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
@@ -314,11 +314,11 @@ function OtherBillPopup(props) {
       </div>
       )}
         {invoiceList.length > 0 ? (
-          <Table>
+          <Table style={{wordBreak: 'initial'}}>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Mobile No.</TableCell>
+                <TableCell>Mobilee No.</TableCell>
                 <TableCell>Due Date</TableCell>
                 <TableCell>Bill No.</TableCell>
                 <TableCell>Amount</TableCell>
