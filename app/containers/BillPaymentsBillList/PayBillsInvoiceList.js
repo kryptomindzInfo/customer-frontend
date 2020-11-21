@@ -167,7 +167,7 @@ const PayBillsInvoiceList = props => {
           </TableCell>
           <TableCell
             style={{ color: '#417505', fontWeight: 600 }}
-            onClick={() => props.setEditingInvoice(row)}
+            onClick={() => props.setEditingInvoice(row,penaltyList[index])}
             align="right"
           >
             View
