@@ -165,6 +165,7 @@ class CardEwalletSendMoneyPayBills extends Component {
             balance={this.state.balance}
             onClose={() => this.closeSendMoneyPopup()}
             open={this.state.sendMoneyPopup}
+
           />
         ) : null}
       </Paper>

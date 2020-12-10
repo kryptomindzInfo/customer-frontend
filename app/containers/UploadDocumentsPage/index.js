@@ -118,18 +118,27 @@ class UploadDocumentsPage extends Component {
         <Paper
           elevation={0}
           style={{
-            marginTop: '10px',
+            marginTop: '15px',
           }}
         >
-          <img
+          {/* <img
             key={i}
-            color="primary"
-            // src={DocImage}
+            color="primary"            
             src={`${CONTRACT_URL}${hash.hash}`}
 
             alt=""
             height="100"
             width="100"
+          /> */}
+          <object
+            key={i}
+            color="primary"
+            data={`${CONTRACT_URL}${hash.hash}`}
+            alt=""
+            width="300"
+            height="200"
+          // marginTop="20px"
+
           />
         </Paper>,
       );
@@ -381,6 +390,7 @@ class UploadDocumentsPage extends Component {
             justify="center"
             alignItems="center"
             direction="column"
+
           >
             {this.getImages()}
           </Grid>

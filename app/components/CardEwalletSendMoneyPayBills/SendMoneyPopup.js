@@ -374,9 +374,9 @@ const SendMoneyPopup = props => {
     if (values.sending_amount != "") {
       let getfees = parseInt(fee.toFixed(2))
       let getamount = parseInt((values.sending_amount - fee).toFixed(2))
-      let gettotal = parseInt((values.sending_amount).toFixed(2))
-
-      return `Amount ${getamount} + Fees ${getfees} = Total ${gettotal}`
+      let gettotal = parseInt((values.sending_amount + fee).toFixed(2))
+      return `Collect ${gettotal}`
+      // return `Amount ${getamount} + Fees ${getfees} = Total ${gettotal}`
     }
 
   }
@@ -1292,7 +1292,7 @@ const SendMoneyPopup = props => {
                               marginBottom: '2%',
                             }}
                           >
-                            {totalfuction(values)}
+                            {/* {totalfuction(values)} */}
                             {/* Fees  {CURRENCY} {fee.toFixed(2)} + Amount{' '}
                             {CURRENCY}{' '}
                             {!values.isInclusive
@@ -1338,7 +1338,8 @@ const SendMoneyPopup = props => {
                                   color="primary"
                                 />
                               ) : (
-                                  <Typography variant="h6">Proceed</Typography>
+                                  // <Typography variant="h6">Proceed</Typography>
+                                  <Typography variant="h6">{totalfuction(values)} Proceed</Typography>
                                 )}
                             </Button>
                           </Grid>
@@ -1381,6 +1382,7 @@ const SendMoneyPopup = props => {
                         } else {
                           props.notify('Transaction Successful!', 'success');
                           setLoading(false);
+                          window.location = "/dashboard"
                           handleClose();
                           //   handleOnProceedClick();
                         }
@@ -1702,7 +1704,7 @@ const SendMoneyPopup = props => {
                                       color="primary"
                                     />
                                   ) : (
-                                      <Typography variant="h6">Proceed</Typography>
+                                      <Typography variant="h6">{totalfuction(values)} Proceed</Typography>
                                     )}
                                 </Button>
                               </Grid>

@@ -145,7 +145,8 @@ const MainHeader = props => {
                 // color="inherit"
                 noWrap
               >
-                Bill Payments
+                {/* Bill Payments */}
+                Pay Bills
               </Typography>
             </Link>
             {/* <Link to="" style={{ textDecoration: 'none' }}> */}
@@ -181,7 +182,7 @@ const MainHeader = props => {
               color="inherit"
               className={classes.headerLogout}
             >
-              Welcome {name} {last_name}
+              Welcome {name}
             </Typography>
             <Menu
               id="simple-menu"

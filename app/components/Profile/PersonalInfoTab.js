@@ -136,8 +136,26 @@ class PersonalInfoTab extends React.Component {
                   error={this.state.nameErr}
                   type="text"
                   className={classes.inputField}
-                  // value={this.state.name}
-                  value={fullname}
+                  value={this.state.name}
+                  // value={fullname}
+                  labelWidth={0}
+                />
+                <span className={classes.errorText}>
+                  {this.state.nameErrorText}
+                </span>
+              </FormControl>
+            </div>
+            <div className={classes.formFields}>
+              <span className={classes.fieldHeading}>Last Name</span>
+              <FormControl variant="outlined">
+                <TextField
+                  id="name"
+                  disabled
+                  error={this.state.nameErr}
+                  type="text"
+                  className={classes.inputField}
+                  value={this.state.last_name}
+                  // value={fullname}
                   labelWidth={0}
                 />
                 <span className={classes.errorText}>
