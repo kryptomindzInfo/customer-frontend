@@ -219,7 +219,6 @@ const SendMoneyPopup = props => {
   const [isValidFee, setIsValidFee] = React.useState(false);
   const [walletUserName, setWalletUserName] = React.useState('');
   const [otpnumber, setotpnumber] = React.useState("")
-  const [verifyotpbutton, setverifyotpbutton] = React.useState(false)
 
   const getFeeWithDummyValue = async transType => {
     let trans_type = '';
@@ -479,6 +478,8 @@ const SendMoneyPopup = props => {
               }}
               onSubmit={async values => {
                 setLoading(true);
+
+
                 try {
                   let API = "";
                   if (values.interbank) {
@@ -1749,9 +1750,7 @@ const SendMoneyPopup = props => {
             <Typography className={classes.resendText}>Resend OTP?</Typography>
           </Grid>
           <Grid container xs={12} md={12} justify="center" alignItems="center">
-            <Button variant="contained" color="primary" disableElevation onClick={() => {
-              setverifyotpbutton(true)
-            }}>
+            <Button variant="contained" color="primary" disableElevation >
               Verify OTP
             </Button>
           </Grid>

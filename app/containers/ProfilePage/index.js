@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import userIcon from '../../images/user-icon.png';
 import documentIcon from '../../images/file-document-outline.png';
 import ProfileTab from '../../components/Profile/ProfileTab';
@@ -82,7 +82,9 @@ class ProfilePage extends React.Component {
     };
   }
 
+
   render() {
+    console.log(this.state.tabOpen)
     const { classes, notify } = this.props;
     return (
       <div>

@@ -5,7 +5,7 @@ import {
   Tabs,
   Typography,
 } from '@material-ui/core';
-import {withStyles, makeStyles}  from '@material-ui/core/styles'
+import { withStyles, makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types';
 import Icon from '@material-ui/core/Icon';
 import axios from 'axios';
@@ -103,8 +103,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -117,8 +117,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -316,32 +316,36 @@ export default ({ notify }) => {
                 : fullRow
               ).map(row => (
                 <TableRow key={row.TxId}>
-                  <TableCell>
-                    <Typography variant="subtitle1">
-                      {getDate(row.Timestamp)}
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      {getTime(row.Timestamp)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    <Typography style={{ color: '#4a90e2' }} variant="h6">
-                      {row.Value.remarks}
-                    </Typography>
-                    <Typography color="primary" variant="subtitle1">
-                      {row.Value.action}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle1">
-                      {row.Value.wallet_type}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="h6">XOF:{row.Value.amount}</Typography>
-                  </TableCell>
+                  {row.Value.action != 'Create' &&
+                    <>
+                      <TableCell>
+                        <Typography variant="subtitle1">
+                          {getDate(row.Timestamp)}
+                        </Typography>
+                        <Typography variant="subtitle1">
+                          {getTime(row.Timestamp)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Typography style={{ color: '#4a90e2' }} variant="h6">
+                          {row.Value.remarks}
+                        </Typography>
+                        <Typography color="primary" variant="subtitle1">
+                          {row.Value.action}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="subtitle1">
+                          {row.Value.wallet_type}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="h6">XOF:{row.Value.amount}</Typography>
+                      </TableCell>
+                    </>
+                  }
                 </TableRow>
               ))}
               {emptyRows > 0 && (

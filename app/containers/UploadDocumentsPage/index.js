@@ -10,12 +10,11 @@ import axios from 'axios';
 
 import history from 'utils/history';
 import { Grid, Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import UploadArea from '../../components/UploadArea';
 import DocImage from '../../images/file-document-outline.png';
-
 import { API_URL, CONTRACT_URL } from '../App/constants';
 
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
@@ -111,6 +110,9 @@ class UploadDocumentsPage extends Component {
 
   getImages = () => {
     const hashList = [];
+    console.log(this.state.fileHashes)
+    console.log(CONTRACT_URL)
+
     this.state.fileHashes.forEach((hash, i) => {
       hashList.push(
         <Paper
@@ -122,7 +124,9 @@ class UploadDocumentsPage extends Component {
           <img
             key={i}
             color="primary"
-            src={DocImage}
+            // src={DocImage}
+            src={`${CONTRACT_URL}${hash.hash}`}
+
             alt=""
             height="100"
             width="100"
@@ -221,7 +225,7 @@ class UploadDocumentsPage extends Component {
               fileHashes: [],
             }));
             user.status = 3;
-            localStorage.setItem('loggedUser',JSON.stringify(user));
+            localStorage.setItem('loggedUser', JSON.stringify(user));
             history.push('/user-verification');
           }
         } else {
@@ -249,7 +253,7 @@ class UploadDocumentsPage extends Component {
               fileHashes: [],
             }));
             user.status = 4;
-            localStorage.setItem('loggedUser',JSON.stringify(user));
+            localStorage.setItem('loggedUser', JSON.stringify(user));
             history.push('/user-verification');
           }
         } else {
@@ -300,8 +304,8 @@ class UploadDocumentsPage extends Component {
                     target="_BLANK"
                   />
                 ) : (
-                  ' '
-                )}
+                    ' '
+                  )}
                 <div
                   className="uploadTrigger"
                   onClick={() => this.triggerBrowse('contract')}
@@ -322,8 +326,8 @@ class UploadDocumentsPage extends Component {
                       cloud_upload
                     </i>
                   ) : (
-                    ' '
-                  )}
+                      ' '
+                    )}
 
                   <label>
                     {!this.state.document1 ? (
@@ -336,8 +340,8 @@ class UploadDocumentsPage extends Component {
                         <span style={{ color: '#417505' }}>browse</span>
                       </div>
                     ) : (
-                      <span />
-                    )}
+                        <span />
+                      )}
                   </label>
                 </div>
               </UploadArea>

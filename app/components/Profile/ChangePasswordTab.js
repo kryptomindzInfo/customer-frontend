@@ -69,31 +69,34 @@ const styles = theme => ({
 });
 
 const ChangePasswordForm = props => (
-  <Formik
+
+  < Formik
     initialValues={{
       currentPassword: '',
       newPassword: '',
       repeatPassword: '',
       password: props.password,
     }}
-    validationSchema={Yup.object().shape({
-      currentPassword: Yup.mixed()
-        .required('Please enter the current password!')
-        .oneOf([Yup.ref('password'), null], "Passwords don't match"),
-      newPassword: Yup.mixed()
-        .required('Please enter the new password!')
-        .oneOf(
-          [Yup.ref('currentPassword'), null],
-          'New password cannot be same as current password',
-        ),
-      repeatPassword: Yup.mixed().when('newPassword', {
-        is: val => !!(val && val.length > 0),
-        then: Yup.string().oneOf(
-          [Yup.ref('newPassword')],
-          'Passwords do not match',
-        ),
-      }),
-    })}
+    validationSchema={
+      Yup.object().shape({
+        currentPassword: Yup.mixed()
+          .required('Please enter the current password!')
+          .oneOf([Yup.ref('password'), null], "Passwords don't match"),
+        newPassword: Yup.mixed()
+          .required('Please enter the new password!')
+          .oneOf(
+            [Yup.ref('currentPassword'), null],
+            'New password cannot be same as current password',
+          ),
+        repeatPassword: Yup.mixed().when('newPassword', {
+          is: val => !!(val && val.length > 0),
+          then: Yup.string().oneOf(
+            [Yup.ref('newPassword')],
+            'Passwords do not match',
+          ),
+        }),
+      })
+    }
     onSubmit={async values => {
       const user = JSON.parse(localStorage.getItem('loggedUser'));
       const res = await axios.post(`${API_URL}/user/updatePassword`, {
@@ -111,7 +114,7 @@ const ChangePasswordForm = props => (
       }
     }}
   >
-    {formikProps => {
+    { formikProps => {
       const {
         values,
         touched,
@@ -129,6 +132,7 @@ const ChangePasswordForm = props => (
       const handleMouseDownPassword = event => {
         event.preventDefault();
       };
+      // console.log(props)
 
       return (
         <Form>
@@ -237,7 +241,7 @@ const ChangePasswordForm = props => (
         </Form>
       );
     }}
-  </Formik>
+  </Formik >
 );
 
 class ChangePasswordTab extends React.Component {

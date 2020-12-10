@@ -21,12 +21,12 @@ const PayBillsInvoiceDetails = props => {
   const [isDataLoading, setDataLoading] = useState(false);
   const [invoice, setInvoice] = useState(props.invoice);
   const [totalAmount, setTotalAmount] = useState(invoice.items.reduce(
-    function(a, b){
-      return a + (b.quantity*b.item_desc.unit_price);
+    function (a, b) {
+      return a + (b.quantity * b.item_desc.unit_price);
     }, 0));
   const [totalTax, setTotalTax] = useState(invoice.items.reduce(
-    function(a, b){
-      return a + (b.total_amount-(b.quantity*b.item_desc.unit_price));
+    function (a, b) {
+      return a + (b.total_amount - (b.quantity * b.item_desc.unit_price));
     }, 0));
   const [fee, setFee] = useState();
   const { merchant } = props;
@@ -42,7 +42,7 @@ const PayBillsInvoiceDetails = props => {
 
   const getItems = () =>
     invoice.items.map(item => {
-      return(
+      return (
         <TableRow key={item._id}>
           <TableCell component="th" scope="row">
             {item.item_desc.name}
@@ -63,7 +63,7 @@ const PayBillsInvoiceDetails = props => {
             {item.quantity}
           </TableCell>
           <TableCell component="th" scope="row">
-            {item.quantity*item.item_desc.unit_price}
+            {item.quantity * item.item_desc.unit_price}
           </TableCell>
           <TableCell component="th" scope="row">
             {item.tax_desc.value}
@@ -73,7 +73,7 @@ const PayBillsInvoiceDetails = props => {
           </TableCell>
         </TableRow>
       );
-  });
+    });
 
   const getCounterInvoiceItems = () => {
     return invoice.counter_invoices.map((item) => {
@@ -119,13 +119,13 @@ const PayBillsInvoiceDetails = props => {
           bill_date: invoice.bill_date || '',
           bill_period: invoice.bill_period || '',
           mobile: invoice.mobile || '',
-          counter_invoices:  invoice.counter_invoices || [],
+          counter_invoices: invoice.counter_invoices || [],
         }}
         onSubmit={values => {
-          const obj =  [{
-              id: invoice._id,
-              penalty: props.penalty,
-            }]
+          const obj = [{
+            id: invoice._id,
+            penalty: props.penalty,
+          }]
           props.showOTPPopup(obj);
         }}
         validationSchema={Yup.object().shape({
@@ -182,8 +182,8 @@ const PayBillsInvoiceDetails = props => {
                       {values.customer_code ? (
                         <Col className="popInfoRight">{values.customer_code}</Col>
                       ) : (
-                        <Col className="popInfoRight">Passing by customer</Col>
-                      )}
+                          <Col className="popInfoRight">Passing by customer</Col>
+                        )}
                     </Row>
                     <Row>
                       <Col className="popInfoLeft">Mobile</Col>
@@ -216,7 +216,7 @@ const PayBillsInvoiceDetails = props => {
                 <Row>
                   <Col cW="100%">
                     <Row />
-                    <Table smallTd style={{marginTop:'34px', wordBreak:'initial'}}>
+                    <Table smallTd style={{ marginTop: '34px', wordBreak: 'initial' }}>
                       <TableHead>
                         <TableRow>
                           <TableCell>Name</TableCell>
@@ -231,9 +231,9 @@ const PayBillsInvoiceDetails = props => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                          {invoice.items && invoice.items.length > 0
-                            ? getItems()
-                            : null}
+                        {invoice.items && invoice.items.length > 0
+                          ? getItems()
+                          : null}
                       </TableBody>
                     </Table>
                     <Row style={{ marginTop: '8px' }}>
@@ -272,16 +272,16 @@ const PayBillsInvoiceDetails = props => {
                     Can't process transaction right now
                   </h5>
                 ) : (
-                  <Button filledBtn>
-                    {isLoading ? (
-                      <Loader />
-                    ) : (
-                      <span>
-                          Collect {CURRENCY} {sumtotal2()} and Pay Bill
-                      </span>
-                    )}
-                  </Button>
-                )}
+                    <Button filledBtn>
+                      {isLoading ? (
+                        <Loader />
+                      ) : (
+                          <span>
+                            Collect {CURRENCY} {sumtotal2()} and Pay Bill
+                          </span>
+                        )}
+                    </Button>
+                  )}
               </FormGroup>
             </Form>
           );

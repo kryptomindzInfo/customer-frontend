@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -93,7 +93,7 @@ const MainHeader = props => {
     history.push('/');
   };
 
-  const { name } = JSON.parse(localStorage.getItem('loggedUser'));
+  const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
 
   return (
     <div className={classes.root}>
@@ -148,16 +148,16 @@ const MainHeader = props => {
                 Bill Payments
               </Typography>
             </Link>
-            <Link to="/" style={{ textDecoration: 'none' }}>
-              <Typography
-                className={`${classes.title} ${classes.eventLink}`}
-                variant="subtitle1"
-                // color="inherit"
-                noWrap
-              >
-                Reports
+            {/* <Link to="" style={{ textDecoration: 'none' }}> */}
+            <Typography
+              className={`${classes.title} ${classes.eventLink}`}
+              variant="subtitle1"
+              // color="inherit"
+              noWrap
+            >
+              Reports
               </Typography>
-            </Link>
+            {/* </Link> */}
           </div>
           <div
             style={{
@@ -181,7 +181,7 @@ const MainHeader = props => {
               color="inherit"
               className={classes.headerLogout}
             >
-              Welcome {name}
+              Welcome {name} {last_name}
             </Typography>
             <Menu
               id="simple-menu"
@@ -191,9 +191,12 @@ const MainHeader = props => {
               onClose={handleClose}
             >
               <Link to="/profile" style={{ textDecoration: 'none' }}>
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose} style={{ marginLeft: "15%" }}>Profile</MenuItem>
               </Link>
-              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+              <br />
+              <Link to="" style={{ textDecoration: 'none' }}>
+                <MenuItem onClick={onLogoutClick} style={{ marginLeft: "15%" }}>Logout</MenuItem>
+              </Link>
             </Menu>
           </div>
         </Toolbar>

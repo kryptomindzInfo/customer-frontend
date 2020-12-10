@@ -67,12 +67,13 @@ const styles = theme => ({
 class PersonalInfoTab extends React.Component {
   constructor(props) {
     super(props);
-    const { name, email, mobile } = JSON.parse(
+    const { name, email, mobile, last_name } = JSON.parse(
       localStorage.getItem('loggedUser'),
     );
     this.state = {
       name,
       email,
+      last_name,
       phoneNumber: mobile,
       nameErr: false,
       nameErrorText: '',
@@ -120,6 +121,7 @@ class PersonalInfoTab extends React.Component {
         });
       }
     };
+    const fullname = `${this.state.name} ${this.state.last_name}`
     return (
       <div>
         <div className={classes.personalInfoContainer}>
@@ -134,7 +136,8 @@ class PersonalInfoTab extends React.Component {
                   error={this.state.nameErr}
                   type="text"
                   className={classes.inputField}
-                  value={this.state.name}
+                  // value={this.state.name}
+                  value={fullname}
                   labelWidth={0}
                 />
                 <span className={classes.errorText}>

@@ -15,7 +15,7 @@ const PayBillOTP = props => {
 
   const startTimer = () => {
     let time = 30;
-    const setTime = setInterval(function() {
+    const setTime = setInterval(function () {
       if (time <= 0) {
         clearInterval(setTime);
         setResend(true);
@@ -67,20 +67,20 @@ const PayBillOTP = props => {
           <Loader />
         </Button>
       ) : (
-        <Button onClick={() => verifyOTP()} filledBtn marginTop="50px">
-          <span>Verify</span>
-        </Button>
-      )}
+          <Button onClick={() => verifyOTP()} filledBtn marginTop="50px">
+            <span>Verify</span>
+          </Button>
+        )}
 
       <p className="resend">
         Wait for <span className="timer">{timer}</span> to{' '}
         {resendOtp ? (
-          <span className="go" onClick={() => {}}>
+          <span className="go" onClick={() => { }}>
             Resend
           </span>
         ) : (
-          <span style={{color: '#f5a623'}}>Resend</span>
-        )}
+            <span style={{ color: '#f5a623' }}>Resend</span>
+          )}
       </p>
     </div>
   );

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -99,6 +99,9 @@ const HeaderChooseYourBank = props => {
   };
 
   const { name } = JSON.parse(localStorage.getItem('loggedUser'));
+  // const lastname = localStorage.getItem('customerLastName')
+
+  console.log(name)
 
   return (
     <div className={classes.root}>

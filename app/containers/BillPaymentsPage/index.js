@@ -19,7 +19,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import history from 'utils/history';
 
@@ -258,8 +258,8 @@ class BillPaymentsPage extends Component {
                       <TableRow>
                         <TableCell>Logo</TableCell>
                         <TableCell>Name</TableCell>
-                        <TableCell>Mobile No.</TableCell>
-                        <TableCell>Email ID</TableCell>
+                        {/* <TableCell>Mobile No.</TableCell>
+                        <TableCell>Email ID</TableCell> */}
                         <TableCell align="left" />
                       </TableRow>
                     </TableHead>
@@ -283,16 +283,16 @@ class BillPaymentsPage extends Component {
                               {row.name}
                             </TableCell>
 
-                            <TableCell align="left">{row.mobile}</TableCell>
-                            <TableCell align="left">{row.email}</TableCell>
+                            {/* <TableCell align="left">{row.mobile}</TableCell>
+                            <TableCell align="left">{row.email}</TableCell> */}
                             <TableCell
                               style={{ color: '#417505', fontWeight: 600 }}
                               // onClick={() => this.showViewBillPopup(row._id)}
                               onClick={() =>
-                                  history.push({
-                                    pathname: `/bill-list/${row._id}`,
-                                  })
-                                  //localStorage.setItem('merchant',row);
+                                history.push({
+                                  pathname: `/bill-list/${row._id}`,
+                                })
+                                //localStorage.setItem('merchant',row);
                               }
                               align="right"
                             >
@@ -301,16 +301,16 @@ class BillPaymentsPage extends Component {
                           </TableRow>
                         ))
                       ) : (
-                        <Grid container justify="center">
-                          <Typography
-                            variant="body1"
-                            style={{ padding: '1rem', width: '100%' }}
-                            align="center"
-                          >
-                            List of merchants will be displayed here...
+                          <Grid container justify="center">
+                            <Typography
+                              variant="body1"
+                              style={{ padding: '1rem', width: '100%' }}
+                              align="center"
+                            >
+                              List of merchants will be displayed here...
                           </Typography>
-                        </Grid>
-                      )}
+                          </Grid>
+                        )}
                     </TableBody>
                   </Table>
                 </div>
