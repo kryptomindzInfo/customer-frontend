@@ -98,10 +98,10 @@ class DocumentsTab extends React.Component {
                 </a>
               ))
             ) : (
-              <div className={classes.documentCard}>
-                <span>No documents uploaded</span>
-              </div>
-            )}
+                <div className={classes.documentCard}>
+                  <span>No documents uploaded</span>
+                </div>
+              )}
           </div>
         </div>
       </div>

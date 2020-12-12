@@ -187,17 +187,22 @@ const MainHeader = props => {
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
-              keepMounted
+              // keepMounted
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              style={{ backgroundColor: "", width: "" }}
             >
-              <Link to="/profile" style={{ textDecoration: 'none' }}>
-                <MenuItem onClick={handleClose} style={{ marginLeft: "15%" }}>Profile</MenuItem>
-              </Link>
-              <br />
-              <Link to="" style={{ textDecoration: 'none' }}>
-                <MenuItem onClick={onLogoutClick} style={{ marginLeft: "15%" }}>Logout</MenuItem>
-              </Link>
+              {/* <h2 style={{ marginLeft: "20px", marginRight: "20px" }}>hello</h2> */}
+              <div style={{ width: "100px" }}>
+                <Link to="/profile" style={{ backgroundColor: '', marginLeft: "20px", marginRight: "" }}>
+                  {/* <MenuItem onClick={handleClose} style={{ marginLeft: "" }}>Profile</MenuItem> */}
+                  <span onClick={handleClose} style={{ marginLeft: "" }}>Profile</span>
+                </Link>
+                <br />
+                <Link to="" style={{ textDecoration: 'none', marginLeft: "20px", marginRight: "" }}>
+                  <span onClick={onLogoutClick} style={{ marginLeft: "" }}>Logout</span>
+                </Link>
+              </div>
             </Menu>
           </div>
         </Toolbar>

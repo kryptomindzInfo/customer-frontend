@@ -523,7 +523,7 @@ class ContactPage extends Component {
                               disabled={isSubmitting}
                               className={classes.addMyFriendButton}
                             >
-                              Add my friend
+                              Add Contact
                             </Button>
                           </Col>
                         </Row>

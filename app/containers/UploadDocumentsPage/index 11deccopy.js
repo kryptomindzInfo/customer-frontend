@@ -16,8 +16,6 @@ import Paper from '@material-ui/core/Paper';
 import UploadArea from '../../components/UploadArea';
 import DocImage from '../../images/file-document-outline.png';
 import { API_URL, CONTRACT_URL } from '../App/constants';
-import pdfFileIcon from '../../images/pdf_icon.png';
-import documentFileIcon from '../../images/document_icon.png';
 
 import HeaderChooseYourBank from '../../components/HeaderChooseYourBank';
 
@@ -117,41 +115,32 @@ class UploadDocumentsPage extends Component {
 
     this.state.fileHashes.forEach((hash, i) => {
       hashList.push(
-
         <Paper
           elevation={0}
           style={{
             marginTop: '15px',
-            backgroundColor: ""
           }}
         >
-          <center>
+          {/* <img
+            key={i}
+            color="primary"            
+            src={`${CONTRACT_URL}${hash.hash}`}
 
-            <a target="_blank" href={`${CONTRACT_URL}${hash.hash}`}>
-              <img src={documentFileIcon}
-                width="50"
-                height="50"
-
-
-              />
-
-              <br />
-              <span style={{ marginTop: '50px' }}>{hash.name}</span>
-            </a>
-          </center>
-
-
-          {/* <object
+            alt=""
+            height="100"
+            width="100"
+          /> */}
+          <object
             key={i}
             color="primary"
             data={`${CONTRACT_URL}${hash.hash}`}
             alt=""
             width="300"
             height="200"
+          // marginTop="20px"
 
-
-          /> */}
-        </Paper >,
+          />
+        </Paper>,
       );
     });
     return hashList;
