@@ -186,8 +186,11 @@ export default ({ notify }) => {
         r.reverse();
         setRow(r);
         setAllRow(r);
-        setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
-        setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
+        console.log(r)
+        setTransferRow(r.filter(row => row.Value.tx_data.tx_type === 'DR'))
+        setReceiveRow(r.filter(row => row.Value.tx_data.tx_type === 'CR'))
+        // setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
+        // setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
       })
       .catch(error => {
         notify('Error while fetching history', 'error');
@@ -210,6 +213,14 @@ export default ({ notify }) => {
   };
 
   const handleChange = (event, newValue) => {
+    // console.log(newValue)
+    // console.log(allRow)
+
+    // const filterRow = allRow.filter((value)=>{
+    //   return value.Value.tx_data.tx_type == countvalue
+    // })
+    // console.log(filterRow)
+
     setValue(newValue);
     switch (newValue) {
       case 0:
@@ -237,6 +248,18 @@ export default ({ notify }) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString();
   };
+
+  const actionfunction = (value) => {
+    console.log(value)
+    console.log(value.tx_data.tx_type)
+    if (value.tx_data.tx_type == "CR") {
+      return "Credit"
+    }
+    else {
+      return "Debit"
+    }
+
+  }
 
   return (
     <Fragment>
@@ -333,7 +356,17 @@ export default ({ notify }) => {
                           {row.Value.remarks}
                         </Typography>
                         <Typography color="primary" variant="subtitle1">
-                          {row.Value.action}
+                          {/* {row.Value.action} */}
+                          {actionfunction(row.Value)}
+                          {/* {row.value != undefined &&
+                            <>
+                              {row.value.tx_data.tx_type == "CR" ? (
+                                "Credit"
+                              ) : (
+                                  "Debit"
+                                )}
+                            </>} */}
+
                         </Typography>
                       </TableCell>
                       <TableCell>

@@ -309,9 +309,9 @@ class UploadDocumentsPage extends Component {
               Please upload the following documents:
             </Typography>
             <ol style={{ paddingLeft: '11%', paddingBottom: '11%' }}>
-              <li>Document</li>
-              <li>Document</li>
-              <li>Document</li>
+              <li>National Id</li>
+              <li>Passport</li>
+              <li>Driving Lisence</li>
             </ol>
           </Grid>
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
