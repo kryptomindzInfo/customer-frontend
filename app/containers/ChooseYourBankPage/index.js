@@ -7,7 +7,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Grid, Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -113,7 +113,7 @@ const ChooseYourBankPage = props => {
         history.push('/upload-documents');
       }
     } catch (err) {
-       props.notify(err, 'error');
+      props.notify(err, 'error');
     }
   };
   return (
@@ -136,47 +136,47 @@ const ChooseYourBankPage = props => {
             className={classes.buttonProgress}
           />
         ) : (
-          <Grid item className={classes.listOfBanks} md={12}>
-            <Grid
-              container
-              style={{ maxWidth: '100%', margin: '0 auto' }}
-              justify="center"
-            >
-              {state.listOfBanks.map((lob, i) => (
-                <Grid
-                  md={2}
-                  sm={6}
-                  xs={12}
-                  key={i}
-                  className={classes.bankCard}
-                >
-                  {lob.logo ? (
-                    <Avatar
-                      alt="banklogo"
-                      onClick={() => saveBank(lob)}
-                      // src='http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/5f9171a5aaf1aa0007d83842/joy.jpg'
-                      src={`${STATIC_URL}${lob.logo}`}
-                      className={classes.bankIcons}
-                    />
-                  ) : (
-                    <Avatar
-                      alt="bank logo"
-                      style={{
-                        height: '100px',
-                        width: '100px',
-                        background: '#173316',
-                      }}
-                      onClick={() => saveBank(lob)}
-                    />
-                  )}
-                  <Typography variant="h5" className={classes.nameOfBank}>
-                    {lob.name}
-                  </Typography>
-                </Grid>
-              ))}
+            <Grid item className={classes.listOfBanks} md={12}>
+              <Grid
+                container
+                style={{ maxWidth: '100%', margin: '0 auto' }}
+                justify="center"
+              >
+                {state.listOfBanks.map((lob, i) => (
+                  <Grid
+                    md={2}
+                    sm={6}
+                    xs={12}
+                    key={i}
+                    className={classes.bankCard}
+                  >
+                    {lob.logo ? (
+                      <Avatar
+                        alt="banklogo"
+                        onClick={() => saveBank(lob)}
+                        // src='http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/5f9171a5aaf1aa0007d83842/joy.jpg'
+                        src={`${STATIC_URL}${lob.logo}`}
+                        className={classes.bankIcons}
+                      />
+                    ) : (
+                        <Avatar
+                          alt="bank logo"
+                          style={{
+                            height: '100px',
+                            width: '100px',
+                            background: '#173316',
+                          }}
+                          onClick={() => saveBank(lob)}
+                        />
+                      )}
+                    <Typography variant="h5" className={classes.nameOfBank}>
+                      {lob.name}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
-          </Grid>
-        )}
+          )}
       </Grid>
     </Fragment>
   );

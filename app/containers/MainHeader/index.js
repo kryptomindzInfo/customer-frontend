@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,8 +12,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import history from '../../utils/history';
+import { API_URL, STATIC_URL } from '../App/constants';
 
 // import MenuIcon from '@material-ui/icons/Menu';
 
@@ -80,6 +82,46 @@ const styles = theme => ({
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [logoofbank, setlogoofbank] = React.useState("")
+  const [bankname, setbankname] = React.useState("")
+  const val = '';
+
+  useEffect(() => {
+    console.log("77777777777777777777777777777777777777777777777777777777777777777777")
+    fetchBanks()
+      .then(res => {
+        console.log(res)
+        const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+        const filterlogo = res.data.banks.filter((value) => {
+          return value.username == username
+        })
+        console.log(filterlogo)
+        if (filterlogo.length) {
+          setlogoofbank(filterlogo[0].logo)
+          setbankname(filterlogo[0].name)
+        }
+        // setState({
+        //   listOfBanks: res.data.banks,
+        // });
+      })
+      .catch();
+  }, [val]);
+
+
+  const fetchBanks = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/user/getBanks`);
+      if (res.status === 200) {
+        // setLoading(false);
+        return res;
+      }
+      // setLoading(false);
+      return null;
+    } catch (err) {
+      // setLoading(false);
+      throw err;
+    }
+  };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -94,6 +136,8 @@ const MainHeader = props => {
   };
 
   const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
+
+  console.log("44444444444444444444444444444444444444444444444444444444444444444444444")
 
   return (
     <div className={classes.root}>
@@ -112,8 +156,12 @@ const MainHeader = props => {
             color="inherit"
             className={classes.headerTitleEwallet}
           >
-            E-WALLET
+            {/* E-WALLET */}
+            {bankname}
+
           </Typography>
+          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
+
           <div className={`headerLink ${classes.headerLink}`}>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <Typography
