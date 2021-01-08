@@ -5,7 +5,7 @@ var __wpo = {
       "/favicon.ico",
       "/npm.intl.4f570d628d17626bef82.chunk.ewallet.js",
       "/1.febe6bf4a5e4f581b458.chunk.ewallet.js",
-      "/main.c29202747ac4087de272.chunk.ewallet.js",
+      "/main.3b4176291936689365db.chunk.ewallet.js",
       "/npm.axios.70530bb128bc32b32304.chunk.ewallet.js",
       "/npm.babel.f2379812fc0d283700bf.chunk.ewallet.js",
       "/npm.core-js.1735cf27fe566e6f4047.chunk.ewallet.js",
@@ -30,7 +30,7 @@ var __wpo = {
     "5e53ef208f3fa79a48f8374488f473c76e1233de": "/favicon.ico",
     "dd0a1da9fa779d9ab7980ea9cf6b1801303aa7fd": "/npm.intl.4f570d628d17626bef82.chunk.ewallet.js",
     "303bdb7873ba1f2864861a4ead34fce084b4031b": "/1.febe6bf4a5e4f581b458.chunk.ewallet.js",
-    "4a6657d175c987c1fcd971804b03f5b919228fde": "/main.c29202747ac4087de272.chunk.ewallet.js",
+    "fbbab3c9a2f188853536dc9db5cf163a9816efc6": "/main.3b4176291936689365db.chunk.ewallet.js",
     "3b2b864e5d5f675cf29410c379e950343ab16e88": "/npm.axios.70530bb128bc32b32304.chunk.ewallet.js",
     "ce8fa6f5cf268fcf54c492c5b9b43810d3fdf749": "/npm.babel.f2379812fc0d283700bf.chunk.ewallet.js",
     "c167b7137c8348a3e7b49cc7de047c7b0a55e6f1": "/npm.core-js.1735cf27fe566e6f4047.chunk.ewallet.js",
@@ -44,11 +44,11 @@ var __wpo = {
     "c261676daa125c5e8c224e5e37c53b2b952f4cd2": "/13.701b6bc5e19667c612c1.chunk.ewallet.js",
     "d27d5a04824e73730d5dbd3d350dff4e69d1cf7a": "/14.a2e4711412a54d16a503.chunk.ewallet.js",
     "528421186dfa176d103bd92bfc3a6101a2c8cae1": "/15.6c0555ee43d202aaf492.chunk.ewallet.js",
-    "24263d104a8d65114ad3b51191e62a3a433c8c52": "/"
+    "ad158dfabef04acb24d9e46c7b00aaf7d99b4a6b": "/"
   },
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "10/27/2020, 6:22:52 PM",
+  "version": "8/1/2021, 11:56:53 am",
   "name": "webpack-offline",
   "pluginVersion": "5.0.6",
   "relativePaths": false

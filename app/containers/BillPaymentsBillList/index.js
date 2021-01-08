@@ -22,6 +22,7 @@ import ActionBar from 'components/ActionBar';
 import Loader from '../../components/Loader';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import CustomButton from '../../components/Button';
 import Popup from 'components/Popup';
 import { Formik, useField, Form } from 'formik';
 import { object, string, number, email, boolean } from 'yup';
@@ -140,6 +141,31 @@ const styles = theme => ({
     },
     // paddingBottom: 0
   },
+  active: {
+    backgroundColor: '#f5a623',
+    border: '1px solid #417505',
+    marginBottom: '3%',
+    marginTop: '3%',
+    width: '100%',
+    fontSize: '10px',
+    color: "#ffffff",
+    '&:hover': {
+      backgroundColor: '#f5a623',
+    },
+  },
+  inactive: {
+    border: '1px solid #417505',
+    backgroundColor: "#ffffff",
+    fontSize: '10px',
+    marginBottom: '3%',
+    width: '100%',
+    marginTop: '3%',
+    color: '#417505',
+    '&:hover': {
+      backgroundColor: "#ffffff",
+    },
+    // paddingBottom: 0
+  },
 });
 const currentDate = new Date();
 const bankID = localStorage.getItem('bankId');
@@ -159,9 +185,11 @@ class BillPaymentsBillList extends Component {
       dataMerchantList: {},
       checkMerchantFee: {},
       invoiceDetails: [],
+      paidInvoices: [],
       filteredInvoice: {},
       loading: false,
       payBillsPopup: false,
+      toggleButton: "pending",
       confirmationPopup: false,
       feeList: [],
       penaltyList: [],
@@ -230,7 +258,6 @@ class BillPaymentsBillList extends Component {
   payBill = (ids) => {
     const { id } = this.props.match.params;
     let API = '';
-    console.log(this.state.dataMerchantList.bank_id,bankID);
     if (this.state.dataMerchantList.bank_id === bankID) {
       API = 'user/payInvoice';
     } else {
@@ -271,11 +298,16 @@ class BillPaymentsBillList extends Component {
       const res = await axios.post(`${API_URL}/user/getMerchantDetails`, {
         merchant_id: id,
       });
+      console.log(res);
       if (res.status === 200) {
         if (res.data.status === 0) {
           return {list: []};
         } else {
-          return {list: res.data.invoices.filter(i => i.paid === 0), merchant: res.data.merchant};
+          return {
+            list: res.data.invoices.filter(i => i.paid === 0),
+            paidlist: res.data.invoices.filter(i => i.paid === 1),
+            merchant: res.data.merchant,
+          };
         }
       }
     } catch (err) {
@@ -288,7 +320,6 @@ class BillPaymentsBillList extends Component {
       const res = await axios.post(`${API_URL}/user/getMerchantPenaltyRule`, {
         merchant_id: id,
       });
-      console.log(res);
       if (res.status === 200) {
         if (res.data.status === 0) {
           toast.error(res.data.message);
@@ -299,7 +330,6 @@ class BillPaymentsBillList extends Component {
       toast.error(res.data.message);
       return { rule: {}, loading: false };
     } catch (err) {
-      console.log(err);
       toast.error('Something went wrong');
       return { rule: {}, loading: false };
     }
@@ -321,8 +351,7 @@ class BillPaymentsBillList extends Component {
         // To calculate the time difference of two dates 
         var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
         // To calculate the no. of days between two dates 
-        var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
-        console.log(currentDate,dueDate,Difference_In_Days);     
+        var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));    
         return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
       }
       
@@ -354,21 +383,30 @@ class BillPaymentsBillList extends Component {
     }
   };
 
+  togglePaidInvoice = async () => {
+    if (this.state.toggleButton !== 'paid') {
+      await  this.setState({ toggleButton: 'paid' });;
+    }
+  };
+
+  togglePendingInvoice = async () => {
+    if (this.state.toggleButton !== 'pending') {
+      await  this.setState({ toggleButton: 'pending' });;
+    }
+  };
+
   componentWillMount = async() => {
     const { id } = this.props.match.params;
     const { notify } = this.props.location;
     this.setState({ loading: true });
     const res1= await this.getPenaltyRule(id);
-    console.log(res1);
     const res2= await this.getParticularMerchantData(id);
-    console.log(res2);
     this.setState({ invoiceDetails: res2.list });
     this.setState({ dataMerchantList: res2.merchant });
-    console.log(res2);
+    this.setState({ paidInvoices: res2.paidlist });
     if (res2.list.length > 0){
       const res3 = await this.calculatePenalty(res1.rule,res2.list);
       this.setState({ penaltyList: res3 });
-      console.log(res3);
       const res4 = await this.getFeeList(res2.list,res3);
       this.setState({ feeList: res4.result });
       this.setState({ loading: res4.loading });
@@ -421,7 +459,6 @@ class BillPaymentsBillList extends Component {
         updatedList.push(obj1);
         updatedList.push(obj2);
         this.setState({selectedInvoices: updatedList});
-        console.log(this.state.selectedInvoices);
         this.setState({ buttonLoading: false });
       } else {
         const data = await this.checkFee({
@@ -438,7 +475,6 @@ class BillPaymentsBillList extends Component {
         const updatedList = [...this.state.selectedInvoices];
         updatedList.push(obj1);
         this.setState({selectedInvoices: updatedList});
-        console.log(this.state.selectedInvoices);
         this.setState({ buttonLoading: false });
       }
     } else {
@@ -452,7 +488,6 @@ class BillPaymentsBillList extends Component {
         const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id  &&  val.id !== counterInvoice[0]._id);
         this.setState({selectedInvoices: updatedList });
         const updatedTotalAmount = this.state.totalAmount - invoice.amount - counterInvoice[0].amount - this.state.penaltyList[index];
-        console.log(this.state.selectedInvoices);
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ buttonLoading: false });
       } else {
@@ -463,7 +498,6 @@ class BillPaymentsBillList extends Component {
         this.setState({ totalFee: data.fee });
         const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id);
         this.setState({selectedInvoices: updatedList });
-        console.log(this.state.selectedInvoices);
         const updatedTotalAmount = this.state.totalAmount - invoice.amount - this.state.penaltyList[index];
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ buttonLoading: false });
@@ -471,8 +505,112 @@ class BillPaymentsBillList extends Component {
     }
   };
 
+  getPendingInvoices = () => 
+    this.state.invoiceDetails.map((row, index) => (
+      <TableRow key={row._id}>
+      <TableCell component="th" scope="row">
+        {row.is_counter ? (
+          <div>
+            {this.state.selectedInvoices.map(a => a.id).includes(row._id) ? (
+              <FormGroup>
+                <input
+                  type="checkbox"
+                  checked
+                  value={row._id}>
+                </input>
+              </FormGroup>
+            ) : (
+              <FormGroup>
+                <input
+                  type="checkbox"
+                  disabled
+                  value={row._id}>
+                </input>
+              </FormGroup>
+            )}
+          </div>
+        ) : (
+          <FormGroup onChange={(e) => this.handleCheckboxClick(e, row, index)}>
+            <input
+              type="checkbox"
+              value={row._id}>
+            </input>
+          </FormGroup>
+        )}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.name ? row.name : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.mobile ? row.mobile : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.due_date ? row.due_date : '-'}
+        {/* {row.bill_date} */}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.number} */}
+
+        {row.number ? row.number : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {row.amount ? row.amount : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {this.state.penaltyList[index] }
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {this.state.feeList[index] > 0 ? this.state.feeList[index] : 'NA' }
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {this.state.feeList[index]+row.amount+this.state.penaltyList[index] > 0 ? this.state.feeList[index]+row.amount+this.state.penaltyList[index] : 'NA'}
+      </TableCell>
+
+      <TableCell
+        style={{ color: '#417505', fontWeight: 600 }}
+        onClick={() => this.handleView(row._id,this.state.penaltyList[index])}
+        align="right"
+      >
+        View
+      </TableCell>
+    </TableRow>
+  ));
+
+  getPaidInvoices = () => 
+    this.state.paidInvoices.map((row, index) => (
+      <TableRow key={row._id}>
+      <TableCell component="th" scope="row">
+        {row.name ? row.name : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.mobile ? row.mobile : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.due_date ? row.due_date : '-'}
+        {/* {row.bill_date} */}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.number} */}
+
+        {row.number ? row.number : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {row.amount ? row.amount : '-'}
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {/* {row.amount} */}
+        {row.penalty ? row.penalty : '-'}
+      </TableCell>
+    </TableRow>
+  ));
+  
+
   getInvoiceItems = invoice => {
-    console.log(invoice);
     invoice.items.map(item => (
       <TableRow key={item._id}>
         <TableCell component="th" scope="row">
@@ -568,12 +706,28 @@ class BillPaymentsBillList extends Component {
                     variant="h5"
                   >
                     Bills List
-                    <Typography
-                      style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
-                      variant="body1"
-                    >
-                      {/* Pay bills safely */}
-                    </Typography>
+                <Row>
+                  <Col cW="20%">
+                  <Button
+                  className={this.state.toggleButton === 'pending' ? classes.active : classes.inactive}
+                  onClick={this.togglePendingInvoice}
+                  marginRight="5px"
+                  padding="5px"
+                >
+                  Pending Invoices
+                </Button>
+                </Col>
+                <Col cW="20%">
+                <Button
+                  className={this.state.toggleButton === 'paid' ? classes.active : classes.inactive}
+                  onClick={this.togglePaidInvoice}
+                  marginLeft="20px"
+                >
+                  Paid Invoices
+                </Button>
+                </Col>
+                <Col cW="60%"></Col>
+                </Row>
                   </Typography>
 
                   {this.state.dataMerchantList != undefined &&
@@ -587,96 +741,38 @@ class BillPaymentsBillList extends Component {
                   ) : (
                     <div>
                     <Table className={classes.table}>
-                      <TableHead>
+                      {this.state.toggleButtone === 'pending' ? (
+                         <TableHead>
+                         <TableRow>
+                           <TableCell></TableCell>
+                           <TableCell>Name</TableCell>
+                           <TableCell>Mobile No.</TableCell>
+                           <TableCell>Due Date</TableCell>
+                           <TableCell>Bill No.</TableCell>
+                           <TableCell>Amount</TableCell>
+                           <TableCell>Penalty</TableCell>
+                           <TableCell>Fees</TableCell>
+                           <TableCell>Total Amount</TableCell>
+                           <TableCell align="left" />
+                         </TableRow>
+                       </TableHead>
+                      ):(
+                        <TableHead>
                         <TableRow>
-                          <TableCell></TableCell>
                           <TableCell>Name</TableCell>
                           <TableCell>Mobile No.</TableCell>
                           <TableCell>Due Date</TableCell>
                           <TableCell>Bill No.</TableCell>
                           <TableCell>Amount</TableCell>
                           <TableCell>Penalty</TableCell>
-                          <TableCell>Fees</TableCell>
-                          <TableCell>Total Amount</TableCell>
-                          <TableCell align="left" />
                         </TableRow>
                       </TableHead>
+                      )}
+                      {this.state.toggleButton === 'pending' ? (
                       <TableBody>
                         {this.state.invoiceDetails != undefined &&
                         this.state.invoiceDetails != null ? (
-                          this.state.invoiceDetails.map((row, index) => (
-                              <TableRow key={row._id}>
-                              <TableCell component="th" scope="row">
-                                {row.is_counter ? (
-                                  <div>
-                                    {this.state.selectedInvoices.map(a => a.id).includes(row._id) ? (
-                                      <FormGroup>
-                                        <input
-                                          type="checkbox"
-                                          checked
-                                          value={row._id}>
-                                        </input>
-                                      </FormGroup>
-                                    ) : (
-                                      <FormGroup>
-                                        <input
-                                          type="checkbox"
-                                          disabled
-                                          value={row._id}>
-                                        </input>
-                                      </FormGroup>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <FormGroup onChange={(e) => this.handleCheckboxClick(e, row, index)}>
-                                    <input
-                                      type="checkbox"
-                                      value={row._id}>
-                                    </input>
-                                  </FormGroup>
-                                )}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {row.name ? row.name : '-'}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {row.mobile ? row.mobile : '-'}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {row.due_date ? row.due_date : '-'}
-                                {/* {row.bill_date} */}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {/* {row.number} */}
-
-                                {row.number ? row.number : '-'}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {/* {row.amount} */}
-                                {row.amount ? row.amount : '-'}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {/* {row.amount} */}
-                                {this.state.penaltyList[index] }
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {/* {row.amount} */}
-                                {this.state.feeList[index] > 0 ? this.state.feeList[index] : 'NA' }
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {/* {row.amount} */}
-                                {this.state.feeList[index]+row.amount+this.state.penaltyList[index] > 0 ? this.state.feeList[index]+row.amount+this.state.penaltyList[index] : 'NA'}
-                              </TableCell>
-
-                              <TableCell
-                                style={{ color: '#417505', fontWeight: 600 }}
-                                onClick={() => this.handleView(row._id,this.state.penaltyList[index])}
-                                align="right"
-                              >
-                                View
-                              </TableCell>
-                            </TableRow>
-                          ))
+                          this.getPendingInvoices()
                         ) : (
                           <Typography
                             variant="body1"
@@ -687,6 +783,22 @@ class BillPaymentsBillList extends Component {
                           </Typography>
                         )}
                       </TableBody>
+                      ):(
+                        <TableBody>
+                        {this.state.paidInvoices != undefined &&
+                          this.state.paidInvoices != null ? (
+                            this.getPaidInvoices()
+                          ) : (
+                            <Typography
+                              variant="body1"
+                              style={{ padding: '1rem', width: '100%' }}
+                              align="center"
+                            >
+                              Invoice details will be displayed here...
+                            </Typography>
+                          )}
+                        </TableBody>
+                      )}
                     </Table>
                     {this.state.totalAmount > 0 ? (
                       <Button

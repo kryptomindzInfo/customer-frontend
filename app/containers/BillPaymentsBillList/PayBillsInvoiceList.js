@@ -213,8 +213,7 @@ const PayBillsInvoiceList = props => {
           // To calculate the time difference of two dates 
           var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
           // To calculate the no. of days between two dates 
-          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
-          console.log(currentDate,dueDate,Difference_In_Days);     
+          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));      
           return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
         }
       }
@@ -231,6 +230,7 @@ const PayBillsInvoiceList = props => {
   }
 
   useEffect(() => {
+    console.log(props.invoiceList);
     setLoading(true);
     const getRule = async() => {
       const res1= await fetchPenaltyRule();
