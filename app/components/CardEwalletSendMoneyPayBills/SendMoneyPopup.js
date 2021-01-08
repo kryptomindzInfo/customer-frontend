@@ -499,6 +499,11 @@ const SendMoneyPopup = props => {
               }}
               onSubmit={async values => {
                 // setVerifyPopup(true)
+                console.log(values)
+                let receiverIdentificationAmount = values.sending_amount
+                values.receiverIdentificationAmount = receiverIdentificationAmount
+                delete values.sending_amount
+                console.log(values)
                 setLoading(true);
                 try {
                   let API = "";
@@ -506,6 +511,8 @@ const SendMoneyPopup = props => {
                     API = 'user/interBank/sendMoneyToNonWallet';
                   } else {
                     API = 'user/sendMoneyToNonWallet';
+
+
                   }
                   const res = await axios.post(
                     `${API_URL}/${API}`,
