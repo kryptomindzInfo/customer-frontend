@@ -4,16 +4,18 @@
  *
  */
 
-import React from 'react';
-import {withStyles}  from '@material-ui/core/styles'
+import React, { Fragment, useEffect, useState } from 'react';
+import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import history from '../../utils/history';
+import { API_URL, STATIC_URL } from '../App/constants';
 
 // import MenuIcon from '@material-ui/icons/Menu';
 
@@ -80,6 +82,46 @@ const styles = theme => ({
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [logoofbank, setlogoofbank] = React.useState("")
+  const [bankname, setbankname] = React.useState("")
+  const val = '';
+
+  useEffect(() => {
+    console.log("77777777777777777777777777777777777777777777777777777777777777777777")
+    fetchBanks()
+      .then(res => {
+        console.log(res)
+        const { username } = JSON.parse(localStorage.getItem('loggedUser'));
+        const filterlogo = res.data.banks.filter((value) => {
+          return value.username == username
+        })
+        console.log(filterlogo)
+        if (filterlogo.length) {
+          setlogoofbank(filterlogo[0].logo)
+          setbankname(filterlogo[0].name)
+        }
+        // setState({
+        //   listOfBanks: res.data.banks,
+        // });
+      })
+      .catch();
+  }, [val]);
+
+
+  const fetchBanks = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/user/getBanks`);
+      if (res.status === 200) {
+        // setLoading(false);
+        return res;
+      }
+      // setLoading(false);
+      return null;
+    } catch (err) {
+      // setLoading(false);
+      throw err;
+    }
+  };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -93,7 +135,9 @@ const MainHeader = props => {
     history.push('/');
   };
 
-  const { name } = JSON.parse(localStorage.getItem('loggedUser'));
+  const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
+
+  console.log("44444444444444444444444444444444444444444444444444444444444444444444444")
 
   return (
     <div className={classes.root}>
@@ -112,8 +156,12 @@ const MainHeader = props => {
             color="inherit"
             className={classes.headerTitleEwallet}
           >
-            E-WALLET
+            {/* E-WALLET */}
+            {bankname}
+
           </Typography>
+          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
+
           <div className={`headerLink ${classes.headerLink}`}>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <Typography
@@ -145,19 +193,20 @@ const MainHeader = props => {
                 // color="inherit"
                 noWrap
               >
-                Bill Payments
+                {/* Bill Payments */}
+                Pay Bills
               </Typography>
             </Link>
-            <Link to="/" style={{ textDecoration: 'none' }}>
-              <Typography
-                className={`${classes.title} ${classes.eventLink}`}
-                variant="subtitle1"
-                // color="inherit"
-                noWrap
-              >
-                Reports
+            {/* <Link to="" style={{ textDecoration: 'none' }}> */}
+            <Typography
+              className={`${classes.title} ${classes.eventLink}`}
+              variant="subtitle1"
+              // color="inherit"
+              noWrap
+            >
+              Reports
               </Typography>
-            </Link>
+            {/* </Link> */}
           </div>
           <div
             style={{
@@ -186,14 +235,22 @@ const MainHeader = props => {
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
-              keepMounted
+              // keepMounted
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              style={{ backgroundColor: "", width: "" }}
             >
-              <Link to="/profile" style={{ textDecoration: 'none' }}>
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-              </Link>
-              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+              {/* <h2 style={{ marginLeft: "20px", marginRight: "20px" }}>hello</h2> */}
+              <div style={{ width: "100px" }}>
+                <Link to="/profile" style={{ backgroundColor: '', marginLeft: "20px", marginRight: "" }}>
+                  {/* <MenuItem onClick={handleClose} style={{ marginLeft: "" }}>Profile</MenuItem> */}
+                  <span onClick={handleClose} style={{ marginLeft: "" }}>Profile</span>
+                </Link>
+                <br />
+                <Link to="" style={{ textDecoration: 'none', marginLeft: "20px", marginRight: "" }}>
+                  <span onClick={onLogoutClick} style={{ marginLeft: "" }}>Logout</span>
+                </Link>
+              </div>
             </Menu>
           </div>
         </Toolbar>

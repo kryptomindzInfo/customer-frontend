@@ -26,7 +26,7 @@ import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import { Grid, Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -332,7 +332,7 @@ class ContactPage extends Component {
                   // const res = await axios('api end point', values);
                   // console.log(res);
                   history.push('/dashboard');
-                } catch (err) {}
+                } catch (err) { }
               }}
             >
               {props => {
@@ -473,7 +473,7 @@ class ContactPage extends Component {
                   // const res = await axios('api end point', values);
                   // console.log(res);
                   history.push('/dashboard');
-                } catch (err) {}
+                } catch (err) { }
               }}
             >
               {props => {
@@ -523,7 +523,7 @@ class ContactPage extends Component {
                               disabled={isSubmitting}
                               className={classes.addMyFriendButton}
                             >
-                              Add my friend
+                              Add Contact
                             </Button>
                           </Col>
                         </Row>

@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'components/Button';
 import Row from 'components/Row';
 import Col from 'components/Col'
@@ -16,7 +16,7 @@ import { isEmpty } from 'lodash';
 
 const PayBillsInvoiceList = props => {
   const { merchant } = props;
-  const currentDate = new Date(); 
+  const currentDate = new Date();
   const [isLoading, setLoading] = useState(true);
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [selectedInvoiceList, setSelectedInvoiceList] = useState([]);
@@ -30,8 +30,8 @@ const PayBillsInvoiceList = props => {
   );
   const handleCheckboxClick = async (e, invoice, index) => {
     setButtonLoading(true);
-    if(e.target.checked) {
-      if(invoice.has_counter_invoice === true){
+    if (e.target.checked) {
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
         setTotalAmount(totalAmount + invoice.amount + counterInvoice[0].amount + penaltyList[index]);
         const data = await checkCashierFee({
@@ -69,16 +69,16 @@ const PayBillsInvoiceList = props => {
         setButtonLoading(false);
       }
     } else {
-      if(invoice.has_counter_invoice === true){
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
         const data = await checkCashierFee({
           merchant_id: merchant._id,
           amount: totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index],
         });
         setTotalFee(data.fee);
-        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id &&  val.id !== counterInvoice[0]._id);
+        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id && val.id !== counterInvoice[0]._id);
         setSelectedInvoiceList(list);
-        setTotalAmount(totalAmount-invoice.amount-counterInvoice[0].amount - penaltyList[index]);
+        setTotalAmount(totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index]);
         setButtonLoading(false);
       } else {
         const data = await checkCashierFee({
@@ -88,7 +88,7 @@ const PayBillsInvoiceList = props => {
         setTotalFee(data.fee);
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id);
         setSelectedInvoiceList(list);
-        setTotalAmount(totalAmount- invoice.amount - penaltyList[index]);
+        setTotalAmount(totalAmount - invoice.amount - penaltyList[index]);
         setButtonLoading(false);
       }
     }
@@ -96,14 +96,14 @@ const PayBillsInvoiceList = props => {
 
   const handleMultipleInvoiceSubmit = () => {
     const obj = {
-      invoices : selectedInvoiceList,
-      merchant_id : merchant._id,
+      invoices: selectedInvoiceList,
+      merchant_id: merchant._id,
     }
     props.showOTPPopup(obj);
   };
-  
+
   const getInvoiceList = () =>
-    invoiceList.map((row,index) => (
+    invoiceList.map((row, index) => (
       <TableRow key={row._id}>
         <TableCell component="th" scope="row">
           {row.is_counter ? (
@@ -117,66 +117,66 @@ const PayBillsInvoiceList = props => {
                   </input>
                 </FormGroup>
               ) : (
-                <FormGroup>
-                  <input
-                    type="checkbox"
-                    disabled
-                    value={row._id}>
-                  </input>
-                </FormGroup>
-              )}
+                  <FormGroup>
+                    <input
+                      type="checkbox"
+                      disabled
+                      value={row._id}>
+                    </input>
+                  </FormGroup>
+                )}
             </div>
           ) : (
-            <FormGroup onChange={(e) => handleCheckboxClick(e, row, index)}>
-              <input
-                type="checkbox"
-                value={row._id}>
-              </input>
-            </FormGroup>
-          )}
+              <FormGroup onChange={(e) => handleCheckboxClick(e, row, index)}>
+                <input
+                  type="checkbox"
+                  value={row._id}>
+                </input>
+              </FormGroup>
+            )}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.name ? row.name : '-'}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.mobile ? row.mobile : '-'}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.due_date ? row.due_date : '-'}
+          {/* {row.bill_date} */}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {/* {row.number} */}
+          {row.number ? row.number : '-'}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {/* {row.amount} */}
+          {row.amount ? row.amount : '-'}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {/* {row.amount} */}
+          {penaltyList[index]}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {/* {row.amount} */}
+          {feeList[index] > 0 ? feeList[index] : 'NA'}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {/* {row.amount} */}
+          {feeList[index] + row.amount + penaltyList[index] > 0 ? feeList[index] + row.amount + penaltyList[index] : 'NA'}
+        </TableCell>
+        <TableCell
+          style={{ color: '#417505', fontWeight: 600 }}
+          onClick={() => props.setEditingInvoice(row, penaltyList[index])}
+          align="right"
+        >
+          View
           </TableCell>
-          <TableCell component="th" scope="row">
-            {row.name ? row.name : '-'}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.mobile ? row.mobile : '-'}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.due_date ? row.due_date : '-'}
-            {/* {row.bill_date} */}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {/* {row.number} */}
-            {row.number ? row.number : '-'}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {/* {row.amount} */}
-            {row.amount ? row.amount : '-'}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {/* {row.amount} */}
-            {penaltyList[index] }
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {/* {row.amount} */}
-            {feeList[index] > 0 ? feeList[index] : 'NA' }
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {/* {row.amount} */}
-            {feeList[index]+row.amount + penaltyList[index] > 0 ? feeList[index]+row.amount + penaltyList[index] : 'NA'}
-          </TableCell>
-          <TableCell
-            style={{ color: '#417505', fontWeight: 600 }}
-            onClick={() => props.setEditingInvoice(row,penaltyList[index])}
-            align="right"
-          >
-            View
-          </TableCell>
-        </TableRow>
+      </TableRow>
     ));
 
-  const fetchfee = async(penaltylist) => {
-    const feelist = invoiceList.map(async (invoice,index) => {
+  const fetchfee = async (penaltylist) => {
+    const feelist = invoiceList.map(async (invoice, index) => {
       if (invoice.amount + penaltylist[index] < 0) {
         const data = await checkCashierFee({
           merchant_id: merchant._id,
@@ -191,58 +191,58 @@ const PayBillsInvoiceList = props => {
         return (data.fee);
       }
     })
-    const result= await Promise.all(feelist);
-    return({res:result, loading:false});
+    const result = await Promise.all(feelist);
+    return ({ res: result, loading: false });
   }
 
-  const calculatePenalty = async(rule) => {
+  const calculatePenalty = async (rule) => {
     const penaltylist = invoiceList.map(async invoice => {
       if (invoice.amount < 0) {
         return (0);
-      }else if(!rule.type){
+      } else if (!rule.type) {
         return (0);
       }
       const datesplit = invoice.due_date.split("/");
-      const dueDate = new Date(datesplit[2],datesplit[1]-1,datesplit[0]);
+      const dueDate = new Date(datesplit[2], datesplit[1] - 1, datesplit[0]);
       if (currentDate <= dueDate) {
-          return (0);
+        return (0);
       } else {
-        if(rule.type === 'once') {
-          return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
+        if (rule.type === 'once') {
+          return (rule.fixed_amount + (invoice.amount * rule.percentage) / 100);
         } else {
           // To calculate the time difference of two dates 
-          var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
+          var Difference_In_Time = currentDate.getTime() - dueDate.getTime();
           // To calculate the no. of days between two dates 
           var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));      
           return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
         }
       }
     });
-    const result= await Promise.all(penaltylist);
-    return(result);
+    const result = await Promise.all(penaltylist);
+    return (result);
   };
 
-  const fetchPenaltyRule = async() => {
+  const fetchPenaltyRule = async () => {
     const data = await getPenaltyRule({
       merchant_id: merchant._id,
     });
-    return(data.rule);
+    return (data.rule);
   }
 
   useEffect(() => {
     console.log(props.invoiceList);
     setLoading(true);
-    const getRule = async() => {
-      const res1= await fetchPenaltyRule();
-      const res2= await calculatePenalty(res1);
+    const getRule = async () => {
+      const res1 = await fetchPenaltyRule();
+      const res2 = await calculatePenalty(res1);
       setPenaltyList(res2);
-      const res3= await fetchfee(res2);
+      const res3 = await fetchfee(res2);
       setFeeList(res3.res);
       setLoading(res3.loading);
     }
     getRule();
-    }, []); // Or [] if effect doesn't need props or state
-  
+  }, []); // Or [] if effect doesn't need props or state
+
   if (isLoading) {
     return <Loader />;
   }
@@ -263,7 +263,7 @@ const PayBillsInvoiceList = props => {
           </div>
         </div>
         <div />
-        <Table marginTop="34px" smallTd style={{wordBreak: 'initial'}}>
+        <Table marginTop="34px" smallTd style={{ wordBreak: 'initial' }}>
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -288,12 +288,12 @@ const PayBillsInvoiceList = props => {
               {isButtonLoading ? (
                 <Loader />
               ) : (
-                `Collect Amount ${totalAmount} + Fee ${totalFee.toFixed(2)} = Total ${totalAmount+totalFee} and Pay Bill`
-              )}
+                  `Collect Amount ${totalAmount} + Fee ${totalFee.toFixed(2)} = Total ${totalAmount + totalFee} and Pay Bill`
+                )}
             </Button>
           ) : (
-            null
-          )}
+              null
+            )}
         </FormGroup>
       </Card>
     </div>

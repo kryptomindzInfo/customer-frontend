@@ -63,6 +63,7 @@ class ProfileTab extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.notify)
     let component;
     switch (this.props.tabInfo) {
       case 'personalInfo':

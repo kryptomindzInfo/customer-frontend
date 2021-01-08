@@ -219,7 +219,6 @@ const SendMoneyPopup = props => {
   const [isValidFee, setIsValidFee] = React.useState(false);
   const [walletUserName, setWalletUserName] = React.useState('');
   const [otpnumber, setotpnumber] = React.useState("")
-  const [verifyotpbutton, setverifyotpbutton] = React.useState(false)
 
   const getFeeWithDummyValue = async transType => {
     let trans_type = '';
@@ -371,34 +370,14 @@ const SendMoneyPopup = props => {
 
   const totalfuction = (values) => {
     console.log(values.sending_amount)
-    console.log(values)
     if (values.sending_amount != "") {
       let getfees = parseInt(fee.toFixed(2))
-      let getamount
-      if (values.isInclusive) {
-        getamount = parseInt((values.sending_amount - fee).toFixed(2))
-      }
-      else {
-        getamount = parseInt((values.sending_amount).toFixed(2))
-      }
-      console.log(getamount)
+      let getamount = parseInt((values.sending_amount - fee).toFixed(2))
+      let gettotal = parseInt((values.sending_amount).toFixed(2))
 
-      let gettotal = parseInt((getamount + fee).toFixed(2))
-      return `Collect ${gettotal}`
-      // return `Amount ${getamount} + Fees ${getfees} = Total ${gettotal}`
+      return `Amount ${getamount} + Fees ${getfees} = Total ${gettotal}`
     }
 
-  }
-
-  const submitotpbutton = () => {
-    console.log()
-    if (otpnumber == '111111') {
-
-    }
-    else {
-      console.log("wrong")
-      alert("Otp Number Wrong")
-    }
   }
 
 
@@ -498,21 +477,15 @@ const SendMoneyPopup = props => {
                 interbank: true,
               }}
               onSubmit={async values => {
-                // setVerifyPopup(true)
-                console.log(values)
-                let receiverIdentificationAmount = values.sending_amount
-                values.receiverIdentificationAmount = receiverIdentificationAmount
-                delete values.sending_amount
-                console.log(values)
                 setLoading(true);
+
+
                 try {
                   let API = "";
                   if (values.interbank) {
                     API = 'user/interBank/sendMoneyToNonWallet';
                   } else {
                     API = 'user/sendMoneyToNonWallet';
-
-
                   }
                   const res = await axios.post(
                     `${API_URL}/${API}`,
@@ -1320,7 +1293,7 @@ const SendMoneyPopup = props => {
                               marginBottom: '2%',
                             }}
                           >
-                            {/* {totalfuction(values)} */}
+                            {totalfuction(values)}
                             {/* Fees  {CURRENCY} {fee.toFixed(2)} + Amount{' '}
                             {CURRENCY}{' '}
                             {!values.isInclusive
@@ -1366,8 +1339,7 @@ const SendMoneyPopup = props => {
                                   color="primary"
                                 />
                               ) : (
-                                  // <Typography variant="h6">Proceed</Typography>
-                                  <Typography variant="h6">{totalfuction(values)} Proceed</Typography>
+                                  <Typography variant="h6">Proceed</Typography>
                                 )}
                             </Button>
                           </Grid>
@@ -1410,9 +1382,8 @@ const SendMoneyPopup = props => {
                         } else {
                           props.notify('Transaction Successful!', 'success');
                           setLoading(false);
-                          window.location = "/dashboard"
                           handleClose();
-                          // handleOnProceedClick();
+                          //   handleOnProceedClick();
                         }
                       } else {
                         props.notify(res.data.error, 'error');
@@ -1732,7 +1703,7 @@ const SendMoneyPopup = props => {
                                       color="primary"
                                     />
                                   ) : (
-                                      <Typography variant="h6">{totalfuction(values)} Proceed</Typography>
+                                      <Typography variant="h6">Proceed</Typography>
                                     )}
                                 </Button>
                               </Grid>
@@ -1751,12 +1722,11 @@ const SendMoneyPopup = props => {
 
       <VerifyDialogModal
         open={verifyPopup}
-        // open="true"
         onClose={handleVerifyClose}
         disableEscapeKeyDown
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="customized-dialog-title" >
+        <DialogTitle id="customized-dialog-title" onClose={handleVerifyClose}>
           Verify OTP
         </DialogTitle>
         <form autoComplete="on">
@@ -1769,7 +1739,7 @@ const SendMoneyPopup = props => {
               placeholder="OTP"
               fullWidth
               variant="outlined"
-              type="text"
+              type="password"
               className={classes.otpTextField}
               onChange={(e) => {
                 setotpnumber(e.target.value)
@@ -1779,15 +1749,11 @@ const SendMoneyPopup = props => {
           <Grid container justify="flex-end">
             <Typography className={classes.resendText}>Resend OTP?</Typography>
           </Grid>
-          <Grid container xs={6} md={6} justify="center" alignItems="center">
-            <Button variant="contained" color="primary" disableElevation onClick={() => {
-              // setverifyotpbutton(true)
-              submitotpbutton()
-            }}>
+          <Grid container xs={12} md={12} justify="center" alignItems="center">
+            <Button variant="contained" color="primary" disableElevation >
               Verify OTP
             </Button>
           </Grid>
-
         </form>
       </VerifyDialogModal>
     </Fragment>

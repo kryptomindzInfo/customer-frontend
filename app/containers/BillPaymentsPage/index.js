@@ -19,7 +19,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 import history from 'utils/history';
 
@@ -133,7 +133,9 @@ class BillPaymentsPage extends Component {
     super(props);
     this.state = {
       viewBillPopup: false,
-      dataMerchantList: {},
+      // dataMerchantList: {},
+      dataMerchantList: [],
+      searchdataMerchantList: []
     };
   }
   // useInjectReducer({ key: 'billPaymentsPage', reducer });
@@ -149,7 +151,8 @@ class BillPaymentsPage extends Component {
       .get(`${API_URL}/user/listMerchants`)
       .then(res => {
         if (res.data.status === 1) {
-          this.setState({ dataMerchantList: res.data });
+          // this.setState({ dataMerchantList: res.data, searchdataMerchantList: res.data.list });
+          this.setState({ dataMerchantList: res.data.list, searchdataMerchantList: res.data.list });
         }
         console.log('res of /user/listMerchants', res);
         if (res.data.error) {
@@ -160,6 +163,18 @@ class BillPaymentsPage extends Component {
         this.props.notify(error.response.data.error, 'error');
       });
   };
+
+  searchlistfunction = (value) => {
+    console.log(value)
+    // console.log(this.state.searchrules)
+    console.log(this.state.searchdataMerchantList)
+    const newfilterdata = this.state.searchdataMerchantList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+    this.setState({ dataMerchantList: newfilterdata })
+
+  }
 
   render() {
     const { classes } = this.props;
@@ -227,7 +242,9 @@ class BillPaymentsPage extends Component {
               >
                 <div className="iconedInput fl">
                   <i className="material-icons">search</i>
-                  <input type="text" placeholder="Search" />
+                  <input type="text" placeholder="Search" onChange={(e) => {
+                    this.searchlistfunction(e.target.value)
+                  }} />
                 </div>
               </ActionBar>
               <Grid
@@ -258,8 +275,8 @@ class BillPaymentsPage extends Component {
                       <TableRow>
                         <TableCell>Logo</TableCell>
                         <TableCell>Name</TableCell>
-                        <TableCell>Mobile No.</TableCell>
-                        <TableCell>Email ID</TableCell>
+                        {/* <TableCell>Mobile No.</TableCell>
+                        <TableCell>Email ID</TableCell> */}
                         <TableCell align="left" />
                       </TableRow>
                     </TableHead>
@@ -270,8 +287,8 @@ class BillPaymentsPage extends Component {
                         )} */}
 
                       {/* {this.state.dataMerchantList.list != undefined ? this.state.dataMerchantList.list[0].name : "error"} */}
-                      {this.state.dataMerchantList.list != undefined ? (
-                        this.state.dataMerchantList.list.map(row => (
+                      {this.state.dataMerchantList != undefined ? (
+                        this.state.dataMerchantList.map(row => (
                           <TableRow key={row._id}>
                             <TableCell component="th" scope="row">
                               <img
@@ -283,16 +300,16 @@ class BillPaymentsPage extends Component {
                               {row.name}
                             </TableCell>
 
-                            <TableCell align="left">{row.mobile}</TableCell>
-                            <TableCell align="left">{row.email}</TableCell>
+                            {/* <TableCell align="left">{row.mobile}</TableCell>
+                            <TableCell align="left">{row.email}</TableCell> */}
                             <TableCell
                               style={{ color: '#417505', fontWeight: 600 }}
                               // onClick={() => this.showViewBillPopup(row._id)}
                               onClick={() =>
-                                  history.push({
-                                    pathname: `/bill-list/${row._id}`,
-                                  })
-                                  //localStorage.setItem('merchant',row);
+                                history.push({
+                                  pathname: `/bill-list/${row._id}`,
+                                })
+                                //localStorage.setItem('merchant',row);
                               }
                               align="right"
                             >
@@ -301,16 +318,16 @@ class BillPaymentsPage extends Component {
                           </TableRow>
                         ))
                       ) : (
-                        <Grid container justify="center">
-                          <Typography
-                            variant="body1"
-                            style={{ padding: '1rem', width: '100%' }}
-                            align="center"
-                          >
-                            List of merchants will be displayed here...
+                          <Grid container justify="center">
+                            <Typography
+                              variant="body1"
+                              style={{ padding: '1rem', width: '100%' }}
+                              align="center"
+                            >
+                              List of merchants will be displayed here...
                           </Typography>
-                        </Grid>
-                      )}
+                          </Grid>
+                        )}
                     </TableBody>
                   </Table>
                 </div>

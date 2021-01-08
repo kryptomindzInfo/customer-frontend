@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -133,10 +133,12 @@ const SignUpPage = props => (
       mobile: '',
       email: '',
       address: '',
+      last_name: '',
       password: '',
       acceptedTerms: false,
     }}
     onSubmit={async values => {
+      console.log(values)
       try {
         const res = await axios.post(`${API_URL}/user/verify`, values);
         if (res.data.status === 1) {
@@ -145,6 +147,7 @@ const SignUpPage = props => (
           } else {
             localStorage.setItem('customerMobile', values.mobile);
             localStorage.setItem('customerName', values.name);
+            localStorage.setItem('customerLastName', values.last_name);
             localStorage.setItem('customerEmail', values.email);
             localStorage.setItem('customerAddress', values.address);
             localStorage.setItem('customerPassword', values.password);
@@ -230,8 +233,8 @@ const SignUpPage = props => (
                 <Form>
                   <TextField
                     id="outlined-with-name"
-                    label="Name"
-                    placeholder="Name"
+                    label="Given Name"
+                    placeholder="Given Name"
                     className={classes.textField}
                     margin="normal"
                     variant="outlined"
@@ -243,6 +246,22 @@ const SignUpPage = props => (
                   />
                   {errors.name && touched.name && (
                     <div className={classes.inputFeedback}>{errors.name}</div>
+                  )}
+                  <TextField
+                    id="outlined-with-name"
+                    label="Family Name"
+                    placeholder="Family Name"
+                    className={classes.textField}
+                    margin="normal"
+                    variant="outlined"
+                    name="last_name"
+                    value={values.last_name}
+                    size="small"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.last_name && touched.last_name && (
+                    <div className={classes.inputFeedback}>{errors.last_name}</div>
                   )}
                   <TextField
                     // id="outlined-with-name"
@@ -278,7 +297,7 @@ const SignUpPage = props => (
                   {errors.email && touched.email && (
                     <div className={classes.inputFeedback}>{errors.email}</div>
                   )}
-                  <TextField
+                  {/* <TextField
                     name="address"
                     label="Address"
                     placeholder="Address"
@@ -290,7 +309,7 @@ const SignUpPage = props => (
                     value={values.address}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                  />
+                  /> */}
                   <TextField
                     name="password"
                     label="Password"
@@ -321,8 +340,8 @@ const SignUpPage = props => (
                       {errors.acceptedTerms}
                     </div>
                   ) : (
-                    ''
-                  )}
+                      ''
+                    )}
                   <Button
                     variant="contained"
                     type="submit"

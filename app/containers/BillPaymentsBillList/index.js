@@ -31,7 +31,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
-import PayBillPopup  from './PayBillPopup';
+import PayBillPopup from './PayBillPopup';
 import ConfirmPaymentPopup from './ConfirmPaymentPopup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -194,7 +194,7 @@ class BillPaymentsBillList extends Component {
       feeList: [],
       penaltyList: [],
       selectedInvoices: [],
-      filteredPenalty:"",
+      filteredPenalty: "",
       totalAmount: 0,
       totalFee: 0,
       buttonLoading: false,
@@ -230,7 +230,7 @@ class BillPaymentsBillList extends Component {
           this.setState({ checkMerchantFee: res.data });
         }
       })
-      .catch(error => {});
+      .catch(error => { });
 
     // this.setState({ viewBillPopup: true });
 
@@ -244,7 +244,7 @@ class BillPaymentsBillList extends Component {
   };
 
   onPayBillsPopupClose = () => {
-    this.setState({payBillsPopup:false });
+    this.setState({ payBillsPopup: false });
   };
 
   showConfirmationPopup = _id => {
@@ -252,7 +252,7 @@ class BillPaymentsBillList extends Component {
   };
 
   onConfirmationPopupClose = () => {
-    this.setState({confirmationPopup: false });
+    this.setState({ confirmationPopup: false });
   };
 
   payBill = (ids) => {
@@ -293,7 +293,7 @@ class BillPaymentsBillList extends Component {
     this.setState({ viewBillPopup: false });
   };
 
-  getParticularMerchantData = async(id) => {
+  getParticularMerchantData = async (id) => {
     try {
       const res = await axios.post(`${API_URL}/user/getMerchantDetails`, {
         merchant_id: id,
@@ -301,7 +301,7 @@ class BillPaymentsBillList extends Component {
       console.log(res);
       if (res.status === 200) {
         if (res.data.status === 0) {
-          return {list: []};
+          return { list: [] };
         } else {
           return {
             list: res.data.invoices.filter(i => i.paid === 0),
@@ -311,7 +311,7 @@ class BillPaymentsBillList extends Component {
         }
       }
     } catch (err) {
-      return {list: []};
+      return { list: [] };
     }
   };
 
@@ -335,18 +335,15 @@ class BillPaymentsBillList extends Component {
     }
   };
 
-  calculatePenalty = async(rule,list) => {
+  calculatePenalty = async (rule, list) => {
     const penaltylist = list.map(async invoice => {
       if (invoice.amount < 0) {
         return (0);
       }
       const datesplit = invoice.due_date.split("/");
-      const dueDate = new Date(datesplit[2],datesplit[1]-1,datesplit[0]);
+      const dueDate = new Date(datesplit[2], datesplit[1] - 1, datesplit[0]);
       if (currentDate <= dueDate) {
         return (0);
-    } else {
-      if(rule.type === 'once') {
-        return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
       } else {
         // To calculate the time difference of two dates 
         var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
@@ -354,16 +351,14 @@ class BillPaymentsBillList extends Component {
         var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));    
         return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
       }
-      
-    }
-  });
-  const result= await Promise.all(penaltylist);
-  return(result);
+    });
+    const result = await Promise.all(penaltylist);
+    return (result);
   }
 
-  getFeeList = async(res, penaltylist) => {
-    if (res.length>0) {
-      const feelist = res.map(async (invoice,index) => {
+  getFeeList = async (res, penaltylist) => {
+    if (res.length > 0) {
+      const feelist = res.map(async (invoice, index) => {
         if (invoice.amount < 0) {
           const data = await this.checkFee({
             merchant_id: invoice.merchant_id,
@@ -378,8 +373,8 @@ class BillPaymentsBillList extends Component {
           return (data.fee);
         }
       })
-      const result= await Promise.all(feelist);
-      return {loading: false, result: result};
+      const result = await Promise.all(feelist);
+      return { loading: false, result: result };
     }
   };
 
@@ -411,7 +406,7 @@ class BillPaymentsBillList extends Component {
       this.setState({ feeList: res4.result });
       this.setState({ loading: res4.loading });
     } else {
-      this.setState({ loading: false});
+      this.setState({ loading: false });
     }
   };
 
@@ -437,8 +432,8 @@ class BillPaymentsBillList extends Component {
 
   handleCheckboxClick = async (e, invoice, index) => {
     this.setState({ buttonLoading: true });
-    if(e.target.checked) {
-      if(invoice.has_counter_invoice === true){
+    if (e.target.checked) {
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = this.state.invoiceDetails.filter((val) => val.number === `${invoice.number}C`);
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
@@ -478,15 +473,15 @@ class BillPaymentsBillList extends Component {
         this.setState({ buttonLoading: false });
       }
     } else {
-      if(invoice.has_counter_invoice === true) {
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = this.state.invoiceDetails.filter((val) => val.number === `${invoice.number}C`);
         const data = await this.checkFee({
           merchant_id: invoice.merchant_id,
           amount: this.state.totalAmount - invoice.amount - counterInvoice[0].amount - this.state.penaltyList[index],
         });
         this.setState({ totalFee: data.fee });
-        const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id  &&  val.id !== counterInvoice[0]._id);
-        this.setState({selectedInvoices: updatedList });
+        const updatedList = this.state.selectedInvoices.filter((val) => val.id !== invoice._id && val.id !== counterInvoice[0]._id);
+        this.setState({ selectedInvoices: updatedList });
         const updatedTotalAmount = this.state.totalAmount - invoice.amount - counterInvoice[0].amount - this.state.penaltyList[index];
         this.setState({ totalAmount: updatedTotalAmount });
         this.setState({ buttonLoading: false });
@@ -640,7 +635,7 @@ class BillPaymentsBillList extends Component {
     }
 
     if (this.state.loading === true) {
-      return <Loader fullPage/>;
+      return <Loader fullPage />;
     }
 
     return (
@@ -682,12 +677,15 @@ class BillPaymentsBillList extends Component {
               sm={12}
               xs={11}
             >
-              {/* <CardEwalletSendMoneyPayBills /> */}
               <Typography
                 className={classes.amountReceivedMessage}
                 variant="h5"
               >
-                {this.state.dataMerchantList.name}
+                <img
+                  src={`${STATIC_URL}${this.state.dataMerchantList.logo}`}
+                  style={{ width: '4rem', borderRadius: 20 }}
+                />
+                <span style={{ marginLeft: "2%" }}>{this.state.dataMerchantList.name}</span>
 
                 <Typography style={{ paddingTop: 5 }} variant="subtitle2">
                   {this.state.dataMerchantList.description}
@@ -706,30 +704,29 @@ class BillPaymentsBillList extends Component {
                     variant="h5"
                   >
                     Bills List
-                <Row>
-                  <Col cW="20%">
-                  <Button
-                  className={this.state.toggleButton === 'pending' ? classes.active : classes.inactive}
-                  onClick={this.togglePendingInvoice}
-                  marginRight="5px"
-                  padding="5px"
-                >
-                  Pending Invoices
-                </Button>
-                </Col>
-                <Col cW="20%">
-                <Button
-                  className={this.state.toggleButton === 'paid' ? classes.active : classes.inactive}
-                  onClick={this.togglePaidInvoice}
-                  marginLeft="20px"
-                >
-                  Paid Invoices
-                </Button>
-                </Col>
-                <Col cW="60%"></Col>
-                </Row>
+                    <Row>
+                      <Col cW="20%">
+                        <Button
+                          className={this.state.toggleButton === 'pending' ? classes.active : classes.inactive}
+                          onClick={this.togglePendingInvoice}
+                          marginRight="5px"
+                          padding="5px"
+                        >
+                          Pending Invoices
+                        </Button>
+                      </Col>
+                      <Col cW="20%">
+                        <Button
+                          className={this.state.toggleButton === 'paid' ? classes.active : classes.inactive}
+                          onClick={this.togglePaidInvoice}
+                          marginLeft="20px"
+                        >
+                          Paid Invoices
+                        </Button>
+                      </Col>
+                      <Col cW="60%"></Col>
+                    </Row>
                   </Typography>
-
                   {this.state.dataMerchantList != undefined &&
                   this.state.dataMerchantList == null ? (
                     <Typography
@@ -739,7 +736,6 @@ class BillPaymentsBillList extends Component {
                       No details present
                     </Typography>
                   ) : (
-                    <div>
                     <Table className={classes.table}>
                       {this.state.toggleButtone === 'pending' ? (
                          <TableHead>
@@ -800,6 +796,7 @@ class BillPaymentsBillList extends Component {
                         </TableBody>
                       )}
                     </Table>
+                  )}
                     {this.state.totalAmount > 0 ? (
                       <Button
                         // onClick={() => this.payBill(this.state.selectedInvoices)}
@@ -810,28 +807,24 @@ class BillPaymentsBillList extends Component {
                         {this.state.buttonLoading ? (
                           <Loader />
                         ) : (
-                          `Collect Amount ${this.state.totalAmount} + Fee ${this.state.totalFee} = Total ${this.state.totalAmount+this.state.totalFee} and Pay Bill`
+                          `Collect Amount ${this.state.totalAmount} + Fee ${this.state.totalFee} = Total ${this.state.totalAmount + this.state.totalFee} and Pay Bill`
                         )}
                       </Button>
-                    ) : (
-                      null
-                    )}
-                  </div>
-                  )}
-                    <Button 
-                      onClick={() => {
-                        this.setState({payBillsPopup:true});
-                      }}
-                      className={classes.signUpButton}
-                      style={{width:'20%'}}
-                    >
-                      Pay Other Bill
-                    </Button>
+                    ):null}
+                  <Button
+                    onClick={() => {
+                      this.setState({ payBillsPopup: true });
+                    }}
+                    className={classes.signUpButton}
+                    style={{ width: '20%' }}
+                  >
+                    Pay Other Bill
+                  </Button>
                 </div>
               </Grid>
             </Grid>
+            </Grid>
           </Grid>
-        </Grid>
         {this.state.viewBillPopup ? (
           <Popup accentedH1 bigBody close={this.closeViewBillPopup}>
             <PayBillsInvoiceDetails
@@ -852,14 +845,14 @@ class BillPaymentsBillList extends Component {
             merchant={this.state.dataMerchantList}
           />
         ) : (
-        ''
-        )}
+            ''
+          )}
         {this.state.confirmationPopup ? (
           <ConfirmPaymentPopup
             close={() => this.onConfirmationPopupClose()}
             pay={() => this.payBill(this.state.selectedInvoices)}
           />
-        ):null}
+        ) : null}
       </div>
     );
   }

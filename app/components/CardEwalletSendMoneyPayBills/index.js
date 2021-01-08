@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
-import {withStyles}  from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import history from 'utils/history';
 
@@ -81,6 +81,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   };
 
   closeSendMoneyPopup = () => {
+    console.log("click")
     this.setState({ sendMoneyPopup: false });
   };
 
@@ -159,11 +160,12 @@ class CardEwalletSendMoneyPayBills extends Component {
           </Grid>
         </Grid>
         {this.state.sendMoneyPopup ? (
-            <SendMoneyPopup
+          <SendMoneyPopup
             notify={notify}
             balance={this.state.balance}
             onClose={() => this.closeSendMoneyPopup()}
             open={this.state.sendMoneyPopup}
+
           />
         ) : null}
       </Paper>
