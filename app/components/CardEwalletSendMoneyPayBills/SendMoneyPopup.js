@@ -370,8 +370,6 @@ const SendMoneyPopup = props => {
   }, [interbank]);
 
   const totalfuction = (values) => {
-    console.log(values.sending_amount)
-    console.log(values)
     if (values.sending_amount != "") {
       let getfees = parseInt(fee.toFixed(2))
       let getamount
@@ -381,8 +379,6 @@ const SendMoneyPopup = props => {
       else {
         getamount = parseInt((values.sending_amount).toFixed(2))
       }
-      console.log(getamount)
-
       let gettotal = parseInt((getamount + fee).toFixed(2))
       return `Collect ${gettotal}`
       // return `Amount ${getamount} + Fees ${getfees} = Total ${gettotal}`
@@ -511,8 +507,6 @@ const SendMoneyPopup = props => {
                     API = 'user/interBank/sendMoneyToNonWallet';
                   } else {
                     API = 'user/sendMoneyToNonWallet';
-
-
                   }
                   const res = await axios.post(
                     `${API_URL}/${API}`,
@@ -525,9 +519,9 @@ const SendMoneyPopup = props => {
                       props.notify(res.data.message, 'error');
                     } else {
                       props.notify('Transaction Successful!', 'success');
+                      handleClose();
                       setLoading(false);
                       window.location = "/dashboard"
-                      handleClose();
                     }
                   } else {
                     props.notify(res.data.error, 'error');
