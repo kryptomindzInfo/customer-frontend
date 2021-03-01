@@ -197,7 +197,10 @@ const MainHeader = props => {
                 Pay Bills
               </Typography>
             </Link>
-            {/* <Link to="" style={{ textDecoration: 'none' }}> */}
+            <Link
+              to="/reports"
+              style={{ textDecoration: 'none' }}
+            >
             <Typography
               className={`${classes.title} ${classes.eventLink}`}
               variant="subtitle1"
@@ -206,7 +209,7 @@ const MainHeader = props => {
             >
               Reports
               </Typography>
-            {/* </Link> */}
+            </Link>
           </div>
           <div
             style={{

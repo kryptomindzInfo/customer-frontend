@@ -21,6 +21,7 @@ import ChooseYourBankPage from '../ChooseYourBankPage';
 import UploadDocumentsPage from '../UploadDocumentsPage';
 import Dashboard from '../Dashboard';
 import ContactPage from '../ContactPage';
+import Reports from '../Reports';
 import BillPaymentsPage from '../BillPaymentsPage';
 import BillPaymentsBillList from '../BillPaymentsBillList';
 import TermsConditions from '../../components/TermsConditions';
@@ -104,6 +105,12 @@ export default function App() {
           path="/dashboard"
           notify={notify}
           component={Dashboard}
+        />
+        <ProtectedRoute
+          exact
+          path="/reports"
+          notify={notify}
+          component={Reports}
         />
         <ProtectedRoute exact path="/contact" component={ContactPage} />
         <ProtectedRoute
