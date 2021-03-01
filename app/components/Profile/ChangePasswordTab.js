@@ -9,6 +9,8 @@ import { Button } from '@material-ui/core';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { API_URL } from '../../containers/App/constants';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   root: {
@@ -34,7 +36,8 @@ const styles = theme => ({
   },
 
   fieldHeading: {
-    marginBottom: '5px',
+    // marginBottom: '5px',
+    marginTop:"-10%"
   },
 
   formContainer: {
@@ -77,38 +80,46 @@ const ChangePasswordForm = props => (
       repeatPassword: '',
       password: props.password,
     }}
-    validationSchema={
-      Yup.object().shape({
-        currentPassword: Yup.mixed()
-          .required('Please enter the current password!')
-          .oneOf([Yup.ref('password'), null], "Passwords don't match"),
-        newPassword: Yup.mixed()
-          .required('Please enter the new password!')
-          .oneOf(
-            [Yup.ref('currentPassword'), null],
-            'New password cannot be same as current password',
-          ),
-        repeatPassword: Yup.mixed().when('newPassword', {
-          is: val => !!(val && val.length > 0),
-          then: Yup.string().oneOf(
-            [Yup.ref('newPassword')],
-            'Passwords do not match',
-          ),
-        }),
-      })
-    }
+
+    
+    // validationSchema={
+    //   Yup.object().shape({
+    //     currentPassword: Yup.mixed()
+    //       .required('Please enter the current password!')
+    //       .oneOf([Yup.ref('password'), null], "Passwords don't match"),
+    //     newPassword: Yup.mixed()
+    //       .required('Please enter the new password!')
+    //       .oneOf(
+    //         [Yup.ref('currentPassword'), null],
+    //         'New password cannot be same as current password',
+    //       ),
+    //     repeatPassword: Yup.mixed().when('newPassword', {
+    //       is: val => !!(val && val.length > 0),
+    //       then: Yup.string().oneOf(
+    //         [Yup.ref('newPassword')],
+    //         'Passwords do not match',
+    //       ),
+    //     }),
+    //   })
+    // }
     onSubmit={async values => {
+      
+
       const user = JSON.parse(localStorage.getItem('loggedUser'));
       const res = await axios.post(`${API_URL}/user/updatePassword`, {
         password: values.newPassword,
         username: user.username,
       });
+      
       if (res.data.status === 1) {
+
+        
+        props.notify('Password successfully updated', 'success');
         user.password = values.newPassword;
         const updateUser = JSON.stringify(user);
-        localStorage.setItem('loggedUser', updateUser);
-        props.notify('Password successfully updated', 'success');
-        window.location.reload();
+        localStorage.setItem('loggedUser', updateUser);       
+        // props.notify('Password successfully updated', 'success');
+      ;
       } else {
         props.notify('Error while updating password', 'error');
       }
@@ -226,7 +237,7 @@ const ChangePasswordForm = props => (
                 <div className={classes.errorText}>{errors.repeatPassword}</div>
               )}
             </div>
-            <div className={classes.formFields}>
+            <div className={classes.formFields} style={{marginTop:"-9%"}}>
               <Button
                 className={[classes.inputField, classes.submitButton]}
                 variant="contained"
@@ -250,13 +261,15 @@ class ChangePasswordTab extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes,notify } = this.props;
+    console.log(this.props);
+    console.log(notify);
     const { password } = JSON.parse(localStorage.getItem('loggedUser'));
     return (
       <div>
         <div className={classes.passwordContainer}>
           <span style={{ fontWeight: '600' }}>Change Password</span>
-          <ChangePasswordForm classes={classes} password={password} />
+          <ChangePasswordForm classes={classes} password={password} notify={notify} />
         </div>
       </div>
     );

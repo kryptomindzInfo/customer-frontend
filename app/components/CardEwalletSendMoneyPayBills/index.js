@@ -100,6 +100,7 @@ class CardEwalletSendMoneyPayBills extends Component {
       const res = await axios.get(`${API_URL}/user/getBalance`, { username });
       if (res.data.status === 1) {
         this.setState({ balance: res.data.balance });
+        // this.props.notify('getbalnace');
       } else {
         this.props.notify(res.data.error, 'error');
       }
@@ -111,6 +112,7 @@ class CardEwalletSendMoneyPayBills extends Component {
   render() {
     const { classes, notify } = this.props;
     const { bank } = JSON.parse(localStorage.getItem('loggedUser'));
+    
 
     return (
       <Paper elevation={0}>

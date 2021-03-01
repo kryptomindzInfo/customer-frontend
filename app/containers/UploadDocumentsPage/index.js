@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 
 import history from 'utils/history';
-import { Grid, Typography } from '@material-ui/core';
+import { Divider, Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -118,15 +118,15 @@ class UploadDocumentsPage extends Component {
     this.state.fileHashes.forEach((hash, i) => {
       hashList.push(
 
-        <Paper
-          elevation={0}
-          style={{
-            marginTop: '15px',
-            backgroundColor: ""
-          }}
-        >
+        // <Paper
+        //   elevation={0}
+        //   style={{
+        //     marginTop: '15px',
+        //     backgroundColor: ""
+        //   }}
+        // >
           <center>
-
+              <div style={{marginTop:"-10%",marginBottom:"5%",backgroundColor:""}}>
             <a target="_blank" href={`${CONTRACT_URL}${hash.hash}`}>
               <img src={documentFileIcon}
                 width="50"
@@ -134,24 +134,19 @@ class UploadDocumentsPage extends Component {
 
 
               />
+              </a>
 
               <br />
-              <span style={{ marginTop: '50px' }}>{hash.name}</span>
-            </a>
+              <a target="_blank" href={`${CONTRACT_URL}${hash.hash}`} style={{ marginTop: '50px' }}>{hash.name}</a>
+              </div>
+              <br/><br/>
+            
           </center>
+         
 
 
-          {/* <object
-            key={i}
-            color="primary"
-            data={`${CONTRACT_URL}${hash.hash}`}
-            alt=""
-            width="300"
-            height="200"
-
-
-          /> */}
-        </Paper >,
+          
+        /* </Paper >, */
       );
     });
     return hashList;

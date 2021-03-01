@@ -29,7 +29,7 @@ const styles = theme => ({
   headerTitleEwallet: {
     // paddingLeft: '6%',
     marginRight: '120px',
-    marginLeft: '20px',
+    marginLeft: '-4%',
     // fontSize: '1em',
     fontSize: '24px',
     fontWeight: 600,
@@ -71,6 +71,11 @@ const styles = theme => ({
   title: {
     color: 'white',
   },
+  colortitle :{
+color:'black',
+fontWeight:600
+
+  },
   sectionDesktop: {
     display: 'flex',
     [theme.breakpoints.up('lg')]: {
@@ -84,9 +89,14 @@ const MainHeader = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [logoofbank, setlogoofbank] = React.useState("")
   const [bankname, setbankname] = React.useState("")
+  const [selectname,setselectname] = React.useState("")
   const val = '';
 
   useEffect(() => {
+
+    const id = window.location.pathname
+    console.log(id)
+    setselectname(id)
     console.log("77777777777777777777777777777777777777777777777777777777777777777777")
     fetchBanks()
       .then(res => {
@@ -137,7 +147,8 @@ const MainHeader = props => {
 
   const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
 
-  console.log("44444444444444444444444444444444444444444444444444444444444444444444444")
+  console.log("")
+  console.log(selectname)
 
   return (
     <div className={classes.root}>
@@ -151,50 +162,62 @@ const MainHeader = props => {
             {/* <MenuIcon /> */}
           </IconButton>
           <div className={classes.sectionDesktop} />
+          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px"   style={{ marginRight: "5%",borderRadius:"50%" }} />
           <Typography
             // variant="h4"
             color="inherit"
             className={classes.headerTitleEwallet}
           >
             {/* E-WALLET */}
-            {bankname}
+            {/* {bankname} */}
+            {bankname.charAt(0).toUpperCase() + bankname.slice(1)}
 
           </Typography>
-          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
+          
 
           <div className={`headerLink ${classes.headerLink}`}>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }} >
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                className= {  selectname == "/dashboard" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 // color="inherit"
                 noWrap
               >
-                Dashboard
+                <span onClick={()=>{
+              //  setselectname('dashboard')
+              // console.log('dashboard')
+            }}>Dashboard</span>
               </Typography>
             </Link>
-            <Link to="/contact" style={{ textDecoration: 'none' }}>
+            <Link to="/contact" style={{ textDecoration: 'none' }} >
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                className={  selectname == "/contact" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 // color="inherit"
                 noWrap
               >
-                Contacts
+                 <span onClick={()=>{
+              //  setselectname('contact')
+              // console.log("contact")
+            }}>Contacts</span>
               </Typography>
             </Link>
             <Link
               to="/bill-payments-merchants"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }} 
             >
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                // className={`${classes.title} ${classes.eventLink}`}
+                className={  selectname == "/bill-payments-merchants" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 // color="inherit"
                 noWrap
               >
                 {/* Bill Payments */}
-                Pay Bills
+                <span onClick={()=>{
+              //  setselectname('paybills')
+              // console.log('paybills')
+            }}>Pay Bills</span>
               </Typography>
             </Link>
             {/* <Link to="" style={{ textDecoration: 'none' }}> */}

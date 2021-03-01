@@ -238,14 +238,21 @@ class BillPaymentsPage extends Component {
                   justifyContent: 'space-around',
                   margin: '0 auto',
                   border: '1px solid #cbd2d6',
+                  
                 }}
               >
-                <div className="iconedInput fl">
+                <div className="iconedInput fl" style={{marginLeft:"",width:"100%"}}>
                   <i className="material-icons">search</i>
                   <input type="text" placeholder="Search" onChange={(e) => {
                     this.searchlistfunction(e.target.value)
                   }} />
                 </div>
+                {/* <button
+                  
+                  className={`${'addBankButton'} `}
+                >
+                  Add Contact
+                </button> */}
               </ActionBar>
               <Grid
                 item
@@ -275,8 +282,8 @@ class BillPaymentsPage extends Component {
                       <TableRow>
                         <TableCell>Logo</TableCell>
                         <TableCell>Name</TableCell>
-                        {/* <TableCell>Mobile No.</TableCell>
-                        <TableCell>Email ID</TableCell> */}
+                        {/* <TableCell>Mobile No.</TableCell>*/}
+                        <TableCell>Email </TableCell> 
                         <TableCell align="left" />
                       </TableRow>
                     </TableHead>
@@ -298,6 +305,9 @@ class BillPaymentsPage extends Component {
                             </TableCell>
                             <TableCell component="th" scope="row">
                               {row.name}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {row.email}
                             </TableCell>
 
                             {/* <TableCell align="left">{row.mobile}</TableCell>

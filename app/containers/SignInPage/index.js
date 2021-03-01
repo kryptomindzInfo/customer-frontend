@@ -34,7 +34,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+    // background: theme.palette.vGradient,
+    background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
@@ -141,6 +142,7 @@ const SignInPage = props => {
         try {
           const res = await axios.post(`${API_URL}/user/login`, obj);
           if (res.data.status === 1) {
+            console.log(res.data)
             if (res.data.error) {
               throw res.data.message;
             } else {
@@ -156,6 +158,7 @@ const SignInPage = props => {
         } catch (err) {
           // notify(err, 'error');
           props.notify(err, 'error');
+          console.log(props)
         }
       }}
       validationSchema={Yup.object().shape({

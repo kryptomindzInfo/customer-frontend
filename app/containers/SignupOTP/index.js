@@ -33,7 +33,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+    // background: theme.palette.vGradient,
+    background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {

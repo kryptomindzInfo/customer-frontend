@@ -32,7 +32,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+     //background: theme.palette.vGradient,
+     background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
@@ -41,6 +42,19 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
+  },
+  setsignupname:{
+    width: '121px',
+    height: '38px',
+   
+    fontFamily: 'Helvetica',
+    fontSize: '25px',
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 'normal',
+    letterSpacing: '0px',
+    color: '#417505'
   },
   setupPageTitle: {
     color: theme.palette.white,
@@ -218,6 +232,9 @@ const SignUpPage = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
+
+{/* <span className={classes.setsignupname} >Sign Up</span> */}
+
                 <Typography variant="h5">Create New Account</Typography>
                 <Typography
                   variant="subtitle2"
