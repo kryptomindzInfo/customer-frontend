@@ -182,7 +182,7 @@ function OtherBillPopup(props) {
                       <CircularProgress size={30} thickness={5} color="primary" />
                     ) : (
                       <span>
-                        Get Invoices
+                        Get idInvoices
                       </span>
                     )}
                   </Button>
@@ -259,7 +259,7 @@ function OtherBillPopup(props) {
         <Table style={{wordBreak: 'initial'}} marginTop="34px" smallTd>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Nameee</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Denomination</TableCell>
               <TableCell>Unit of measure</TableCell>

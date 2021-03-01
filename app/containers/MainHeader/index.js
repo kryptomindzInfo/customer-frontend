@@ -189,7 +189,7 @@ const MainHeader = props => {
             }}>Dashboard</span>
               </Typography>
             </Link>
-            <Link to="/contact" style={{ textDecoration: 'none' }} >
+            {/* <Link to="/contact" style={{ textDecoration: 'none' }}>
               <Typography
                 className={  selectname == "/contact" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
@@ -213,14 +213,14 @@ const MainHeader = props => {
                 // color="inherit"
                 noWrap
               >
-                {/* Bill Payments */}
-                <span onClick={()=>{
-              //  setselectname('paybills')
-              // console.log('paybills')
-            }}>Pay Bills</span>
+                Pay Bills
               </Typography>
             </Link>
-            {/* <Link to="" style={{ textDecoration: 'none' }}> */}
+             */}
+            <Link
+              to="/reports"
+              style={{ textDecoration: 'none' }}
+            >
             <Typography
               className={`${classes.title} ${classes.eventLink}`}
               variant="subtitle1"
@@ -229,7 +229,7 @@ const MainHeader = props => {
             >
               Reports
               </Typography>
-            {/* </Link> */}
+            </Link>
           </div>
           <div
             style={{

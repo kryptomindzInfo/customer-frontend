@@ -138,9 +138,8 @@ class CardEwalletSendMoneyPayBills extends Component {
                   variant="outlined"
                   color="primary"
                   onClick={this.showSendMoneyPopup}
-                  startIcon={<Icon>send</Icon>}
                 >
-                  <Typography style={{ fontSize: '11px' }} noWrap>
+                  <Typography style={{ fontSize: '8px' }} noWrap>
                     Send Money
                   </Typography>
                 </Button>
@@ -151,9 +150,8 @@ class CardEwalletSendMoneyPayBills extends Component {
                   color="primary"
                   style={{ fontSize: '11px' }}
                   onClick={this.goToBillsPaymentPage}
-                  startIcon={<Icon>receipt</Icon>}
                 >
-                  <Typography style={{ fontSize: '11px' }} noWrap>
+                  <Typography style={{ fontSize: '8px' }} noWrap>
                     Pay Bills
                   </Typography>
                 </Button>

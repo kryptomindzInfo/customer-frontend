@@ -12,6 +12,7 @@ import { Grid, Typography } from '@material-ui/core';
 import {withStyles}  from '@material-ui/core/styles'
 
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
+import AlignItemsList from '../../components/MessageList';
 import MainHeader from '../MainHeader';
 import RecentActivityTab from './RecentActivityTab';
 import ContactList from './ContactList';
@@ -155,6 +156,18 @@ class Dashboard extends Component {
             >
               <CardDownloadOurApp />
             </Grid>
+            <Grid
+              className={classes.gridCardDownloadApp}
+              item
+              md={12}
+              sm={12}
+              xs={12}
+            >
+              <Typography> <h2>Messages</h2></Typography>
+             
+              <AlignItemsList />
+            </Grid>
+          
           </Grid>
 
           <Grid item md={8} sm={12} xs={12}>

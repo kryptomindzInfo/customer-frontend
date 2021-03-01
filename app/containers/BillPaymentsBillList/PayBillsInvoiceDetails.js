@@ -122,10 +122,14 @@ const PayBillsInvoiceDetails = props => {
           counter_invoices: invoice.counter_invoices || [],
         }}
         onSubmit={values => {
-          const obj = [{
-            id: invoice._id,
-            penalty: props.penalty,
-          }]
+          const obj = {
+            invoices: [{
+              id: invoice._id,
+              penalty: props.penalty,
+            }],
+            merchant_id:props.merchantId,
+
+        }
           props.showOTPPopup(obj);
         }}
         validationSchema={Yup.object().shape({

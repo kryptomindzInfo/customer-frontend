@@ -149,6 +149,7 @@ const SignInPage = props => {
               localStorage.setItem('customerLogged', res.data.token);
               const loggedUser = JSON.stringify(res.data.user);
               localStorage.setItem('loggedUser', loggedUser);
+              localStorage.setItem('mobile', res.data.user.mobile);
               localStorage.setItem('bankId', res.data.user.bank_id);
               return redirectUser(res.data.user);
             }
