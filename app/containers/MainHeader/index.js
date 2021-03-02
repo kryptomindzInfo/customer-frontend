@@ -97,19 +97,27 @@ const MainHeader = props => {
     const id = window.location.pathname
     console.log(id)
     setselectname(id)
-    console.log("77777777777777777777777777777777777777777777777777777777777777777777")
+   
     fetchBanks()
+    // 60260d450023d70007f5747b
       .then(res => {
         console.log(res)
-        const { username } = JSON.parse(localStorage.getItem('loggedUser'));
-        const filterlogo = res.data.banks.filter((value) => {
-          return value.username == username
-        })
-        console.log(filterlogo)
-        if (filterlogo.length) {
-          setlogoofbank(filterlogo[0].logo)
-          setbankname(filterlogo[0].name)
-        }
+        const { username} = JSON.parse(localStorage.getItem('loggedUser'));
+        
+       const bankId = localStorage.getItem('bankId')
+         
+          const filterlogo = res.data.banks.filter((value) => {
+
+            return value._id == bankId
+          })
+          console.log(filterlogo)
+          if (filterlogo.length) {
+            setlogoofbank(filterlogo[0].logo)
+            setbankname(filterlogo[0].name)
+          }
+         
+         
+        
         // setState({
         //   listOfBanks: res.data.banks,
         // });
