@@ -306,6 +306,7 @@ export default ({ notify }) => {
           </Typography>
         </Grid>
       </Grid>
+      
       <DashBoardTabs
         variant="scrollable"
         scrollButtons="auto"
@@ -320,6 +321,7 @@ export default ({ notify }) => {
         />
         <DashboardTab label="Payment Sent" className={classes.tab} />
         <DashboardTab label="Payment Recieved" className={classes.tab} />
+        <DashboardTab label="Bill Paid" className={classes.tab} />
       </DashBoardTabs>
       <Grid
         container

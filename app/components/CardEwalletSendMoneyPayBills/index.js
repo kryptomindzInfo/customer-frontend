@@ -138,8 +138,9 @@ class CardEwalletSendMoneyPayBills extends Component {
                   variant="outlined"
                   color="primary"
                   onClick={this.showSendMoneyPopup}
+                  // style={{backgroundColor:"red"}}
                 >
-                  <Typography style={{ fontSize: '8px' }} noWrap>
+                  <Typography style={{ fontSize: '8px' }} noWrap> 
                     Send Money
                   </Typography>
                 </Button>

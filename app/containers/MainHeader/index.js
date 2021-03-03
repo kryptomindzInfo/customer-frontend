@@ -192,7 +192,7 @@ const MainHeader = props => {
                 noWrap
               >
                 <span onClick={()=>{
-              //  setselectname('dashboard')
+                setselectname('dashboard')
               // console.log('dashboard')
             }}>Dashboard</span>
               </Typography>
@@ -230,12 +230,15 @@ const MainHeader = props => {
               style={{ textDecoration: 'none' }}
             >
             <Typography
-              className={`${classes.title} ${classes.eventLink}`}
+              className={selectname == "/reports" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
               variant="subtitle1"
               // color="inherit"
               noWrap
             >
-              Reports
+              <span onClick={()=>{
+                setselectname('reports')
+              // console.log('dashboard')
+            }}>Reports</span>
               </Typography>
             </Link>
           </div>

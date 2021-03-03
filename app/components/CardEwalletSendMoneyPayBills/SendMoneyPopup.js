@@ -75,10 +75,10 @@ const dialogStyles = () => ({
 
 const verifyDialogStyles = () => ({
   paper: {
-    minHeight: '50%',
-    maxHeight: '50%',
-    minWidth: '50%',
-    maxWidth: '50%',
+    minHeight: '40%',
+    maxHeight: '40%',
+    minWidth: '40%',
+    maxWidth: '40%',
   },
 });
 
@@ -1747,42 +1747,37 @@ const SendMoneyPopup = props => {
         open={verifyPopup}
         // open="true"
         onClose={handleVerifyClose}
-        disableEscapeKeyDown
-        aria-labelledby="form-dialog-title"
+        // disableEscapeKeyDown
+        // aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="customized-dialog-title" >
-          Verify OTP
+          Transaction Password
         </DialogTitle>
-        <form autoComplete="on">
-          <Grid container md={12} xs={12} justify="center" alignItems="center">
+        
+        <center>
+        <Grid container md={6} xs={6}  >
             <TextField
-              disabled={!isValidFee}
+              
               size="small"
               id="form-given-name"
               label="Enter Your OTP"
               placeholder="OTP"
               fullWidth
               variant="outlined"
-              type="text"
-              className={classes.otpTextField}
-              onChange={(e) => {
-                setotpnumber(e.target.value)
-              }}
+              style={{marginTop:"15%"}}
+              
+              
             />
           </Grid>
-          <Grid container justify="flex-end">
-            <Typography className={classes.resendText}>Resend OTP?</Typography>
-          </Grid>
-          <Grid container xs={6} md={6} justify="center" alignItems="center">
-            <Button variant="contained" color="primary" disableElevation onClick={() => {
-              // setverifyotpbutton(true)
-              submitotpbutton()
-            }}>
-              Verify OTP
+          </center>
+        <Grid container xs={12} md={12} justify="center" alignItems="center" >
+          
+            <Button variant="contained" color="primary"  style={{marginTop:"5%"}}>
+          Send Now
             </Button>
           </Grid>
 
-        </form>
+        
       </VerifyDialogModal>
     </Fragment>
   );

@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { Form, Formik } from 'formik';
 
@@ -70,7 +71,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '5%',
+    marginTop: '2%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -174,6 +175,19 @@ const SignupOTP = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
+              
+                <Typography
+                  
+                  
+                >
+               <span style={{
+                 marginTop:"-1%",marginLeft:"-15%",
+                 fontStyle:"Helvetica-Bold",fontSize:"25px",
+                 
+                color:"#417505"
+                   
+                  }}><ArrowBackIcon/>{' '}<strong>OTP</strong> </span>
+                </Typography>
                 <Typography
                   style={{
                     paddingTop: '10%',

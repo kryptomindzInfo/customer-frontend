@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { Form, Formik, useField } from 'formik';
 
@@ -234,8 +235,21 @@ const SignUpPage = props => (
               >
 
 {/* <span className={classes.setsignupname} >Sign Up</span> */}
+<Typography
+                  
+                  
+                >
+               <span style={{
+                 marginLeft:"-15%",marginBotton:"5%",
+                 fontStyle:"Helvetica-Bold",fontSize:"25px",
+                 
+                color:"#417505"
+                   
+                  }}><ArrowBackIcon/>{' '}<strong>Sign Up</strong> </span>
+                </Typography>
+                <br/>
 
-                <Typography variant="h5">Create New Account</Typography>
+                <Typography variant="h5" >Create New Account</Typography>
                 <Typography
                   variant="subtitle2"
                   style={{
@@ -346,7 +360,7 @@ const SignUpPage = props => (
                     </div>
                   )}
 
-                  <div style={{ paddingTop: '15px', marginTop: '6%' }}>
+                  <div style={{ paddingTop: '15px', marginTop: '2%' }}>
                     <Checkbox name="acceptedTerms" />
                     <span>
                       I have read the <u> terms and conditions </u>

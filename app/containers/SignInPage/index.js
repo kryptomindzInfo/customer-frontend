@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import * as Yup from 'yup';
 
@@ -212,6 +213,19 @@ const SignInPage = props => {
                   xs={12}
                   className={classes.setupPageRightSide}
                 >
+                  <Typography
+                  
+                  
+                  >
+                 <span style={{
+                   marginTop:"",marginLeft:"-15%",
+                   fontStyle:"Helvetica-Bold",fontSize:"25px",
+                   
+                  color:"#417505"
+                     
+                    }}><ArrowBackIcon/>{' '}<strong>Sign In</strong> </span>
+                  </Typography>
+                  <br/><br/>
                   <Typography variant="h5">Login to your account</Typography>
                   <Typography
                     variant="subtitle2"

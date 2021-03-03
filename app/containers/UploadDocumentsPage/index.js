@@ -372,11 +372,12 @@ class UploadDocumentsPage extends Component {
                   type="submit"
                   onClick={() => this.addHashes(this.state.fileHashes)}
                   // disabled={isSubmitting}
+                  style={{marginLeft:"30%"}}
                   className={classes.signInButton}
                 >
                   SAVE
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   color="primary"
                   type="submit"
@@ -384,7 +385,7 @@ class UploadDocumentsPage extends Component {
                   className={classes.skipButton}
                 >
                   Skip
-                </Button>
+                </Button> */}
               </Grid>
             </form>
           </Grid>

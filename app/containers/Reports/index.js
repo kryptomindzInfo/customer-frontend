@@ -267,7 +267,7 @@ class ReportPage extends Component {
     return (
       <div>
         <Helmet>
-          <title>Contacts</title>
+          <title>Reports</title>
           <meta name="description" content="Description of ContactPage" />
         </Helmet>
         <MainHeader />
@@ -280,8 +280,9 @@ class ReportPage extends Component {
               sm={12}
               xs={12}
             >
-              <CardEwalletSendMoneyPayBills notify={notify} />
+               <CardEwalletSendMoneyPayBills notify={notify} /> 
             </Grid>
+            <br/>
             <Grid
               className={classes.gridCardDownloadApp}
               item
