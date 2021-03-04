@@ -131,6 +131,7 @@ class UploadDocumentsPage extends Component {
               <img src={documentFileIcon}
                 width="50"
                 height="50"
+              style={{borderRadius:"50%"}}
 
 
               />
@@ -296,17 +297,17 @@ class UploadDocumentsPage extends Component {
         </Helmet>
         <HeaderChooseYourBank />
         <Typography className={classes.uploadDocumentsTitle} variant="h4">
-          Upload Documents
+          <strong>Upload Documents</strong>
         </Typography>
         <Grid container className={classes.mainContainer}>
           <Grid item md={4} sm={6} xs={12}>
             <Typography style={{ paddingLeft: '7%' }} variant="h6">
-              Please upload the following documents:
+              <strong>Please upload the following documents:</strong>
             </Typography>
             <ol style={{ paddingLeft: '11%', paddingBottom: '11%' }}>
-              <li>National Id</li>
-              <li>Passport</li>
-              <li>Driving Lisence</li>
+            <strong><li>National Id</li></strong>
+            <strong><li>Passport</li></strong>
+            <strong><li>Driving Lisence</li></strong>
             </ol>
           </Grid>
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
@@ -367,12 +368,12 @@ class UploadDocumentsPage extends Component {
                 direction="row"
               >
                 <Button
-                  disabled={this.state.fileHashes.length === 0}
+                  // disabled={this.state.fileHashes.length === 0}
                   variant="contained"
                   type="submit"
                   onClick={() => this.addHashes(this.state.fileHashes)}
                   // disabled={isSubmitting}
-                  style={{marginLeft:"30%"}}
+                  style={{marginLeft:"50%"}}
                   className={classes.signInButton}
                 >
                   SAVE

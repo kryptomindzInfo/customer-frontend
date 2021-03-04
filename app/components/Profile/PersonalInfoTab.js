@@ -30,6 +30,7 @@ const styles = theme => ({
     marginTop: '-8%',
     margin: '50px',
     marginBottom: '40px',
+    marginLeft:"125px",
   },
 
   personalInfoContainer: {
@@ -124,8 +125,8 @@ class PersonalInfoTab extends React.Component {
     const fullname = `${this.state.name} ${this.state.last_name}`
     return (
       <div>
-        <div className={classes.personalInfoContainer}>
-          <span style={{ fontWeight: '600' }}>Personal Info</span>
+        <div className={classes.personalInfoContainer} style={{marginTop:"10%",marginLeft:"10%"}}>
+          {/* <span style={{ fontWeight: '600' }}>Personal Info</span> */}
           <div className={classes.formContainer}>
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Name</span>

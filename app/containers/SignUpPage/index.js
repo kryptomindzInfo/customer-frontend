@@ -83,7 +83,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '3%',
+    marginTop: '1%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -100,6 +100,9 @@ const styles = theme => ({
     marginBottom: '0.03375rem',
     width: '70%',
     // height: '45px'
+  },
+  aliginmentright:{
+    marginLeft:"-10%"
   },
   signUpButton: {
     // margin: theme.spacing.unit,
@@ -241,14 +244,14 @@ const SignUpPage = props => (
                 >
                <span style={{
                  marginLeft:"-15%",marginBotton:"5%",
-                 fontStyle:"Helvetica-Bold",fontSize:"25px",
+                 fontStyle:"Helvetica-Bold",fontSize:"25px",marginTop:"-2%",
                  
                 color:"#417505"
                    
                   }}><ArrowBackIcon/>{' '}<strong>Sign Up</strong> </span>
                 </Typography>
                 <br/>
-
+                <div className={classes.aliginmentright}>
                 <Typography variant="h5" >Create New Account</Typography>
                 <Typography
                   variant="subtitle2"
@@ -261,6 +264,9 @@ const SignUpPage = props => (
                 >
                   Use your Mobile number to create new account at no cost.
                 </Typography>
+                
+
+                
                 <Form>
                   <TextField
                     id="outlined-with-name"
@@ -429,6 +435,7 @@ const SignUpPage = props => (
                     </Grid>
                   </Grid>
                 </Form>
+                </div>
               </Grid>
             </Grid>
           </div>

@@ -53,15 +53,32 @@ function CardDownloadOurApp(props) {
       <Grid container className={classes.mainContainer}>
         <Grid item md={12} sm={12} xs={12}>
           <Typography className={classes.cardDownloadOurAppTitle} variant="h5">
-            Download Our App
+            <strong>Download Our App</strong>
           </Typography>
           <Typography
             className={classes.cardDownloadOurAppSubitle}
             variant="subtitle2"
           >
-            Send & receive money through your mobile
+            <strong>Send & receive money through your mobile</strong>
           </Typography>
-          <a
+          <Typography
+            className={classes.cardDownloadOurAppSubitle}
+            variant="subtitle2"
+            onClick={() =>
+              window.open('https://www.apple.com/in/ios/app-store/')
+            }
+          >
+             <img className={classes.appStoreLogo} src={appStore} />
+          </Typography>
+          <Typography
+            className={classes.cardDownloadOurAppSubitle}
+            variant="subtitle2"
+            style={{marginTop:"-6%"}}
+            onClick={() => window.open('https://play.google.com/store?hl=en')}
+          >
+              <img className={classes.appStoreLogo} src={GooglePlayLogo} />
+          </Typography>
+          {/* <a
             onClick={() =>
               window.open('https://www.apple.com/in/ios/app-store/')
             }
@@ -71,7 +88,7 @@ function CardDownloadOurApp(props) {
           <br />
           <a onClick={() => window.open('https://play.google.com/store?hl=en')}>
             <img className={classes.appStoreLogo} src={GooglePlayLogo} />
-          </a>
+          </a> */}
         </Grid>
       </Grid>
     </div>

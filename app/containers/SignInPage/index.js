@@ -72,7 +72,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '5%',
+    marginTop: '1%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -223,7 +223,7 @@ const SignInPage = props => {
                    
                   color:"#417505"
                      
-                    }}><ArrowBackIcon/>{' '}<strong>Sign In</strong> </span>
+                    }}><strong>Sign In</strong> </span>
                   </Typography>
                   <br/><br/>
                   <Typography variant="h5">Login to your account</Typography>

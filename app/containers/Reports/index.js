@@ -271,8 +271,9 @@ class ReportPage extends Component {
           <meta name="description" content="Description of ContactPage" />
         </Helmet>
         <MainHeader />
-        <Grid container style={{ background: '#fcfffc' }}>
-          <Grid item md={2} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
+        {/* <Grid container style={{ background: '#fcfffc' }}> */}
+        <Grid container style={{ background: '' }}>
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '3% 0 0 3%',backgroundColor:"" }}>
             <Grid
               className={classes.gridCardEwalletSendMoney}
               item
@@ -293,8 +294,8 @@ class ReportPage extends Component {
               <CardDownloadOurApp />
             </Grid>
           </Grid>
-          <Grid item md={9} sm={12} xs={12}>
-          <Card style={{ marginTop: '50px' }}>
+          <Grid item md={8} sm={12} xs={12} style={{margin: '3% 0 0 3%',backgroundColor:""}}>
+          <Card style={{ marginTop: '37px' }}>
             <div>
                 <h3 style={{color:"green"}}>Send Money</h3>
                 <Table

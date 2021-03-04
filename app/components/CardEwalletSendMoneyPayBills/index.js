@@ -22,7 +22,7 @@ import SendMoneyPopup from './SendMoneyPopup';
 
 const styles = theme => ({
   mainContainer: {
-    paddingLeft: '11%',
+    paddingLeft: '6%',
     // textAlign: 'center',
     borderRadius: '7px',
     paddingRight: '0%',
@@ -117,46 +117,49 @@ class CardEwalletSendMoneyPayBills extends Component {
     return (
       <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
-          <Grid item md={12} xs={12} sm={12}>
+          <Grid item md={12} xs={12} sm={12} style={{backgroundColor:""}}>
             <div className={classes.eWalletTitle}>
               <span className={classes.cardEwalletTitle}>E-WALLET</span>
-              <span className={classes.cardBankTitle}>Powered by {bank}</span>
+              {/* <span className={classes.cardBankTitle}>Powered by {bank}</span> */}
             </div>
             <Typography variant="subtitle2">Available:</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
+           
             <Grid
               container
               xs={12}
               md={12}
-              spacing="4"
-              style={{ marginTop: '20px', paddingBottom: '6%' }}
+              // spacing="4"
+              style={{ marginTop: '20px', paddingBottom: '6%',backgroundColor:"" }}
             >
-              <Grid xs={12} md={6} item>
+             
                 <Button
                   variant="outlined"
                   color="primary"
                   onClick={this.showSendMoneyPopup}
+                  style={{ fontSize: '11px' }}
+                  
                   // style={{backgroundColor:"red"}}
                 >
                   <Typography style={{ fontSize: '8px' }} noWrap> 
                     Send Money
                   </Typography>
                 </Button>
-              </Grid>
-              <Grid xs={12} md={6} item>
+             
+         {' '}
                 <Button
                   variant="outlined"
                   color="primary"
-                  style={{ fontSize: '11px' }}
+                  style={{ fontSize: '11px',marginLeft:"2%" }}
                   onClick={this.goToBillsPaymentPage}
                 >
                   <Typography style={{ fontSize: '8px' }} noWrap>
                     Pay Bills
                   </Typography>
                 </Button>
-              </Grid>
+          
             </Grid>
           </Grid>
         </Grid>

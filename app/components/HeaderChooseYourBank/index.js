@@ -129,7 +129,7 @@ const HeaderChooseYourBank = props => {
               display: 'flex',
             }}
           >
-            <div
+            {/* <div
               aria-controls="simple-menu"
               aria-haspopup="true"
               onClick={handleClick}
@@ -137,7 +137,7 @@ const HeaderChooseYourBank = props => {
               style={{ marginRight: '30px', display: 'flex', color: '#fff' }}
             >
               settings
-            </div>
+            </div> */}
 
             <Typography
               variant="subtitle1"
@@ -154,7 +154,7 @@ const HeaderChooseYourBank = props => {
               style={{marginLeft:"25px",fontStyle:"Helvetica-Bold",fontSize:""}}
               onClick={onLogoutClick}
             >
-              Logout 
+              <strong>LOGOUT </strong>
             </Typography>
             <Menu
               id="simple-menu"

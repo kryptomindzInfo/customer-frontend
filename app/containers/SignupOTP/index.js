@@ -175,6 +175,7 @@ const SignupOTP = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
+                
               
                 <Typography
                   
@@ -188,17 +189,19 @@ const SignupOTP = props => (
                    
                   }}><ArrowBackIcon/>{' '}<strong>OTP</strong> </span>
                 </Typography>
+               
                 <Typography
                   style={{
                     paddingTop: '10%',
                     paddingBottom: '3%',
+                    marginLeft:"-8%",
                   }}
                   variant="h5"
                 >
                   Enter OTP for {values.mobile}
                 </Typography>
 
-                <Form>
+                <Form style={{marginLeft:"-8%",}}>
                   <TextField
                     label="OTP"
                     placeholder="OTP"
@@ -221,10 +224,12 @@ const SignupOTP = props => (
                     type="submit"
                     disabled={isSubmitting}
                     className={classes.signInButton}
+                    style={{marginTop:"5%"}}
                   >
                     SUBMIT
                   </Button>
                 </Form>
+                
               </Grid>
             </Grid>
           </div>

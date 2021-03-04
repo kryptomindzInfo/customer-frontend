@@ -25,14 +25,16 @@ const styles = theme => ({
   formFields: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '0px',
+    marginTop: '20px',
+   marginLeft:"135px",
     margin: '50px',
-    marginBottom: '40px',
+    marginBottom: '25px',
   },
 
   passwordContainer: {
     display: 'flex',
     flexDirection: 'column',
+    // marginTop:"2%"
   },
 
   fieldHeading: {
@@ -148,7 +150,9 @@ const ChangePasswordForm = props => (
       return (
         <Form>
           <div className={classes.formContainer}>
+          
             <div className={classes.formFields}>
+           
               <span className={classes.fieldHeading}>Current Password</span>
               <Field
                 id="currentPassword"
@@ -179,6 +183,7 @@ const ChangePasswordForm = props => (
                 </div>
               )}
             </div>
+        
 
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>New Password</span>
@@ -237,7 +242,7 @@ const ChangePasswordForm = props => (
                 <div className={classes.errorText}>{errors.repeatPassword}</div>
               )}
             </div>
-            <div className={classes.formFields} style={{marginTop:"-9%"}}>
+            <div className={classes.formFields} style={{marginTop:"-2%"}}>
               <Button
                 className={[classes.inputField, classes.submitButton]}
                 variant="contained"
@@ -267,8 +272,8 @@ class ChangePasswordTab extends React.Component {
     const { password } = JSON.parse(localStorage.getItem('loggedUser'));
     return (
       <div>
-        <div className={classes.passwordContainer}>
-          <span style={{ fontWeight: '600' }}>Change Password</span>
+        <div className={classes.passwordContainer} style={{marginTop:"8%",marginLeft:"10%"}}>
+          {/* <span style={{ fontWeight: '600' }}>Change Password</span> */}
           <ChangePasswordForm classes={classes} password={password} notify={notify} />
         </div>
       </div>
