@@ -23,6 +23,7 @@ const styles = theme => ({
   formFields: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent:'center',
     marginTop: '0px',
     margin: '50px',
     marginBottom: '40px',
@@ -45,13 +46,14 @@ const styles = theme => ({
 
   inputField: {
     height: '40px',
-    width: '130%',
+    width: '500px',
   },
   updateButton: {
     color: '#417505',
     fontSize: '13px',
     fontWeight: '600',
     textTransform: 'capitalize',
+    width:'50%'
   },
   errorText: {
     color: 'red',
@@ -60,8 +62,9 @@ const styles = theme => ({
   },
   submitButton: {
     background: theme.palette.primary.main,
-    marginTop: '10%',
+    marginLeft: '25%',
     color: theme.palette.white,
+    width:'50%',
     '&:hover': {
       background: theme.palette.primary.hover,
     },
@@ -255,7 +258,7 @@ class ChangePasswordTab extends React.Component {
     return (
       <div>
         <div className={classes.passwordContainer}>
-          <span style={{ fontWeight: '600' }}>Change Password</span>
+          {/* <span style={{ fontWeight: '600' }}>Change Password</span> */}
           <ChangePasswordForm classes={classes} password={password} />
         </div>
       </div>

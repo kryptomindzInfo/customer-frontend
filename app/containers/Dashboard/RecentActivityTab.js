@@ -296,11 +296,11 @@ export default ({ notify }) => {
           alignItems="flex-start"
         >
           <Typography variant="h5" style={{ textAlign: 'start' }}>
-            Recent Activity
+            Recent Activities
           </Typography>
           <Typography
             variant="subtitle1"
-            styles={{ textAlign: 'start', color: '#9ea0a5' }}
+            style={{ textAlign: 'start', color: 'grey' }}
           >
             E-wallet activity
           </Typography>

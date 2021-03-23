@@ -28,7 +28,7 @@ const styles = theme => ({
   },
   headerTitleEwallet: {
     // paddingLeft: '6%',
-    marginRight: '120px',
+    marginRight: '50px',
     marginLeft: '20px',
     // fontSize: '1em',
     fontSize: '24px',
@@ -82,8 +82,8 @@ const styles = theme => ({
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoofbank, setlogoofbank] = React.useState("")
-  const [bankname, setbankname] = React.useState("")
+  const [logoofbank, setlogoofbank] = React.useState("");
+  const [bankname, setbankname] = React.useState("");
   const val = '';
 
   useEffect(() => {
@@ -156,17 +156,18 @@ const MainHeader = props => {
             color="inherit"
             className={classes.headerTitleEwallet}
           >
-            {/* E-WALLET */}
-            {bankname}
+            E-WALLET
+            {/* {bankname} */}
 
           </Typography>
-          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
+          {/* <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} /> */}
 
           <div className={`headerLink ${classes.headerLink}`}>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
               <Typography
                 className={`${classes.title} ${classes.eventLink}`}
                 variant="subtitle1"
+                style={{borderBottom: props.active==='dashboard' ? '1px solid white' : '0'}}
                 // color="inherit"
                 noWrap
               >

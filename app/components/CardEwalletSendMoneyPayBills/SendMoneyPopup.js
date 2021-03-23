@@ -173,6 +173,7 @@ const dialogContentStyles = makeStyles(theme => ({
     },
   },
   toggleButtonDisabled: {
+    width: '150px',
     color: '#1a841b',
     border: '1px solid #1a841b',
   },
@@ -190,6 +191,8 @@ const dialogContentStyles = makeStyles(theme => ({
   proceedButton: {
     paddingTop: '1%',
     paddingBottom: '1%',
+    color:'white',
+    backgroundColor:'green',
   },
   inputFeedback: {
     color: 'red',
@@ -419,7 +422,7 @@ const SendMoneyPopup = props => {
           <div>
             <span>Send Money</span>
           </div>
-          <div>
+          <span style={{marginTop:'10px'}}>
             <IconButton
               aria-label="close"
               className={classes.closeButton}
@@ -427,7 +430,7 @@ const SendMoneyPopup = props => {
             >
               <CloseIcon />
             </IconButton>
-          </div>
+          </span>
         </DialogTitle>
         <Grid xs={12} md={12} container direction="column" alignItems="center">
           <Grid item>

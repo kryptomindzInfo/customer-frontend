@@ -34,7 +34,8 @@ const styles = theme => ({
 
   personalInfoContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    // flexDirection: 'column',
+    justifyContnt:'center'
   },
 
   fieldHeading: {
@@ -49,7 +50,7 @@ const styles = theme => ({
 
   inputField: {
     height: '40px',
-    width: '130%',
+    width: '500px',
   },
   updateButton: {
     color: '#417505',
@@ -125,7 +126,7 @@ class PersonalInfoTab extends React.Component {
     return (
       <div>
         <div className={classes.personalInfoContainer}>
-          <span style={{ fontWeight: '600' }}>Personal Info</span>
+          {/* <span style={{ fontWeight: '600' }}>Personal Info</span> */}
           <div className={classes.formContainer}>
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Name</span>
@@ -166,7 +167,7 @@ class PersonalInfoTab extends React.Component {
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Email</span>
               <FormControl variant="outlined">
-                <OutlinedInput
+                <TextField
                   id="email"
                   type="text"
                   value={this.state.email}
@@ -201,7 +202,7 @@ class PersonalInfoTab extends React.Component {
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Phone Number</span>
               <FormControl variant="outlined">
-                <OutlinedInput
+                <TextField
                   id="mobileNumber"
                   type="text"
                   disabled
