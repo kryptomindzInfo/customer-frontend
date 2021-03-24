@@ -187,8 +187,8 @@ export default ({ notify }) => {
         setRow(r);
         setAllRow(r);
         console.log(r)
-        setTransferRow(r.filter(row => row.Value.tx_data.tx_type === 'DR'))
-        setReceiveRow(r.filter(row => row.Value.tx_data.tx_type === 'CR'))
+        setTransferRow(r.filter(row => row.Value.tx_data[0].tx_type === 'DR'))
+        setReceiveRow(r.filter(row => row.Value.tx_data[0].tx_type === 'CR'))
         // setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
         // setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
       })
@@ -350,14 +350,17 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
+                      <Typography variant="subtitle1">
+                          {row.Value.tx_data[0].master_id}
+                        </Typography>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <Typography style={{ color: '#4a90e2' }} variant="h6">
+                        {/* <Typography style={{ color: '#4a90e2' }} variant="h6">
                           {row.Value.remarks}
-                        </Typography>
+                        </Typography> */}
                         <Typography color="primary" variant="subtitle1">
-                          {/* {row.Value.action} */}
-                          {actionfunction(row.Value)}
+                          {row.Value.tx_data[0].tx_details}
+                          {/* {actionfunction(row.Value)} */}
                           {/* {row.value != undefined &&
                             <>
                               {row.value.tx_data.tx_type == "CR" ? (
@@ -375,7 +378,7 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="h6">XOF:{row.Value.amount}</Typography>
+                        <Typography variant="h6">XOF:{row.Value.tx_data[0].amount}</Typography>
                       </TableCell>
                     </>
                   }

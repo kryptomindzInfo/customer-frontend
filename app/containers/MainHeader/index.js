@@ -205,7 +205,7 @@ const MainHeader = props => {
             <Typography
               className={`${classes.title} ${classes.eventLink}`}
               variant="subtitle1"
-              // color="inherit"
+              style={{borderBottom: props.active==='report' ? '1px solid white' : '0'}}
               noWrap
             >
               Reports
