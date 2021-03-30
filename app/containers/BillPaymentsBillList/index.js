@@ -101,6 +101,7 @@ const styles = theme => ({
     minWidth: 700,
     background: 'white',
     wordBreak: 'initial',
+    marginTop: '20px',
   },
   recentActivitiesTable: {
     margin: '0 auto',
@@ -187,6 +188,7 @@ class BillPaymentsBillList extends Component {
       invoiceDetails: [],
       paidInvoices: [],
       filteredInvoice: {},
+      totalPendingAmount: 0,
       loading: false,
       payBillsPopup: false,
       toggleButton: "pending",
@@ -378,6 +380,19 @@ class BillPaymentsBillList extends Component {
     }
   };
 
+  getTotalPending = async (list,penalty,fees) => {
+    const amount = list.reduce(function (a, b) {
+      return a + b.amount;
+    }, 0);
+    const p = penalty.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    const f = fees.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    return (amount + p + f);
+  }
+
   togglePaidInvoice = async () => {
     if (this.state.toggleButton !== 'paid') {
       await  this.setState({ toggleButton: 'paid' });;
@@ -403,6 +418,9 @@ class BillPaymentsBillList extends Component {
       const res3 = await this.calculatePenalty(res1.rule,res2.list);
       this.setState({ penaltyList: res3 });
       const res4 = await this.getFeeList(res2.list,res3);
+      const res5 = await this.getTotalPending(res2.list,res3,res4.result);
+      console.log(res5);
+      this.setState({ totalPendingAmount: res5 });
       this.setState({ feeList: res4.result });
       this.setState({ loading: res4.loading });
     } else {
@@ -717,7 +735,7 @@ class BillPaymentsBillList extends Component {
                         fontSize="large"
                       />
                       </span>
-                    Bills List
+                    My Bills List
                     <Row style={{marginTop:'12px'}}>
                       <Col cW="20%">
                         <Button
@@ -738,7 +756,8 @@ class BillPaymentsBillList extends Component {
                           Paid Invoices
                         </Button>
                       </Col>
-                      <Col cW="60%"></Col>
+                      <Col cW="30%"></Col>
+                      <Col cW="30%" style={{fontSize:'20px'}}>Total Amount Pending: XOF {this.state.totalPendingAmount}</Col>
                     </Row>
                   </Typography>
                   {this.state.dataMerchantList != undefined &&
@@ -832,7 +851,7 @@ class BillPaymentsBillList extends Component {
                     className={classes.signUpButton}
                     style={{ width: '20%' }}
                   >
-                    Pay Other Bill
+                    Pay Other Bills
                   </Button>
                 </div>
               </Grid>

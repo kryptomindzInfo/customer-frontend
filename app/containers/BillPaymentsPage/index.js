@@ -18,6 +18,7 @@ import makeSelectBillPaymentsPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import MerchantList from './MerchantList';
 import Icon from '@material-ui/core/Icon';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
@@ -230,31 +231,12 @@ class BillPaymentsPage extends Component {
                   specimen book.
                 </Typography>
               </Typography> */}
-              <ActionBar
-                marginBottom="33px"
-                inputWidth="100%"
-                className="clr"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  margin: '0 auto',
-                  border: '1px solid #cbd2d6',
-                  
-                }}
+              <Grid container className={classes.listOfMerchantsContainer}
+              item
+              
               >
-                <div className="iconedInput fl" style={{marginLeft:"",width:"100%"}}>
-                  <i className="material-icons">search</i>
-                  <input type="text" placeholder="Search" onChange={(e) => {
-                    this.searchlistfunction(e.target.value)
-                  }} />
-                </div>
-                {/* <button
-                  
-                  className={`${'addBankButton'} `}
-                >
-                  Add Contact
-                </button> */}
-              </ActionBar>
+                <MerchantList notify={this.props.notify} />
+              </Grid>
               <Grid
                 item
                 className={classes.gridCardEwalletSendMoney}
@@ -319,9 +301,9 @@ class BillPaymentsPage extends Component {
                             <TableCell component="th" scope="row">
                               {row.name}
                             </TableCell>
-                            <TableCell component="th" scope="row">
+                            {/* <TableCell component="th" scope="row">
                               {row.email}
-                            </TableCell>
+                            </TableCell> */}
 
                             {/* <TableCell align="left">{row.mobile}</TableCell>
                             <TableCell align="left">{row.email}</TableCell> */}

@@ -150,7 +150,7 @@ const ReportPage = (props) => {
           <td>
             {trans.Value.tx_data[0].tx_details}</td>
           <td>
-          Wallet to Wallet 
+          <td>{trans.Value.tx_data[0].tx_name}</td>
           </td>
           <td>{trans.Value.tx_data[0].tx_type === 'DR' ? trans.Value.tx_data[0].amount : '-'}</td>
           <td>{trans.Value.tx_data[0].tx_type === 'CR' ? trans.Value.tx_data[0].amount : '-'}</td>
@@ -262,16 +262,16 @@ const ReportPage = (props) => {
                          All Transactions
                         </option>
                         <option value={'WallettoWallet'}>
-                          Wallet to Wallet
+                          Send Money to Wallet
                         </option>
                         <option value={'WallettoNonWallet'}>
-                          Wallet to Non Wallet
+                          Send Money to Non Wallet
                         </option>
                         <option value={'NonWallettoNonWallet'}>
-                          Non Wallet to Wallet
+                          Received money from Non Wallet
                         </option>
                         <option value={'WallettoMerchant'}>
-                          Wallet to Merchant
+                          Bill Payments
                         </option>
 
                       </SelectInput>

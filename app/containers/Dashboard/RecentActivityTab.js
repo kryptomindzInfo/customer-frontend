@@ -23,7 +23,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableCell from '@material-ui/core/TableCell';
 import { API_URL } from '../App/constants';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const DashBoardTabs = withStyles({
   indicator: {
@@ -276,7 +275,6 @@ export default ({ notify }) => {
         justify="flex-start"
         alignItems="flex-start"
         className={classes.paper}
-        // style={{backgroundColor:"red"}}
       >
         <Grid
           item
@@ -288,25 +286,22 @@ export default ({ notify }) => {
           justify="flex-start"
           alignItems="flex-start"
         >
-          <AssignmentIcon style={{color:"green",fontSize:"40px",marginTop:"10%"}}/>
-          {/* <Icon
-            fontSize="medium"
+          <Icon
+            fontSize="large"
             style={{
               color: 'green',
-              fontSize: 40,
+              fontSize: 50,
             }}
           >
             playlist_add_check
-          </Icon> */}
+          </Icon>
         </Grid>
         <Grid
           column
           direction="column"
           justify="flex-start"
           alignItems="flex-start"
-          style={{marginLeft:"-2%"}}
         >
-
           <Typography variant="h5" style={{ textAlign: 'start' }}>
             Recent Activities
           </Typography>
@@ -318,7 +313,6 @@ export default ({ notify }) => {
           </Typography>
         </Grid>
       </Grid>
-      
       <DashBoardTabs
         variant="scrollable"
         scrollButtons="auto"
@@ -333,7 +327,6 @@ export default ({ notify }) => {
         />
         <DashboardTab label="Payment Sent" className={classes.tab} />
         <DashboardTab label="Payment Recieved" className={classes.tab} />
-
         <DashboardTab label="Invoices Paid" className={classes.tab} />
       </DashBoardTabs>
       <Grid
@@ -357,24 +350,23 @@ export default ({ notify }) => {
                   {row.Value.action != 'Create' &&
                     <>
                       <TableCell>
-                        <Typography variant="subtitle1">
+                        <Typography variant="h7">
                           {getDate(row.Timestamp)}
                         </Typography>
-                        <Typography variant="subtitle1">
+                        <Typography variant="h7">
                           {getTime(row.Timestamp)}
                         </Typography>
                       </TableCell>
                       <TableCell>
-                      <Typography variant="subtitle1">
+                      <Typography variant="h7">
                           {row.Value.tx_data[0].master_id}
                         </Typography>
                       </TableCell>
                       <TableCell component="th" scope="row">
-
                         {/* <Typography style={{ color: '#4a90e2' }} variant="h6">
                           {row.Value.remarks}
                         </Typography> */}
-                        <Typography color="primary" variant="subtitle1">
+                        <Typography color="primary" variant="h7">
                           {row.Value.tx_data[0].tx_details}
                           {/* {actionfunction(row.Value)} */}
                           {/* {row.value != undefined &&
@@ -389,12 +381,12 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="subtitle1">
+                        <Typography variant="h7">
                           {row.Value.tx_data[0].tx_name}
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="h6">XOF:{row.Value.tx_data[0].amount}</Typography>
+                        <Typography variant="h7">XOF:{row.Value.tx_data[0].amount}</Typography>
                       </TableCell>
                     </>
                   }

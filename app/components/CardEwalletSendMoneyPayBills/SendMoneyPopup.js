@@ -75,10 +75,10 @@ const dialogStyles = () => ({
 
 const verifyDialogStyles = () => ({
   paper: {
-    minHeight: '40%',
-    maxHeight: '40%',
-    minWidth: '40%',
-    maxWidth: '40%',
+    minHeight: '50%',
+    maxHeight: '50%',
+    minWidth: '50%',
+    maxWidth: '50%',
   },
 });
 
@@ -129,7 +129,6 @@ const dialogContentStyles = makeStyles(theme => ({
     paddingLeft: '1%',
     paddingRight: '1%',
     paddingBottom: '1%',
-    paddingTop:"3%"
   },
   dialogTextField: {
     paddingLeft: '1%',
@@ -433,7 +432,7 @@ const SendMoneyPopup = props => {
             </IconButton>
           </span>
         </DialogTitle>
-        <Grid xs={12} md={12} container direction="column" alignItems="center" style={{marginTop:"2%"}}>
+        <Grid xs={12} md={12} container direction="column" alignItems="center">
           <Grid item>
             <ToggleButtonGroup
               className={classes.toggleButtonGroup}
@@ -441,7 +440,6 @@ const SendMoneyPopup = props => {
               value="center"
               onChange={handleOnchange}
               exclusive
-              style={{backgroundColor:""}}
             >
               <ToggleButton
                 key={2}
@@ -890,9 +888,8 @@ const SendMoneyPopup = props => {
                               style={{
                                 paddingBottom: '0px',
                                 marginBottom: '',
-                                backgroundColor:""
                               }}
-                              
+                              className={classes.dialogTextFieldGrid}
                             >
                               <FormControlLabel
                                 style={{
@@ -920,11 +917,10 @@ const SendMoneyPopup = props => {
                               />
                             </Grid>
 
-                            <Grid item >
+                            <Grid item className={classes.dialogTextFieldGrid}>
                               <FormControlLabel
                                 style={{
                                   color: '#9ea0a5',
-                                  marginTop:"-1%"
                                 }}
                                 control={
                                   <Checkbox
@@ -1227,7 +1223,7 @@ const SendMoneyPopup = props => {
                             item
                             direction="column"
                             alignItems="flex-start"
-                            // style={{ marginBottom: '', marginLeft: '1%' }}
+                            style={{ marginBottom: '', marginLeft: '1%' }}
                           >
                             <FormControlLabel
                               control={
@@ -1252,7 +1248,7 @@ const SendMoneyPopup = props => {
                             item
                             direction="column"
                             alignItems="flex-start"
-                            // style={{ marginBottom: '', marginLeft: '1%' }}
+                            style={{ marginBottom: '', marginLeft: '1%' }}
                           >
                             <FormControlLabel
                               control={
@@ -1278,7 +1274,7 @@ const SendMoneyPopup = props => {
                             item
                             direction="column"
                             alignItems="flex-start"
-                            // className={classes.dialogTextFieldGrid}
+                            className={classes.dialogTextFieldGrid}
                           >
                             <FormControlLabel
                               onChange={handleChange}
@@ -1354,11 +1350,11 @@ const SendMoneyPopup = props => {
                               color="primary"
                               disableElevation
                               onClick={handleSubmit}
-                              // disabled={
-                              //   isSubmitting ||
-                              //   !isValidFee ||
-                              //   !values.acceptedTerms
-                              // }
+                              disabled={
+                                isSubmitting ||
+                                !isValidFee ||
+                                !values.acceptedTerms
+                              }
                             >
                               {loading ? (
                                 <CircularProgress
@@ -1476,19 +1472,17 @@ const SendMoneyPopup = props => {
                               container
                               direction="column"
                               spacing={2}
-                              style={{ marginTop: '5%' }}
+                              style={{ marginTop: '10%' }}
                             >
                               <Grid
                                 container
                                 direction="row"
                                 alignItems="flex-start"
-                                style={{marginTop:"-5%"}}
                               >
                                 <Grid
                                   item
                                   xs={2}
                                   className={classes.dialogTextFieldGrid}
-                                  style={{marginTop:"2%"}}
                                 >
                                   <TextField
                                     size="small"
@@ -1615,7 +1609,7 @@ const SendMoneyPopup = props => {
                                     color: 'rgb(53, 153, 51)',
                                     // marginBottom: '10px',
                                     marginLeft: '10px',
-                                    fontSize: '12px',
+                                    fontSize: '15px',
                                   }}
                                 >
                                   Wallet Balance: {CURRENCY}{' '}
@@ -1625,7 +1619,7 @@ const SendMoneyPopup = props => {
                                   <span
                                     style={{
                                       color: 'rgb(53, 153, 51)',
-                                      fontSize: '12px',
+                                      fontSize: '15px',
                                     }}
                                   >
                                     {CURRENCY} {fee.toFixed(2)} will be charged as fee and{' '}
@@ -1669,7 +1663,7 @@ const SendMoneyPopup = props => {
                                   />
                                 </Grid>
                               </Grid>
-                              <div style={{ marginTop: '2%',marginLeft:"2%" }}>
+                              <div style={{ marginBottom: '' }}>
                                 <FormControlLabel
                                   control={
                                     <Checkbox
@@ -1690,7 +1684,7 @@ const SendMoneyPopup = props => {
                                   }
                                 />
                               </div>
-                              <div style={{ marginTop: '-3%',marginLeft:"2%" }}>
+                              <div>
                                 <FormControlLabel
                                   control={<Checkbox name="acceptedTerms" />}
                                   label={
@@ -1714,7 +1708,6 @@ const SendMoneyPopup = props => {
                                 justify="space-between"
                                 alignItems="center"
                                 className={classes.dialogTextFieldGrid}
-                                style={{marginTop:"-5%"}}
                               >
                                 <Button
                                   type="submit"
@@ -1724,12 +1717,12 @@ const SendMoneyPopup = props => {
                                   variant="contained"
                                   color="primary"
                                   disableElevation
-                                  // disabled={
-                                  //   isSubmitting ||
-                                  //   !isValidFee ||
-                                  //   walletUserName === '' ||
-                                  //   !values.acceptedTerms
-                                  // }
+                                  disabled={
+                                    isSubmitting ||
+                                    !isValidFee ||
+                                    walletUserName === '' ||
+                                    !values.acceptedTerms
+                                  }
                                 >
                                   {loading ? (
                                     <CircularProgress
@@ -1759,37 +1752,42 @@ const SendMoneyPopup = props => {
         open={verifyPopup}
         // open="true"
         onClose={handleVerifyClose}
-        // disableEscapeKeyDown
-        // aria-labelledby="form-dialog-title"
+        disableEscapeKeyDown
+        aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="customized-dialog-title" >
-          Transaction Password
+          Verify OTP
         </DialogTitle>
-        
-        <center>
-        <Grid container md={6} xs={6}  >
+        <form autoComplete="on">
+          <Grid container md={12} xs={12} justify="center" alignItems="center">
             <TextField
-              
+              disabled={!isValidFee}
               size="small"
               id="form-given-name"
               label="Enter Your OTP"
               placeholder="OTP"
               fullWidth
               variant="outlined"
-              style={{marginTop:"15%"}}
-              
-              
+              type="text"
+              className={classes.otpTextField}
+              onChange={(e) => {
+                setotpnumber(e.target.value)
+              }}
             />
           </Grid>
-          </center>
-        <Grid container xs={12} md={12} justify="center" alignItems="center" >
-          
-            <Button variant="contained" color="primary"  style={{marginTop:"5%"}}>
-          Send Now
+          <Grid container justify="flex-end">
+            <Typography className={classes.resendText}>Resend OTP?</Typography>
+          </Grid>
+          <Grid container xs={6} md={6} justify="center" alignItems="center">
+            <Button variant="contained" color="primary" disableElevation onClick={() => {
+              // setverifyotpbutton(true)
+              submitotpbutton()
+            }}>
+              Verify OTP
             </Button>
           </Grid>
 
-        
+        </form>
       </VerifyDialogModal>
     </Fragment>
   );

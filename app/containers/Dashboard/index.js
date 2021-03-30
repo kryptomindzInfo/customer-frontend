@@ -198,18 +198,13 @@ class Dashboard extends Component {
               >
                 <ContactList notify={notify} />
               </Grid>
-              {/* <Grid container className={classes.recentActivitiesTable}>
-                <RecentActivityTab notify={notify} />
-              </Grid> */}
+
             </Grid>
             <br/>
 
             <Grid
               className={classes.recentActivitiesTable}
                item
-              // md={12}
-              // sm={12}
-              // xs={12}
             >
               
                 <RecentActivityTab notify={notify} />   
@@ -217,6 +212,7 @@ class Dashboard extends Component {
             </Grid>
             {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>
+        
         </Grid>
       </div>
     );
