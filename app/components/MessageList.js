@@ -86,10 +86,13 @@ export default function AlignItemsList() {
   }, []);
 
   return (
+    <div>
+    <Typography> <h2 style={{textAlign:'center', display: messages.length > 0 ? '': 'none' }}>My Messages</h2></Typography>
     <List className={classes.root}>
         {messages.length > 0 ? (
             getItems()
-        ): "ww"}
+        ): ""}
     </List>
+    </div>
   );
 }

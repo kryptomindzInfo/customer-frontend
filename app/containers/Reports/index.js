@@ -34,8 +34,52 @@ const ReportPage = (props) => {
   const [enddate, setEnddate] = useState(new Date());
   const [transList, setTransList] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [transactionType, setTransactionType ] = useState('all');
+  const [merchantList, setMerchantList ] = useState([]);
+  const [contactList, setContactList ] = useState([]);
+  const [merchant, setMerchant ] = useState('all');
+  const [contact, setContact ] = useState('all');
 
-  const getTransactionHistory = async notify => {
+  const getAllMerchants = async() => {
+    try{
+      const res = await axios.get(`${API_URL}/user/listMerchants`);
+      if (res.status === 200) {
+        console.log(res);
+        if (res.data.status === 0) {
+          props.notify(res.data.message, 'error');
+        } else {
+          return ({list: res.data.list});
+        }
+      } else {
+        props.notify(res.data.error, 'error');
+      }
+    } catch (err) {
+      throw err;
+    }
+     
+  };
+
+  const getAllContacts = async() => {
+    try{
+      const res = await axios.get(`${API_URL}/user/getContactList`);
+      if (res.status === 200) {
+        console.log(res);
+        if (res.data.status === 0) {
+          props.notify(res.data.message, 'error');
+        } else {
+          return ({list: res.data.contacts.wallet});
+        }
+      } else {
+        props.notify(res.data.error, 'error');
+      }
+    } catch (err) {
+      throw err;
+    }
+     
+  };
+
+
+  const getTransactionHistory = async (list) => {
     try {
       const controller = 'getTransactionHistory';
       const { username } = JSON.parse(localStorage.getItem('loggedUser'));
@@ -68,9 +112,28 @@ const ReportPage = (props) => {
   };
 
   const getReport = async() => {
+    console.log(merchant);
     setLoading(true);
-    const history = await getTransactionHistory();
-    setTransList(history.res);
+    const merchantlist = await getAllMerchants();
+    const contactlist = await getAllContacts();
+    setContactList(contactlist.list);
+    console.log(merchantlist);
+    setMerchantList(merchantlist.list);
+    
+    const history = await getTransactionHistory(merchantlist.list);
+    if(transactionType === 'WallettoMerchant' && merchant==='all'){
+      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant'));
+    }else if(transactionType === 'WallettoMerchant'){
+      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant' && row.Value.tx_data[0].tx_details === `Transferred to ${merchant}`));
+    }else if (transactionType === 'WallettoWallet' && contact==='all'){
+      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet'));
+    }else if(transactionType === 'WallettoWallet'){
+      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet' && row.Value.tx_data[0].tx_details === `Transferred to ${contact}`));
+    }else if (transactionType === 'all'){
+      setTransList(history.res);
+    }else{
+      setTransList([]);
+    }
     setLoading(history.loading);
   };
 
@@ -110,14 +173,19 @@ const ReportPage = (props) => {
     
       <Fragment>
         <Helmet>
-          <title>Contacts</title>
+          <title>Reports</title>
           <meta name="description" content="Description of ContactPage" />
         </Helmet>
         <MainHeader active="report"/>
           <Container>
             <Row style={{marginBottom:"0px", marginTop:'20px'}}>
               <Col cW='40%'>
-              <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'200px'}}>
+              <Card
+                marginBottom="20px"
+                buttonMarginTop="32px"
+                smallValue
+                style={{height: transactionType==='WallettoMerchant' ||transactionType==='WallettoWallet' ? '330px' : '200px'}}
+              >
               <h4 style={{color:"green"}}><b>Date Range</b></h4> 
                   <Row>
                     <Col cW='48%'>
@@ -180,25 +248,29 @@ const ReportPage = (props) => {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <h4 style={{color:"green",marginTop:'10px'}}><b>Transaction Type</b></h4>     
+              <h4 style={{color:"green",marginTop:'10px'}}><b>Transaction Type</b></h4>     
                   <Row>
                     <Col cW='60%'>
                     <FormGroup>
                       <SelectInput
+                       value={transactionType}
+                       onChange={(event)=>{
+                        setTransactionType(event.target.value);
+                       }}
                       >
-                        <option value={'w2w'}>
+                        <option value={'all'}>
                          All Transactions
                         </option>
-                        <option value={'w2w'}>
-                          Wallet to wallet
+                        <option value={'WallettoWallet'}>
+                          Wallet to Wallet
                         </option>
-                        <option value={'w2w'}>
+                        <option value={'WallettoNonWallet'}>
                           Wallet to Non Wallet
                         </option>
-                        <option value={'w2w'}>
+                        <option value={'NonWallettoNonWallet'}>
                           Non Wallet to Wallet
                         </option>
-                        <option value={'w2w'}>
+                        <option value={'WallettoMerchant'}>
                           Wallet to Merchant
                         </option>
 
@@ -214,18 +286,71 @@ const ReportPage = (props) => {
                       </Button>
                     </Col>
                   </Row>
-                  {/* <Row style={{marginTop: '10px'}}> 
-                  <Col cW='25%'> </Col>
-                  <Col cW='50%'> 
-                      <Button
-                        style={{padding:'9px', color:'green', backgroundColor:'white', margin:'auto' }}
-                        onClick={()=>getReport()}
+              {transactionType==='WallettoMerchant' ? (
+                <div>
+                  <h4 style={{color:"green",marginTop:'10px'}}><b>Select Merchant</b></h4>  
+                  <Row>
+                    <Col cW='60%'>
+                    <FormGroup>
+                      <SelectInput
+                       value={merchant}
+                       onChange={(event)=>{
+                        setMerchant(event.target.value);
+                       }}
                       >
-                        Get Report
-                      </Button>
-                     </Col>
-                  <Col cW='25%'> </Col>
-                  </Row> */}
+                         <option  value={'all'}>
+                              All
+                          </option>
+                        {merchantList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={b.name}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+
+                      </SelectInput>
+                    </FormGroup>
+                    </Col>
+                    <Col cW='40%'>
+                    </Col>
+                  </Row>
+
+                </div>
+              ) : ''}
+               {transactionType==='WallettoWallet' ? (
+                <div>
+                  <h4 style={{color:"green",marginTop:'10px'}}><b>Select Contact</b></h4>  
+                  <Row>
+                    <Col cW='60%'>
+                    <FormGroup>
+                      <SelectInput
+                       value={contact}
+                       onChange={(event)=>{
+                        setContact(event.target.value);
+                       }}
+                      >
+                        <option  value={'all'}>
+                              All
+                          </option>
+                        {contactList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={b.name}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+
+                      </SelectInput>
+                    </FormGroup>
+                    </Col>
+                    <Col cW='40%'>
+                    </Col>
+                  </Row>
+
+                </div>
+              ) : ''}
+              
               </Card>
               </Col>
               <Col  cW='30%'>

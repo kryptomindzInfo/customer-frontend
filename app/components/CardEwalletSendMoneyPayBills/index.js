@@ -119,6 +119,14 @@ class CardEwalletSendMoneyPayBills extends Component {
           <Grid item md={12} xs={12} sm={12}>
             <div className={classes.eWalletTitle}>
               <span className={classes.cardEwalletTitle}>E-Wallet</span>
+              <Button
+                  accentedOutline
+                  style={{height:'fit-contnt', margin:'auto', marginLeft:'100px'}}
+                >
+                  {/* <Typography noWrap> */}
+                     My Bank
+                  {/* </Typography> */}
+                </Button>
               {/* <span className={classes.cardBankTitle}>Powered by {bank}</span> */}
             </div>
             <Typography variant="subtitle2" style = {{color:"grey"}}>Available</Typography>
@@ -162,7 +170,7 @@ class CardEwalletSendMoneyPayBills extends Component {
         </Grid>
         {this.state.sendMoneyPopup ? (
           <SendMoneyPopup
-            notify={notify}
+            notify={this.props.notify}
             balance={this.state.balance}
             onClose={() => this.closeSendMoneyPopup()}
             open={this.state.sendMoneyPopup}

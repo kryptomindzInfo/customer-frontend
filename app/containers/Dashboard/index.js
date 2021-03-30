@@ -163,7 +163,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              {/* <Typography> <h2 style={{textAlign:'center'}}>Messages</h2></Typography> */}
+              
              
               <AlignItemsList />
             </Grid>

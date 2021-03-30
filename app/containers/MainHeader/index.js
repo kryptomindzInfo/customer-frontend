@@ -7,6 +7,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
+import NotificationIcon from '@material-ui/icons/Notifications';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -82,46 +83,12 @@ const styles = theme => ({
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoofbank, setlogoofbank] = React.useState("");
-  const [bankname, setbankname] = React.useState("");
+  const logoofbank = JSON.parse(localStorage.getItem('bank')).logo;
+  const bankname = JSON.parse(localStorage.getItem('bank')).name;
   const val = '';
 
-  useEffect(() => {
-    console.log("77777777777777777777777777777777777777777777777777777777777777777777")
-    fetchBanks()
-      .then(res => {
-        console.log(res)
-        const { username } = JSON.parse(localStorage.getItem('loggedUser'));
-        const filterlogo = res.data.banks.filter((value) => {
-          return value.username == username
-        })
-        console.log(filterlogo)
-        if (filterlogo.length) {
-          setlogoofbank(filterlogo[0].logo)
-          setbankname(filterlogo[0].name)
-        }
-        // setState({
-        //   listOfBanks: res.data.banks,
-        // });
-      })
-      .catch();
-  }, [val]);
 
 
-  const fetchBanks = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/user/getBanks`);
-      if (res.status === 200) {
-        // setLoading(false);
-        return res;
-      }
-      // setLoading(false);
-      return null;
-    } catch (err) {
-      // setLoading(false);
-      throw err;
-    }
-  };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -137,7 +104,6 @@ const MainHeader = props => {
 
   const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
 
-  console.log("44444444444444444444444444444444444444444444444444444444444444444444444")
 
   return (
     <div className={classes.root}>
@@ -156,11 +122,10 @@ const MainHeader = props => {
             color="inherit"
             className={classes.headerTitleEwallet}
           >
-            E-WALLET
-            {/* {bankname} */}
+            {bankname}
 
           </Typography>
-          {/* <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} /> */}
+          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
 
           <div className={`headerLink ${classes.headerLink}`}>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
@@ -219,6 +184,14 @@ const MainHeader = props => {
               justifyContent: 'center',
             }}
           >
+            <div
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              className="material-icons fl"
+              style={{ marginRight: '10px', display: 'flex', color: '#fff' }}
+            >
+              <NotificationIcon />
+            </div>
             <div
               aria-controls="simple-menu"
               aria-haspopup="true"

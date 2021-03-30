@@ -422,7 +422,7 @@ const SendMoneyPopup = props => {
           <div>
             <span>Send Money</span>
           </div>
-          <span style={{marginTop:'10px'}}>
+          <span style={{marginTop:'10px', float:'right'}}>
             <IconButton
               aria-label="close"
               className={classes.closeButton}
@@ -1412,12 +1412,14 @@ const SendMoneyPopup = props => {
                           // handleOnProceedClick();
                         }
                       } else {
-                        props.notify(res.data.error, 'error');
+                        props.notify(res.data.message, 'error');
+                        handleClose();
                       }
                       setLoading(false);
                     } catch (err) {
                       props.notify('Something went wrong', 'error');
                       setLoading(false);
+                      handleClose();
                     }
                   }}
                   validationSchema={Yup.object().shape({
