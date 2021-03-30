@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import * as Yup from 'yup';
 
@@ -34,7 +35,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+    // background: theme.palette.vGradient,
+    background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
@@ -70,7 +72,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '5%',
+    marginTop: '1%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -141,6 +143,7 @@ const SignInPage = props => {
         try {
           const res = await axios.post(`${API_URL}/user/login`, obj);
           if (res.data.status === 1) {
+            console.log(res.data)
             if (res.data.error) {
               throw res.data.message;
             } else {
@@ -159,6 +162,7 @@ const SignInPage = props => {
         } catch (err) {
           // notify(err, 'error');
           props.notify(err, 'error');
+          console.log(props)
         }
       }}
       validationSchema={Yup.object().shape({
@@ -211,6 +215,19 @@ const SignInPage = props => {
                   xs={12}
                   className={classes.setupPageRightSide}
                 >
+                  <Typography
+                  
+                  
+                  >
+                 <span style={{
+                   marginTop:"",marginLeft:"-15%",
+                   fontStyle:"Helvetica-Bold",fontSize:"25px",
+                   
+                  color:"#417505"
+                     
+                    }}><strong>Sign In</strong> </span>
+                  </Typography>
+                  <br/><br/>
                   <Typography variant="h5">Login to your account</Typography>
                   <Typography
                     variant="subtitle2"

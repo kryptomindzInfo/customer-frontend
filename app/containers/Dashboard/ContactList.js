@@ -9,11 +9,12 @@ import { API_URL } from '../App/constants';
 
 const useStyles = makeStyles(() => ({
   contactIcon: {
-    width: '80px',
-    height: '80px',
+    width: '50px',
+    height: '50px',
     cursor: 'pointer',
     color: '#fff',
     background: 'rgba(92,155,5,0.8)',
+   
   },
 }));
 
@@ -78,6 +79,7 @@ export default ({ notify }) => {
                     direction="column"
                     alignItems="center"
                     justify="center"
+                     style={{backgroundColor:""}}
                   >
                     <Avatar
                       alt="bank logo"
@@ -88,7 +90,7 @@ export default ({ notify }) => {
                         variant="h5"
                         style={{
                           textTransform: 'capitalize',
-                          fontWeight: '700',
+                          fontWeight: '400',
                         }}
                       >
                         {Object.values(row.name)[0]}
@@ -99,7 +101,7 @@ export default ({ notify }) => {
                       style={{
                         textTransform: 'capitalize',
                         fontWeight: '600',
-                        paddingTop: '5%',
+                        paddingTop: '3%',
                       }}
                     >
                       {row.name}

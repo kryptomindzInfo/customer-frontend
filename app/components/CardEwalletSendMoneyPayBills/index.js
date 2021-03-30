@@ -22,7 +22,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 const styles = theme => ({
   mainContainer: {
-    paddingLeft: '11%',
+    paddingLeft: '6%',
     // textAlign: 'center',
     borderRadius: '7px',
     paddingRight: '0%',
@@ -101,6 +101,7 @@ class CardEwalletSendMoneyPayBills extends Component {
       const res = await axios.get(`${API_URL}/user/getBalance`, { username });
       if (res.data.status === 1) {
         this.setState({ balance: res.data.balance });
+        // this.props.notify('getbalnace');
       } else {
         this.props.notify(res.data.error, 'error');
       }
@@ -112,12 +113,14 @@ class CardEwalletSendMoneyPayBills extends Component {
   render() {
     const { classes, notify } = this.props;
     const { bank } = JSON.parse(localStorage.getItem('loggedUser'));
+    
 
     return (
       <Paper elevation={0}>
         <Grid container className={classes.mainContainer}>
-          <Grid item md={12} xs={12} sm={12}>
+          <Grid item md={12} xs={12} sm={12} style={{backgroundColor:""}}>
             <div className={classes.eWalletTitle}>
+
               <span className={classes.cardEwalletTitle}>E-Wallet</span>
               <Button
                   accentedOutline
@@ -133,27 +136,33 @@ class CardEwalletSendMoneyPayBills extends Component {
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
+           
             <Grid
               container
               xs={12}
               md={12}
-              spacing="4"
-              style={{ marginTop: '20px', paddingBottom: '6%' }}
+              // spacing="4"
+              style={{ marginTop: '20px', paddingBottom: '6%',backgroundColor:"" }}
             >
-              <Grid xs={12} md={6} item>
+             
                 <Button
                   accentedOutline
                   // variant="outlined"
                   // color="primary"
                   onClick={this.showSendMoneyPopup}
+                  style={{ fontSize: '11px' }}
+                  
+                  // style={{backgroundColor:"red"}}
                 >
+
                   {/* <Typography noWrap> */}
                     <i><SendIcon/></i> Send Money
                   {/* </Typography> */}
                 </Button>
-              </Grid>
-              <Grid xs={12} md={6} item>
+             
+         {' '}
                 <Button
+
                   accentedOutline
                   // variant="outlined"
                   // color="primary"
@@ -164,7 +173,7 @@ class CardEwalletSendMoneyPayBills extends Component {
                     <i><InsertDriveFileIcon/></i>Pay Bills
                   {/* </Typography> */}
                 </Button>
-              </Grid>
+          
             </Grid>
           </Grid>
         </Grid>

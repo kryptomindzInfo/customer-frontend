@@ -124,7 +124,7 @@ const ChooseYourBankPage = props => {
       </Helmet>
       <HeaderChooseYourBank />
       <Grid container justify="center">
-        <Grid item md={12}>
+        <Grid item md={12} style={{marginTop:"1%"}}>
           <Typography className={classes.titleChooseBank} variant="h4">
             Choose Your Bank
           </Typography>
@@ -149,6 +149,7 @@ const ChooseYourBankPage = props => {
                     xs={12}
                     key={i}
                     className={classes.bankCard}
+                    style={{marginTop:"-2%"}}
                   >
                     {lob.logo ? (
                       <Avatar
