@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 import axios from 'axios';
 
 import history from 'utils/history';
-import { Grid, Typography } from '@material-ui/core';
+import { Divider, Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -118,40 +118,36 @@ class UploadDocumentsPage extends Component {
     this.state.fileHashes.forEach((hash, i) => {
       hashList.push(
 
-        <Paper
-          elevation={0}
-          style={{
-            marginTop: '15px',
-            backgroundColor: ""
-          }}
-        >
+        // <Paper
+        //   elevation={0}
+        //   style={{
+        //     marginTop: '15px',
+        //     backgroundColor: ""
+        //   }}
+        // >
           <center>
-
+              <div style={{marginTop:"-10%",marginBottom:"5%",backgroundColor:""}}>
             <a target="_blank" href={`${CONTRACT_URL}${hash.hash}`}>
               <img src={documentFileIcon}
                 width="50"
                 height="50"
+              style={{borderRadius:"50%"}}
 
 
               />
+              </a>
 
               <br />
-              <span style={{ marginTop: '50px' }}>{hash.name}</span>
-            </a>
+              <a target="_blank" href={`${CONTRACT_URL}${hash.hash}`} style={{ marginTop: '50px' }}>{hash.name}</a>
+              </div>
+              <br/><br/>
+            
           </center>
+         
 
 
-          {/* <object
-            key={i}
-            color="primary"
-            data={`${CONTRACT_URL}${hash.hash}`}
-            alt=""
-            width="300"
-            height="200"
-
-
-          /> */}
-        </Paper >,
+          
+        /* </Paper >, */
       );
     });
     return hashList;
@@ -301,17 +297,17 @@ class UploadDocumentsPage extends Component {
         </Helmet>
         <HeaderChooseYourBank />
         <Typography className={classes.uploadDocumentsTitle} variant="h4">
-          Upload Documents
+          <strong>Upload Documents</strong>
         </Typography>
         <Grid container className={classes.mainContainer}>
           <Grid item md={4} sm={6} xs={12}>
             <Typography style={{ paddingLeft: '7%' }} variant="h6">
-              Please upload the following documents:
+              <strong>Please upload the following documents:</strong>
             </Typography>
             <ol style={{ paddingLeft: '11%', paddingBottom: '11%' }}>
-              <li>National Id</li>
-              <li>Passport</li>
-              <li>Driving Lisence</li>
+            <strong><li>National Id</li></strong>
+            <strong><li>Passport</li></strong>
+            <strong><li>Driving Lisence</li></strong>
             </ol>
           </Grid>
           <Grid item className={classes.uploadAreaGrid} md={4} sm={6} xs={11}>
@@ -372,16 +368,17 @@ class UploadDocumentsPage extends Component {
                 direction="row"
               >
                 <Button
-                  disabled={this.state.fileHashes.length === 0}
+                  // disabled={this.state.fileHashes.length === 0}
                   variant="contained"
                   type="submit"
                   onClick={() => this.addHashes(this.state.fileHashes)}
                   // disabled={isSubmitting}
+                  style={{marginLeft:"50%"}}
                   className={classes.signInButton}
                 >
                   SAVE
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   color="primary"
                   type="submit"
@@ -389,7 +386,7 @@ class UploadDocumentsPage extends Component {
                   className={classes.skipButton}
                 >
                   Skip
-                </Button>
+                </Button> */}
               </Grid>
             </form>
           </Grid>

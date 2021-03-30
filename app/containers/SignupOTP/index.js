@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { Form, Formik } from 'formik';
 
@@ -33,7 +34,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+    // background: theme.palette.vGradient,
+    background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
@@ -69,7 +71,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '5%',
+    marginTop: '2%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -173,17 +175,33 @@ const SignupOTP = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
+                
+              
+                <Typography
+                  
+                  
+                >
+               <span style={{
+                 marginTop:"-1%",marginLeft:"-15%",
+                 fontStyle:"Helvetica-Bold",fontSize:"25px",
+                 
+                color:"#417505"
+                   
+                  }}><ArrowBackIcon/>{' '}<strong>OTP</strong> </span>
+                </Typography>
+               
                 <Typography
                   style={{
                     paddingTop: '10%',
                     paddingBottom: '3%',
+                    marginLeft:"-8%",
                   }}
                   variant="h5"
                 >
                   Enter OTP for {values.mobile}
                 </Typography>
 
-                <Form>
+                <Form style={{marginLeft:"-8%",}}>
                   <TextField
                     label="OTP"
                     placeholder="OTP"
@@ -206,10 +224,12 @@ const SignupOTP = props => (
                     type="submit"
                     disabled={isSubmitting}
                     className={classes.signInButton}
+                    style={{marginTop:"5%"}}
                   >
                     SUBMIT
                   </Button>
                 </Form>
+                
               </Grid>
             </Grid>
           </div>

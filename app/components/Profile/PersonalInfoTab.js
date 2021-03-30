@@ -27,9 +27,10 @@ const styles = theme => ({
   formFields: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '0px',
+    marginTop: '-8%',
     margin: '50px',
     marginBottom: '40px',
+    marginLeft:"125px",
   },
 
   personalInfoContainer: {
@@ -125,13 +126,15 @@ class PersonalInfoTab extends React.Component {
     const fullname = `${this.state.name} ${this.state.last_name}`
     return (
       <div>
-        <div className={classes.personalInfoContainer}>
+
+        <div className={classes.personalInfoContainer} style={{marginTop:"10%",marginLeft:"10%"}}>
+
           {/* <span style={{ fontWeight: '600' }}>Personal Info</span> */}
           <div className={classes.formContainer}>
             <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Name</span>
               <FormControl variant="outlined">
-                <TextField
+                <OutlinedInput
                   id="name"
                   disabled
                   error={this.state.nameErr}
@@ -146,10 +149,28 @@ class PersonalInfoTab extends React.Component {
                 </span>
               </FormControl>
             </div>
-            <div className={classes.formFields}>
+            {/* <div className={classes.formFields}>
               <span className={classes.fieldHeading}>Last Name</span>
               <FormControl variant="outlined">
                 <TextField
+                  id="name"
+                  disabled
+                  error={this.state.nameErr}
+                  type="text"
+                  className={classes.inputField}
+                  value={this.state.last_name}
+                  // value={fullname}
+                  labelWidth={0}
+                />
+                <span className={classes.errorText}>
+                  {this.state.nameErrorText}
+                </span>
+              </FormControl>
+            </div> */}
+            <div className={classes.formFields}>
+              <span className={classes.fieldHeading}>Last Name</span>
+              <FormControl variant="outlined">
+                <OutlinedInput
                   id="name"
                   disabled
                   error={this.state.nameErr}

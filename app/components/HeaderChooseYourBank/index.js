@@ -129,22 +129,32 @@ const HeaderChooseYourBank = props => {
               display: 'flex',
             }}
           >
-            <div
+            {/* <div
               aria-controls="simple-menu"
               aria-haspopup="true"
               onClick={handleClick}
               className="material-icons fl"
-              style={{ marginRight: '10px', display: 'flex', color: '#fff' }}
+              style={{ marginRight: '30px', display: 'flex', color: '#fff' }}
             >
               settings
-            </div>
+            </div> */}
 
             <Typography
               variant="subtitle1"
               color="inherit"
               className={classes.headerLogout}
+              style={{marginLeft:"-10%"}}
+              
             >
               Welcome {name}
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color="inherit"
+              style={{marginLeft:"25px",fontStyle:"Helvetica-Bold",fontSize:""}}
+              onClick={onLogoutClick}
+            >
+              <strong>LOGOUT </strong>
             </Typography>
             <Menu
               id="simple-menu"

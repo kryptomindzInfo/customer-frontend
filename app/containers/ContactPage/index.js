@@ -151,8 +151,8 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData(7896543290, 'Hatim', 'Pay Now'),
-  createData(7896543290, 'Hatim', 'Pay Now'),
+  createData(7896543290, 'Vejant Arora','vedant@gmail.com', 'Pay Now'),
+  createData(7896543290, 'Anil Shah','anil@gmail.com', 'Pay Now',),
   // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
@@ -276,7 +276,7 @@ class ContactPage extends Component {
                     <TableRow>
                       <TableCell>Number</TableCell>
                       <TableCell align="right">Name</TableCell>
-                      <TableCell align="right" />
+                      <TableCell align="right" >Email</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

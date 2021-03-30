@@ -32,7 +32,7 @@ const styles = theme => ({
   gridCongratsMerchantRecentActivities: {
     margin: '0 auto',
     borderRadius: '4px',
-    paddingTop: '5%',
+     paddingTop: '5%',
 
     [theme.breakpoints.down('sm')]: {
       margin: '3% 3%',
@@ -45,7 +45,7 @@ const styles = theme => ({
     margin: '0 auto',
     borderRadius: '4px',
     background: 'white',
-    // border: '1px solid #cbd2d6',
+ 
 
     boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
     [theme.breakpoints.down('sm')]: {
@@ -135,9 +135,10 @@ class Dashboard extends Component {
           <title>Dashboard</title>
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
+
         <MainHeader active={'dashboard'}/>
         <Grid container style={{ background: '#fcfffc' }}>
-          <Grid item md={3} sm={12} xs={12} style={{ margin: '2% 0 0 4%' }}>
+          <Grid item md={3} sm={12} xs={12} style={{ margin: '3% 0 0 3%' }}>
             <Grid
               className={classes.gridCardEwalletSendMoney}
               item
@@ -156,7 +157,7 @@ class Dashboard extends Component {
             >
               <CardDownloadOurApp />
             </Grid>
-            <Grid
+            {/* <Grid
               className={classes.gridCardDownloadApp}
               item
               md={12}
@@ -166,17 +167,18 @@ class Dashboard extends Component {
               
              
               <AlignItemsList />
-            </Grid>
+            </Grid> */}
           
           </Grid>
 
-          <Grid item md={8} sm={12} xs={12}>
+          <Grid item md={8} sm={12} xs={12} style={{backgroundColor:"",marginLeft:"3%"}}>
             <Grid
               className={classes.gridCongratsMerchantRecentActivities}
               item
-              md={11}
+              md={12}
               sm={12}
               xs={12}
+              style={{backgroundColor:""}}
             >
               {/* <CardEwalletSendMoneyPayBills /> */}
               <Typography
@@ -190,19 +192,28 @@ class Dashboard extends Component {
                 </Typography>
               </Typography>
 
-              <Grid container className={classes.listOfMerchantsContainer}>
+              <Grid container className={classes.listOfMerchantsContainer}
+              item
+              
+              >
                 <ContactList notify={notify} />
               </Grid>
+              {/* <Grid container className={classes.recentActivitiesTable}>
+                <RecentActivityTab notify={notify} />
+              </Grid> */}
             </Grid>
+            <br/>
 
             <Grid
               className={classes.recentActivitiesTable}
-              item
-              md={11}
-              sm={12}
-              xs={12}
+               item
+              // md={12}
+              // sm={12}
+              // xs={12}
             >
-              <RecentActivityTab notify={notify} />
+              
+                <RecentActivityTab notify={notify} />   
+               
             </Grid>
             {/* <CardEwalletSendMoneyPayBills /> */}
           </Grid>

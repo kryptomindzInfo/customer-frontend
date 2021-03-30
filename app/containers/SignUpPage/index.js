@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import history from 'utils/history';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { Form, Formik, useField } from 'formik';
 
@@ -32,7 +33,8 @@ const styles = theme => ({
     fontSize: '11px',
   },
   setupPageLeftSide: {
-    background: theme.palette.vGradient,
+     //background: theme.palette.vGradient,
+     background:'linear-gradient(to bottom, #6cac6a, #102910)',
     height: '100vh',
     overflow: 'hidden',
     [theme.breakpoints.down('sm')]: {
@@ -41,6 +43,19 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
+  },
+  setsignupname:{
+    width: '121px',
+    height: '38px',
+   
+    fontFamily: 'Helvetica',
+    fontSize: '25px',
+    fontWeight: 'bold',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 'normal',
+    letterSpacing: '0px',
+    color: '#417505'
   },
   setupPageTitle: {
     color: theme.palette.white,
@@ -68,7 +83,7 @@ const styles = theme => ({
     paddingLeft: '20%',
   },
   setupPageRightSide: {
-    marginTop: '3%',
+    marginTop: '1%',
     paddingLeft: '10%',
     overflow: 'hidden',
 
@@ -85,6 +100,9 @@ const styles = theme => ({
     marginBottom: '0.03375rem',
     width: '70%',
     // height: '45px'
+  },
+  aliginmentright:{
+    marginLeft:"-10%"
   },
   signUpButton: {
     // margin: theme.spacing.unit,
@@ -218,7 +236,23 @@ const SignUpPage = props => (
                 xs={12}
                 className={classes.setupPageRightSide}
               >
-                <Typography variant="h5">Create New Account</Typography>
+
+{/* <span className={classes.setsignupname} >Sign Up</span> */}
+<Typography
+                  
+                  
+                >
+               <span style={{
+                 marginLeft:"-15%",marginBotton:"5%",
+                 fontStyle:"Helvetica-Bold",fontSize:"25px",marginTop:"-2%",
+                 
+                color:"#417505"
+                   
+                  }}><ArrowBackIcon/>{' '}<strong>Sign Up</strong> </span>
+                </Typography>
+                <br/>
+                <div className={classes.aliginmentright}>
+                <Typography variant="h5" >Create New Account</Typography>
                 <Typography
                   variant="subtitle2"
                   style={{
@@ -230,6 +264,9 @@ const SignUpPage = props => (
                 >
                   Use your Mobile number to create new account at no cost.
                 </Typography>
+                
+
+                
                 <Form>
                   <TextField
                     id="outlined-with-name"
@@ -329,7 +366,7 @@ const SignUpPage = props => (
                     </div>
                   )}
 
-                  <div style={{ paddingTop: '15px', marginTop: '6%' }}>
+                  <div style={{ paddingTop: '15px', marginTop: '2%' }}>
                     <Checkbox name="acceptedTerms" />
                     <span>
                       I have read the <u> terms and conditions </u>
@@ -398,6 +435,7 @@ const SignUpPage = props => (
                     </Grid>
                   </Grid>
                 </Form>
+                </div>
               </Grid>
             </Grid>
           </div>

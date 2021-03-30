@@ -40,6 +40,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    
   },
 });
 
@@ -78,7 +79,7 @@ class DocumentsTab extends React.Component {
     return (
       <div>
         <div className={classes.documentContainer}>
-          <span style={{ fontWeight: '600' }}>Documents</span>
+          {/* <span style={{ fontWeight: '600' }}>Documents</span> */}
           <div className={classes.documentsTab}>
             {this.state.documentList.length > 0 ? (
               this.state.documentList.map((value, index) => (

@@ -29,6 +29,7 @@ const styles = theme => ({
   },
   headerTitleEwallet: {
     // paddingLeft: '6%',
+
     marginRight: '50px',
     marginLeft: '20px',
     // fontSize: '1em',
@@ -72,6 +73,11 @@ const styles = theme => ({
   title: {
     color: 'white',
   },
+  colortitle :{
+color:'black',
+fontWeight:600
+
+  },
   sectionDesktop: {
     display: 'flex',
     [theme.breakpoints.up('lg')]: {
@@ -83,6 +89,7 @@ const styles = theme => ({
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const logoofbank = JSON.parse(localStorage.getItem('bank')).logo;
   const bankname = JSON.parse(localStorage.getItem('bank')).name;
   const val = '';
@@ -117,44 +124,53 @@ const MainHeader = props => {
             {/* <MenuIcon /> */}
           </IconButton>
           <div className={classes.sectionDesktop} />
+          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px"   style={{ marginRight: "5%",borderRadius:"50%" }} />
           <Typography
             // variant="h4"
             color="inherit"
             className={classes.headerTitleEwallet}
           >
+
             {bankname}
 
           </Typography>
-          <img src={`${STATIC_URL}${logoofbank}`} width="50px" height="50px" style={{ marginRight: "5%" }} />
+          
 
           <div className={`headerLink ${classes.headerLink}`}>
-            <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+            <Link to="/dashboard" style={{ textDecoration: 'none' }} >
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                className= {  selectname == "/dashboard" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 style={{borderBottom: props.active==='dashboard' ? '1px solid white' : '0'}}
                 // color="inherit"
                 noWrap
               >
-                Dashboard
+                <span onClick={()=>{
+                setselectname('dashboard')
+              // console.log('dashboard')
+            }}>Dashboard</span>
               </Typography>
             </Link>
             {/* <Link to="/contact" style={{ textDecoration: 'none' }}>
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                className={  selectname == "/contact" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 // color="inherit"
                 noWrap
               >
-                Contacts
+                 <span onClick={()=>{
+              //  setselectname('contact')
+              // console.log("contact")
+            }}>Contacts</span>
               </Typography>
             </Link>
             <Link
               to="/bill-payments-merchants"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }} 
             >
               <Typography
-                className={`${classes.title} ${classes.eventLink}`}
+                // className={`${classes.title} ${classes.eventLink}`}
+                className={  selectname == "/bill-payments-merchants" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
                 // color="inherit"
                 noWrap
@@ -168,12 +184,15 @@ const MainHeader = props => {
               style={{ textDecoration: 'none' }}
             >
             <Typography
-              className={`${classes.title} ${classes.eventLink}`}
+              className={selectname == "/reports" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
               variant="subtitle1"
               style={{borderBottom: props.active==='report' ? '1px solid white' : '0'}}
               noWrap
             >
-              Reports
+              <span onClick={()=>{
+                setselectname('reports')
+              // console.log('dashboard')
+            }}>Reports</span>
               </Typography>
             </Link>
           </div>
