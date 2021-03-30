@@ -832,7 +832,7 @@ class BillPaymentsBillList extends Component {
                     className={classes.signUpButton}
                     style={{ width: '20%' }}
                   >
-                    Pay Other Bill
+                    Pay Other Bills
                   </Button>
                 </div>
               </Grid>
