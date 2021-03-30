@@ -36,7 +36,7 @@ margin-bottom:0;
     position: absolute;
     z-index: 1;
     left: 9px;
-    top: 4px;
+    top: 7px;
     font-size: 20px;
     color: #4a4a4a;
     opacity: 0.4;

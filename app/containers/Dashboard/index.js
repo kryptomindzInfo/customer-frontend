@@ -135,8 +135,8 @@ class Dashboard extends Component {
           <title>Dashboard</title>
           <meta name="description" content="Description of Dashboard" />
         </Helmet>
-        <MainHeader />
-        {/* <Grid container style={{ background: '#fcfffc' }}> */}
+
+        <MainHeader active={'dashboard'}/>
         <Grid container style={{ background: '#fcfffc' }}>
           <Grid item md={3} sm={12} xs={12} style={{ margin: '3% 0 0 3%' }}>
             <Grid
@@ -164,7 +164,7 @@ class Dashboard extends Component {
               sm={12}
               xs={12}
             >
-              <Typography> <h2>Messages</h2></Typography>
+              
              
               <AlignItemsList />
             </Grid> */}

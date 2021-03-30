@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import history from 'utils/history';
 
 import Table from '@material-ui/core/Table';
@@ -536,9 +536,9 @@ class BillPaymentsBillList extends Component {
       <TableCell component="th" scope="row">
         {row.name ? row.name : '-'}
       </TableCell>
-      <TableCell component="th" scope="row">
+      {/* <TableCell component="th" scope="row">
         {row.mobile ? row.mobile : '-'}
-      </TableCell>
+      </TableCell> */}
       <TableCell component="th" scope="row">
         {row.due_date ? row.due_date : '-'}
         {/* {row.bill_date} */}
@@ -554,15 +554,15 @@ class BillPaymentsBillList extends Component {
       </TableCell>
       <TableCell component="th" scope="row">
         {/* {row.amount} */}
-        {this.state.penaltyList[index] }
+        {this.state.penaltyList[index].toFixed(2) }
       </TableCell>
       <TableCell component="th" scope="row">
         {/* {row.amount} */}
-        {this.state.feeList[index] > 0 ? this.state.feeList[index] : 'NA' }
+        {this.state.feeList[index] > 0 ? this.state.feeList[index].toFixed(2) : 'NA' }
       </TableCell>
       <TableCell component="th" scope="row">
         {/* {row.amount} */}
-        {this.state.feeList[index]+row.amount+this.state.penaltyList[index] > 0 ? this.state.feeList[index]+row.amount+this.state.penaltyList[index] : 'NA'}
+        {this.state.feeList[index]+row.amount+this.state.penaltyList[index] > 0 ? (this.state.feeList[index]+row.amount+this.state.penaltyList[index]).toFixed(2) : 'NA'}
       </TableCell>
 
       <TableCell
@@ -679,7 +679,7 @@ class BillPaymentsBillList extends Component {
             >
               <Typography
                 className={classes.amountReceivedMessage}
-                variant="h5"
+                variant="h4"
               >
                 <img
                   src={`${STATIC_URL}${this.state.dataMerchantList.logo}`}
@@ -687,7 +687,7 @@ class BillPaymentsBillList extends Component {
                 />
                 <span style={{ marginLeft: "2%" }}>{this.state.dataMerchantList.name}</span>
 
-                <Typography style={{ paddingTop: 5 }} variant="subtitle2">
+                <Typography style={{ paddingTop: 5,marginTop: 12 }} variant="subtitle2">
                   {this.state.dataMerchantList.description}
                 </Typography>
               </Typography>
@@ -703,8 +703,22 @@ class BillPaymentsBillList extends Component {
                     style={{ margin: '0% 3% 0 3%', paddingTop: '2%' }}
                     variant="h5"
                   >
+                    <span
+                        style={{
+                          backgroundColor:"green",
+                          color:"white",
+                          borderRadius:"50%",
+                          width:'20px',
+                          padding: '5px 5px 9px 5px',
+                          marginRight:'8px',
+                          marginTop:'8px',
+                        }}>
+                        <ListAltIcon
+                        fontSize="large"
+                      />
+                      </span>
                     Bills List
-                    <Row>
+                    <Row style={{marginTop:'12px'}}>
                       <Col cW="20%">
                         <Button
                           className={this.state.toggleButton === 'pending' ? classes.active : classes.inactive}
@@ -737,12 +751,12 @@ class BillPaymentsBillList extends Component {
                     </Typography>
                   ) : (
                     <Table className={classes.table}>
-                      {this.state.toggleButtone === 'pending' ? (
+                      {this.state.toggleButton === 'pending' ? (
                          <TableHead>
                          <TableRow>
                            <TableCell></TableCell>
                            <TableCell>Name</TableCell>
-                           <TableCell>Mobile No.</TableCell>
+                           {/* <TableCell>Mobile No.</TableCell> */}
                            <TableCell>Due Date</TableCell>
                            <TableCell>Bill No.</TableCell>
                            <TableCell>Amount</TableCell>
@@ -807,7 +821,7 @@ class BillPaymentsBillList extends Component {
                         {this.state.buttonLoading ? (
                           <Loader />
                         ) : (
-                          `Collect Amount ${this.state.totalAmount} + Fee ${this.state.totalFee} = Total ${this.state.totalAmount + this.state.totalFee} and Pay Bill`
+                          `Collect Amount ${this.state.totalAmount.toFixed(2)} + Fee ${this.state.totalFee.toFixed(2)} = Total ${(this.state.totalAmount + this.state.totalFee).toFixed(2)} and Pay Bill`
                         )}
                       </Button>
                     ):null}

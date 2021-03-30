@@ -10,7 +10,7 @@ margin-top: ${props => props.marginTop ? props.marginTop : '0' };
     padding: 8px;
     text-align:center;
     background-color: ${props => props.theme.accent};
-    color: #fff;
+    color: 'black';
     position:relative;
 }
 > tbody > tr > td{

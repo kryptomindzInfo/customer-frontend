@@ -7,6 +7,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton';
+import NotificationIcon from '@material-ui/icons/Notifications';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -28,8 +29,9 @@ const styles = theme => ({
   },
   headerTitleEwallet: {
     // paddingLeft: '6%',
-    marginRight: '120px',
-    marginLeft: '-4%',
+
+    marginRight: '50px',
+    marginLeft: '20px',
     // fontSize: '1em',
     fontSize: '24px',
     fontWeight: 600,
@@ -87,59 +89,13 @@ fontWeight:600
 const MainHeader = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoofbank, setlogoofbank] = React.useState("")
-  const [bankname, setbankname] = React.useState("")
-  const [selectname,setselectname] = React.useState("")
+
+  const logoofbank = JSON.parse(localStorage.getItem('bank')).logo;
+  const bankname = JSON.parse(localStorage.getItem('bank')).name;
   const val = '';
 
-  useEffect(() => {
-
-    const id = window.location.pathname
-    console.log(id)
-    setselectname(id)
-   
-    fetchBanks()
-    // 60260d450023d70007f5747b
-      .then(res => {
-        console.log(res)
-        const { username} = JSON.parse(localStorage.getItem('loggedUser'));
-        
-       const bankId = localStorage.getItem('bankId')
-         
-          const filterlogo = res.data.banks.filter((value) => {
-
-            return value._id == bankId
-          })
-          console.log(filterlogo)
-          if (filterlogo.length) {
-            setlogoofbank(filterlogo[0].logo)
-            setbankname(filterlogo[0].name)
-          }
-         
-         
-        
-        // setState({
-        //   listOfBanks: res.data.banks,
-        // });
-      })
-      .catch();
-  }, [val]);
 
 
-  const fetchBanks = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/user/getBanks`);
-      if (res.status === 200) {
-        // setLoading(false);
-        return res;
-      }
-      // setLoading(false);
-      return null;
-    } catch (err) {
-      // setLoading(false);
-      throw err;
-    }
-  };
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -155,8 +111,6 @@ const MainHeader = props => {
 
   const { name, last_name } = JSON.parse(localStorage.getItem('loggedUser'));
 
-  console.log("")
-  console.log(selectname)
 
   return (
     <div className={classes.root}>
@@ -176,9 +130,8 @@ const MainHeader = props => {
             color="inherit"
             className={classes.headerTitleEwallet}
           >
-            {/* E-WALLET */}
-            {/* {bankname} */}
-            {bankname.charAt(0).toUpperCase() + bankname.slice(1)}
+
+            {bankname}
 
           </Typography>
           
@@ -188,6 +141,7 @@ const MainHeader = props => {
               <Typography
                 className= {  selectname == "/dashboard" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
                 variant="subtitle1"
+                style={{borderBottom: props.active==='dashboard' ? '1px solid white' : '0'}}
                 // color="inherit"
                 noWrap
               >
@@ -232,7 +186,7 @@ const MainHeader = props => {
             <Typography
               className={selectname == "/reports" ? (`${classes.colortitle} ${classes.eventLink}`) : (`${classes.title} ${classes.eventLink}`)}
               variant="subtitle1"
-              // color="inherit"
+              style={{borderBottom: props.active==='report' ? '1px solid white' : '0'}}
               noWrap
             >
               <span onClick={()=>{
@@ -249,6 +203,14 @@ const MainHeader = props => {
               justifyContent: 'center',
             }}
           >
+            <div
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              className="material-icons fl"
+              style={{ marginRight: '10px', display: 'flex', color: '#fff' }}
+            >
+              <NotificationIcon />
+            </div>
             <div
               aria-controls="simple-menu"
               aria-haspopup="true"

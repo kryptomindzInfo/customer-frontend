@@ -11,13 +11,14 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectBillPaymentsPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import Icon from '@material-ui/core/Icon';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 
@@ -231,7 +232,7 @@ class BillPaymentsPage extends Component {
               </Typography> */}
               <ActionBar
                 marginBottom="33px"
-                inputWidth="calc(100% - 241px)"
+                inputWidth="100%"
                 className="clr"
                 style={{
                   display: 'flex',
@@ -262,31 +263,43 @@ class BillPaymentsPage extends Component {
                 xs={6}
               >
                 <div className={classes.recentActivitiesTable}>
-                  {/* <a  href="/contact">
-                    <i className="material-icons">arrow_back</i>
-                  </a> */}
+                  {/* <a  href="/contact"> */}
+                    
+                  {/* </a>  */}
                   <Typography
                     style={{ margin: '0% 3% 0 3%', paddingTop: '2%' }}
                     variant="h5"
                   >
+                      <span
+                        style={{
+                          backgroundColor:"green",
+                          color:"white",
+                          borderRadius:"50%",
+                          width:'20px',
+                          padding: '5px 5px 9px 5px',
+                          marginRight:'8px',
+                          marginTop:'8px',
+                        }}>
+                        <ListAltIcon
+                        fontSize="large"
+                      />
+                      </span>
                     Merchant List
-                    <Typography
-                      style={{ color: 'grey', margin: '0% 0% 1% 1%' }}
+                    {/* <Typography
+                      style={{ color: 'grey', margin: '0% 0% 0% 9%' }}
                       variant="body1"
                     >
-                      Pay bills safely
-                    </Typography>
+                      Pay your bills safely with us
+                    </Typography> */}
                   </Typography>
-                  <Table className={classes.table}>
-                    <TableHead>
+                  <Table style={{marginTop:'30px'}} className={classes.table}>
+                    {/* <TableHead>
                       <TableRow>
                         <TableCell>Logo</TableCell>
                         <TableCell>Name</TableCell>
-                        {/* <TableCell>Mobile No.</TableCell>*/}
-                        <TableCell>Email </TableCell> 
                         <TableCell align="left" />
                       </TableRow>
-                    </TableHead>
+                    </TableHead> */}
                     <TableBody>
                       {/* {console.log(
                           'this.state.dataMerchantList',
@@ -323,7 +336,7 @@ class BillPaymentsPage extends Component {
                               }
                               align="right"
                             >
-                              More details
+                              View
                             </TableCell>
                           </TableRow>
                         ))

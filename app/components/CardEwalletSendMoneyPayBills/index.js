@@ -9,14 +9,14 @@ import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import history from 'utils/history';
-
+import Button from '../../components/Button';
 import { API_URL, CURRENCY } from 'containers/App/constants';
 import Paper from '@material-ui/core/Paper';
-import Icon from '@material-ui/core/Icon';
-import Button from '@material-ui/core/Button';
+import SendIcon from '@material-ui/icons/Send';
+// import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import SendMoneyPopup from './SendMoneyPopup';
-
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
@@ -42,11 +42,12 @@ const styles = theme => ({
     fontWeight: 500,
     width: '150px',
     marginRight: '-100px',
-    fontSize: '32px',
+    fontSize: '28px',
   },
   cardEwalletCurrency: {
     fontWeight: 600,
     paddingTop: '2%',
+    color:"green",
     // paddingBottom: '0%',
   },
   textField: {
@@ -119,10 +120,19 @@ class CardEwalletSendMoneyPayBills extends Component {
         <Grid container className={classes.mainContainer}>
           <Grid item md={12} xs={12} sm={12} style={{backgroundColor:""}}>
             <div className={classes.eWalletTitle}>
-              <span className={classes.cardEwalletTitle}>E-WALLET</span>
+
+              <span className={classes.cardEwalletTitle}>E-Wallet</span>
+              <Button
+                  accentedOutline
+                  style={{height:'fit-contnt', margin:'auto', marginLeft:'100px'}}
+                >
+                  {/* <Typography noWrap> */}
+                     My Bank
+                  {/* </Typography> */}
+                </Button>
               {/* <span className={classes.cardBankTitle}>Powered by {bank}</span> */}
             </div>
-            <Typography variant="subtitle2">Available:</Typography>
+            <Typography variant="subtitle2" style = {{color:"grey"}}>Available</Typography>
             <Typography className={classes.cardEwalletCurrency} variant="h4">
               {CURRENCY} {this.state.balance.toFixed(2)}
             </Typography>
@@ -136,28 +146,32 @@ class CardEwalletSendMoneyPayBills extends Component {
             >
              
                 <Button
-                  variant="outlined"
-                  color="primary"
+                  accentedOutline
+                  // variant="outlined"
+                  // color="primary"
                   onClick={this.showSendMoneyPopup}
                   style={{ fontSize: '11px' }}
                   
                   // style={{backgroundColor:"red"}}
                 >
-                  <Typography style={{ fontSize: '8px' }} noWrap> 
-                    Send Money
-                  </Typography>
+
+                  {/* <Typography noWrap> */}
+                    <i><SendIcon/></i> Send Money
+                  {/* </Typography> */}
                 </Button>
              
          {' '}
                 <Button
-                  variant="outlined"
-                  color="primary"
-                  style={{ fontSize: '11px',marginLeft:"2%" }}
+
+                  accentedOutline
+                  // variant="outlined"
+                  // color="primary"
+                  // style={{ fontSize: '11px' }}
                   onClick={this.goToBillsPaymentPage}
                 >
-                  <Typography style={{ fontSize: '8px' }} noWrap>
-                    Pay Bills
-                  </Typography>
+                  {/* <Typography noWrap> */}
+                    <i><InsertDriveFileIcon/></i>Pay Bills
+                  {/* </Typography> */}
                 </Button>
           
             </Grid>
@@ -165,7 +179,7 @@ class CardEwalletSendMoneyPayBills extends Component {
         </Grid>
         {this.state.sendMoneyPopup ? (
           <SendMoneyPopup
-            notify={notify}
+            notify={this.props.notify}
             balance={this.state.balance}
             onClose={() => this.closeSendMoneyPopup()}
             open={this.state.sendMoneyPopup}

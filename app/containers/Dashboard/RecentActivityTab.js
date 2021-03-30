@@ -31,7 +31,7 @@ const DashBoardTabs = withStyles({
     justifyContent: 'center',
     backgroundColor: 'transparent',
     '& > div': {
-      maxWidth: 40,
+      maxWidth: 20,
       width: '100%',
       backgroundColor: '#417505',
     },
@@ -43,7 +43,8 @@ const DashboardTab = withStyles(theme => ({
     margin: '1%',
     color: '#417505',
     textAlign: 'center',
-    width: '50%',
+    width: '10%',
+    minWidth: 20,
     textTransform: 'none',
     fontSize: 21,
     outline: 0,
@@ -146,7 +147,7 @@ const useStyles = makeStyles(() => ({
   },
   tab: {
     textAlign: 'center',
-    width: '50%',
+    width: '27%',
   },
   iconSelected: {
     color: '#417505',
@@ -181,6 +182,7 @@ export default ({ notify }) => {
   const [allRow, setAllRow] = useState([]);
   const [transferRow, setTransferRow] = useState([]);
   const [receiveRow, setReceiveRow] = useState([]);
+  const [invoiceRow, setInvoiceRow] = useState([]);
   useEffect(() => {
     getTransactionHistory(notify)
       .then(r => {
@@ -188,8 +190,9 @@ export default ({ notify }) => {
         setRow(r);
         setAllRow(r);
         console.log(r)
-        setTransferRow(r.filter(row => row.Value.tx_data.tx_type === 'DR'))
-        setReceiveRow(r.filter(row => row.Value.tx_data.tx_type === 'CR'))
+        setTransferRow(r.filter(row => row.Value.tx_data[0].tx_type === 'DR'))
+        setReceiveRow(r.filter(row => row.Value.tx_data[0].tx_type === 'CR'))
+        setInvoiceRow(r.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant'))
         // setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
         // setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
       })
@@ -234,6 +237,10 @@ export default ({ notify }) => {
       case 2:
         setPage(0);
         setRow(receiveRow);
+        break;
+      case 3:
+        setPage(0);
+        setRow(invoiceRow);
         break;
       default:
         setRow(allRow);
@@ -299,12 +306,13 @@ export default ({ notify }) => {
           alignItems="flex-start"
           style={{marginLeft:"-2%"}}
         >
-          <Typography variant="h5" style={{ textAlign: 'start',fontFamily:"" }}>
-           <strong>Recent Activity</strong> 
+
+          <Typography variant="h5" style={{ textAlign: 'start' }}>
+            Recent Activities
           </Typography>
           <Typography
             variant="subtitle1"
-            styles={{ textAlign: 'start', color: '#9ea0a5' }}
+            style={{ textAlign: 'start', color: 'grey' }}
           >
             E-wallet activity
           </Typography>
@@ -325,7 +333,8 @@ export default ({ notify }) => {
         />
         <DashboardTab label="Payment Sent" className={classes.tab} />
         <DashboardTab label="Payment Recieved" className={classes.tab} />
-        <DashboardTab label="Bill Paid" className={classes.tab} />
+
+        <DashboardTab label="Invoices Paid" className={classes.tab} />
       </DashBoardTabs>
       <Grid
         container
@@ -356,14 +365,18 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
+                      <Typography variant="subtitle1">
+                          {row.Value.tx_data[0].master_id}
+                        </Typography>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <Typography style={{ color: '#4a90e2' }} variant="h6">
-                          <strong>{row.Value.remarks}</strong>
-                        </Typography>
+
+                        {/* <Typography style={{ color: '#4a90e2' }} variant="h6">
+                          {row.Value.remarks}
+                        </Typography> */}
                         <Typography color="primary" variant="subtitle1">
-                          {/* {row.Value.action} */}
-                          {actionfunction(row.Value)}
+                          {row.Value.tx_data[0].tx_details}
+                          {/* {actionfunction(row.Value)} */}
                           {/* {row.value != undefined &&
                             <>
                               {row.value.tx_data.tx_type == "CR" ? (
@@ -377,11 +390,11 @@ export default ({ notify }) => {
                       </TableCell>
                       <TableCell>
                         <Typography variant="subtitle1">
-                          {row.Value.wallet_type}
+                          {row.Value.tx_data[0].tx_name}
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="h6">XOF:{row.Value.amount}</Typography>
+                        <Typography variant="h6">XOF:{row.Value.tx_data[0].amount}</Typography>
                       </TableCell>
                     </>
                   }

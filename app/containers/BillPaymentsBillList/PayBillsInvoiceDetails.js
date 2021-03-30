@@ -259,11 +259,11 @@ const PayBillsInvoiceDetails = props => {
                         </Row>
                         <Row>
                           <Col className="popInfoLeft">Penalty</Col>
-                          <Col className="popInfoRight">{props.penalty}</Col>
+                          <Col className="popInfoRight">{props.penalty.toFixed(2)}</Col>
                         </Row>
                         <Row>
                           <Col className="popInfoLeft">Sum Total</Col>
-                          <Col className="popInfoRight">{sumtotal2()}</Col>
+                          <Col className="popInfoRight">{sumtotal2().toFixed()}</Col>
                         </Row>
                       </Col>
                     </Row>
@@ -281,7 +281,7 @@ const PayBillsInvoiceDetails = props => {
                         <Loader />
                       ) : (
                           <span>
-                            Collect {CURRENCY} {sumtotal2()} and Pay Bill
+                            Collect {CURRENCY} {sumtotal2().toFixed()} and Pay Bill
                           </span>
                         )}
                     </Button>

@@ -155,15 +155,15 @@ const PayBillsInvoiceList = props => {
         </TableCell>
         <TableCell component="th" scope="row">
           {/* {row.amount} */}
-          {penaltyList[index]}
+          {penaltyList[index].toFixed(2)}
         </TableCell>
         <TableCell component="th" scope="row">
           {/* {row.amount} */}
-          {feeList[index] > 0 ? feeList[index] : 'NA'}
+          {feeList[index] > 0 ? feeList[index].toFixed(2) : 'NA'}
         </TableCell>
         <TableCell component="th" scope="row">
           {/* {row.amount} */}
-          {feeList[index] + row.amount + penaltyList[index] > 0 ? feeList[index] + row.amount + penaltyList[index] : 'NA'}
+          {feeList[index] + row.amount + penaltyList[index] > 0 ? (feeList[index] + row.amount + penaltyList[index]).toFixed(2) : 'NA'}
         </TableCell>
         <TableCell
           style={{ color: '#417505', fontWeight: 600 }}
@@ -274,7 +274,7 @@ const PayBillsInvoiceList = props => {
               <TableCell>Amount</TableCell>
               <TableCell>Penalty</TableCell>
               <TableCell>Fees</TableCell>
-              <TableCell>Amount with Fees</TableCell>
+              <TableCell>Total</TableCell>
               <TableCell align="left" />
             </TableRow>
           </TableHead>
