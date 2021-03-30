@@ -32,7 +32,10 @@ const token = localStorage.getItem('customerLogged');
 const ReportPage = (props) => {
   const [startdate, setStartdate] = useState(new Date());
   const [enddate, setEnddate] = useState(new Date());
+  const [empty, setEmpty] = useState(false);
   const [transList, setTransList] = useState([]);
+  const [userTransList, setUserTransList] = useState([]);
+  const [merchantTransList, setMerchantTransList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [transactionType, setTransactionType ] = useState('all');
   const [merchantList, setMerchantList ] = useState([]);
@@ -44,7 +47,6 @@ const ReportPage = (props) => {
     try{
       const res = await axios.get(`${API_URL}/user/listMerchants`);
       if (res.status === 200) {
-        console.log(res);
         if (res.data.status === 0) {
           props.notify(res.data.message, 'error');
         } else {
@@ -63,7 +65,6 @@ const ReportPage = (props) => {
     try{
       const res = await axios.get(`${API_URL}/user/getContactList`);
       if (res.status === 200) {
-        console.log(res);
         if (res.data.status === 0) {
           props.notify(res.data.message, 'error');
         } else {
@@ -95,7 +96,6 @@ const ReportPage = (props) => {
           const end = new Date(enddate);
           start.setHours(0,0,0,0);
           end.setHours(23,59,59,0);
-          console.log(start);
           const datehistory = res.data.history.filter((h)=>{
             return new Date(h.Timestamp) >= start &&
             new Date(h.Timestamp) <= end &&
@@ -111,34 +111,87 @@ const ReportPage = (props) => {
     }
   };
 
+  const getTransByUser = async(translist,userlist) => {
+    const list = userlist.map(async (item) => {
+        const data = await translist.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet' && row.Value.tx_data[0].tx_details === `Transferred to ${item.name}`);
+        return (data);
+    })
+    const result= await Promise.all(list);
+    return({res:result, loading:false});
+  };
+
+  const getTransByMerchant = async(translist,merchantlist) => {
+    const list = merchantlist.map(async (item) => {
+        const data = await translist.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant' && row.Value.tx_data[0].tx_details === `Transferred to ${item.name}`);
+        return (data);
+    })
+    const result= await Promise.all(list);
+    return({res:result, loading:false});
+  };
+
   const getReport = async() => {
-    console.log(merchant);
     setLoading(true);
     const merchantlist = await getAllMerchants();
     const contactlist = await getAllContacts();
     setContactList(contactlist.list);
-    console.log(merchantlist);
     setMerchantList(merchantlist.list);
     
     const history = await getTransactionHistory(merchantlist.list);
     if(transactionType === 'WallettoMerchant' && merchant==='all'){
-      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant'));
+      const merchanttrans = await getTransByMerchant(history.res,merchantlist.list);
+      setMerchantTransList(merchanttrans.res);
+      setEmpty(false);
+      setLoading(merchanttrans.loading);
     }else if(transactionType === 'WallettoMerchant'){
       setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant' && row.Value.tx_data[0].tx_details === `Transferred to ${merchant}`));
+      setEmpty(false);
+      setLoading(history.loading);
     }else if (transactionType === 'WallettoWallet' && contact==='all'){
-      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet'));
+      const usertrans = await getTransByUser(history.res,contactlist.list);
+      setEmpty(false);
+      setUserTransList(usertrans.res);
+      setLoading(usertrans.loading);
     }else if(transactionType === 'WallettoWallet'){
+      setEmpty(false);
       setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet' && row.Value.tx_data[0].tx_details === `Transferred to ${contact}`));
+      setLoading(history.loading);
     }else if (transactionType === 'all'){
+      setEmpty(false);
       setTransList(history.res);
+      setLoading(history.loading);
     }else{
+      setEmpty(false);
       setTransList([]);
+      setLoading(history.loading);
     }
-    setLoading(history.loading);
+    
   };
 
   const getTrans = () => {
     return transList.reverse().map((trans) => {
+      return (
+        <tr key={trans.TxId}>
+          <td>
+            {`${format(new Date(trans.Timestamp), 'dd-MM-yyyy')}`}
+          </td>
+          <td>
+            {trans.Value.tx_data[0].master_id}
+          </td>
+          <td>
+            {trans.Value.tx_data[0].tx_details}</td>
+          <td>
+          <td>{trans.Value.tx_data[0].tx_name}</td>
+          </td>
+          <td>{trans.Value.tx_data[0].tx_type === 'DR' ? trans.Value.tx_data[0].amount : '-'}</td>
+          <td>{trans.Value.tx_data[0].tx_type === 'CR' ? trans.Value.tx_data[0].amount : '-'}</td>
+          <td>{trans.Value.balance}</td>
+        </tr>
+      );
+    });
+  };
+
+  const getAllTrans = (list) => {
+    return list.reverse().map((trans) => {
       return (
         <tr key={trans.TxId}>
           <td>
@@ -256,6 +309,7 @@ const ReportPage = (props) => {
                        value={transactionType}
                        onChange={(event)=>{
                         setTransactionType(event.target.value);
+                        setEmpty(true);
                        }}
                       >
                         <option value={'all'}>
@@ -296,6 +350,7 @@ const ReportPage = (props) => {
                        value={merchant}
                        onChange={(event)=>{
                         setMerchant(event.target.value);
+                        setEmpty(true);
                        }}
                       >
                          <option  value={'all'}>
@@ -328,6 +383,7 @@ const ReportPage = (props) => {
                        value={contact}
                        onChange={(event)=>{
                         setContact(event.target.value);
+                        setEmpty(true);
                        }}
                       >
                         <option  value={'all'}>
@@ -358,25 +414,28 @@ const ReportPage = (props) => {
               <Col  cW='30%'>
               </Col>
             </Row>
+            { !empty ? (
+            <div>
+            {transactionType==='all' ||  (transactionType==='WallettoWallet' && contact!=='all') || (transactionType==='WallettoMerchant' && merchant!=='all') ? (
             <Card bigPadding style={{width:'100%'}}>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Transactions</b></h3>
-        {transList && transList.length > 0 ? (
-          <div>
-                <Table marginTop="34px">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Transaction ID</th>
-                      <th>Details</th>
-                      <th>Transaction Type</th>
-                      <th>Debit</th>
-                      <th>Credit</th>
-                      <th>Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>{getTrans()}</tbody>
-                </Table>
-              </div>
+              {transList && transList.length > 0 ? (
+                <div>
+                  <Table marginTop="34px">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Transaction ID</th>
+                        <th>Details</th>
+                        <th>Transaction Type</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>{getTrans()}</tbody>
+                  </Table>
+                </div>
               ) : (
                   <h3
                     style={{
@@ -387,8 +446,94 @@ const ReportPage = (props) => {
                   >
                     No Transactions found
                   </h3>
-                )}
-        </Card>
+              )}
+            </Card>
+            
+            ):''}
+
+            {transactionType==='WallettoWallet' && contact==='all' ? (
+              <div>
+                {contactList.map((b,index) => {
+                  return (
+                    <Card bigPadding style={{width:'100%'}}>
+                    <h3 style={{color:"green" ,textAlign:"left"}}><b>{b.name}</b></h3>
+                    {userTransList[index] && userTransList[index].length > 0 ? (
+                      <div>
+                        <Table marginTop="34px">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Transaction ID</th>
+                              <th>Details</th>
+                              <th>Transaction Type</th>
+                              <th>Debit</th>
+                              <th>Credit</th>
+                              <th>Balance</th>
+                            </tr>
+                          </thead>
+                          <tbody>{getAllTrans(userTransList[index])}</tbody>
+                        </Table>
+                      </div>
+                    ) : (
+                        <h3
+                          style={{
+                            textAlign: 'center',
+                            color: 'grey',
+                            height: '300px',
+                          }}
+                        >
+                          No Transactions found
+                        </h3>
+                    )}
+                  </Card>
+                  
+                  );
+                })}
+              </div>
+            ):''}
+
+            {transactionType==='WallettoMerchant' && merchant==='all' ? (
+              <div>
+                {merchantList.map((b,index) => {
+                  return (
+                    <Card bigPadding style={{width:'100%'}}>
+                    <h3 style={{color:"green" ,textAlign:"left"}}><b>{b.name}</b></h3>
+                    {merchantTransList[index] && merchantTransList[index].length > 0 ? (
+                      <div>
+                        <Table marginTop="34px">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Transaction ID</th>
+                              <th>Details</th>
+                              <th>Transaction Type</th>
+                              <th>Debit</th>
+                              <th>Credit</th>
+                              <th>Balance</th>
+                            </tr>
+                          </thead>
+                          <tbody>{getAllTrans(merchantTransList[index])}</tbody>
+                        </Table>
+                      </div>
+                    ) : (
+                        <h3
+                          style={{
+                            textAlign: 'center',
+                            color: 'grey',
+                            height: '300px',
+                          }}
+                        >
+                          No Transactions found
+                        </h3>
+                    )}
+                  </Card>
+                  
+                  );
+                })}
+              </div>
+            ):''}
+            </div>
+            ):''}
           </Container>
         </Fragment>
     );
