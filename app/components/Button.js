@@ -16,7 +16,7 @@ color: ${props => (props.filledBtn || props.accentedBtn) ? '#fff' : props.theme.
 color: ${props => (props.accentedOutline) ? 'green' :  'sd' };
 font-size: ${props => props.filledBtn ? '20px' : '11px' };
 font-size: ${props => props.accentedBtn ? '16px' : 'sdf' };
-font-size: ${props => props.accentedOutline ? '12px' : 'sdf' };
+font-size: ${props => props.accentedOutline ? '10px' : 'sdf' };
 font-weight:${props => (props.filledBtn || props.accentedBtn || props.accentedOutline) ? 'bold' : 'normal' };
 display: ${props => props.flex ? 'flex' : 'block' };
 align-items: center;

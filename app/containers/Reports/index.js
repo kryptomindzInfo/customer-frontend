@@ -489,8 +489,8 @@ const ReportPage = (props) => {
                         <th>Transaction ID</th>
                         <th>Details</th>
                         <th>Transaction Type</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
+                        <th>Sent</th>
+                        <th>Received</th>
                         <th>Balance</th>
                       </tr>
                     </thead>
@@ -546,8 +546,8 @@ const ReportPage = (props) => {
                               <th>Transaction ID</th>
                               <th>Details</th>
                               <th>Transaction Type</th>
-                              <th>Debit</th>
-                              <th>Credit</th>
+                              <th>Sent</th>
+                              <th>Received</th>
                               <th>Balance</th>
                             </tr>
                           </thead>
@@ -591,8 +591,8 @@ const ReportPage = (props) => {
                               <th>Transaction ID</th>
                               <th>Details</th>
                               <th>Transaction Type</th>
-                              <th>Debit</th>
-                              <th>Credit</th>
+                              <th>Sent</th>
+                              <th>Received</th>
                               <th>Balance</th>
                             </tr>
                           </thead>

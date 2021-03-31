@@ -161,7 +161,7 @@
                    onClick={this.goToBillsPaymentPage}
                  >
                    {/* <Typography noWrap> */}
-                     <i><InsertDriveFileIcon/></i>Pay Bills
+                     <i><InsertDriveFileIcon/></i>My Merchants
                    {/* </Typography> */}
                  </Button>
                </Grid>

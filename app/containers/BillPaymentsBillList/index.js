@@ -843,7 +843,7 @@ class BillPaymentsBillList extends Component {
                         {this.state.buttonLoading ? (
                           <Loader />
                         ) : (
-                          `Collect Amount ${this.state.totalAmount.toFixed(2)} + Fee ${this.state.totalFee.toFixed(2)} = Total ${(this.state.totalAmount + this.state.totalFee).toFixed(2)} and Pay Bill`
+                          `Pay Amount ${this.state.totalAmount.toFixed(2)} + Fee ${this.state.totalFee.toFixed(2)} = Total ${(this.state.totalAmount + this.state.totalFee).toFixed(2)} and Pay Bill`
                         )}
                       </Button>
                     ):null}

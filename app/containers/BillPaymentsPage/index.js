@@ -22,24 +22,22 @@ import MerchantList from './MerchantList';
 import Icon from '@material-ui/core/Icon';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles'
-
+import Button from 'components/Button';
 import history from 'utils/history';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
+import Loader from 'components/Loader';
 import Footer from 'components/Footer';
 import axios from 'axios';
-
 import MainHeader from '../MainHeader';
-
 import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
-
 import CardEwalletSendMoneyPayBills from 'components/CardEwalletSendMoneyPayBills';
 import CardDownloadOurApp from 'components/CardDownloadOurApp';
+import AddMerchantPopup from './AddMerchantPopup';
 
 const styles = theme => ({
   gridCardEwalletSendMoney: {
@@ -114,6 +112,26 @@ const styles = theme => ({
       margin: '4% 5%',
     },
   },
+  listOfMerchantsContainer: {
+    background: 'white',
+    boxShadow: '0 4px 9px 0 rgba(0, 0, 0, 0.02)',
+    padding: '2%',
+    borderRadius: '7px',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+
+    marginBottom: '1%',
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: '3%',
+      // width: '50%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: '3%',
+      padding: '4%',
+    },
+  },
 });
 
 let id = 0;
@@ -122,65 +140,109 @@ function createData(name, calories, fat, carbs, protein) {
   return { id, name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData('Merchant 1', 'View Bills'),
-  createData('Merchant 2', 'View Bills'),
-  // createData('Eclair', 262, 16.0, 24, 6.0),
-  // createData('Cupcake', 305, 3.7, 67, 4.3),
-  // createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 class BillPaymentsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       viewBillPopup: false,
+      popup: false,
+      loading: false,
       bankLogo: JSON.parse(localStorage.getItem('bank')).logo,
       bankName: JSON.parse(localStorage.getItem('bank')).name,
       dataMerchantList: [],
-      searchdataMerchantList: []
+      searchdataMerchantList: [],
+      merchantStats:[],
     };
   }
   // useInjectReducer({ key: 'billPaymentsPage', reducer });
   // useInjectSaga({ key: 'billPaymentsPage', saga });
-  componentWillMount = () => {
-    this.getAllMerchants();
-    // this.props.dispatch(getAllMerchantsList());
+ 
+
+  getAllMerchants = async() => {
+    try {
+      const res = await axios.get(`${API_URL}/user/listMerchants`);
+      if (res.data.status === 1){
+        return ({result:res.data.list })
+      } else {
+        this.props.notify(res.data.message, 'error');
+      }
+    }catch (err){
+      this.props.notify(err, 'error');
+    }
   };
 
-  getAllMerchants = () => {
-    let method = '';
-    axios
-      .get(`${API_URL}/user/listMerchants`)
-      .then(res => {
-        if (res.data.status === 1) {
-          // this.setState({ dataMerchantList: res.data, searchdataMerchantList: res.data.list });
-          this.setState({ dataMerchantList: res.data.list, searchdataMerchantList: res.data.list });
-        }
-        console.log('res of /user/listMerchants', res);
-        if (res.data.error) {
-          this.props.notify(res.data.error, 'error');
-        }
-      })
-      .catch(error => {
-        this.props.notify(error.response.data.error, 'error');
-      });
+  getAddedMerchants = async() => {
+    try {
+      const res = await axios.get(`${API_URL}/user/listAddedMerchants`);
+      if (res.data.status === 1){
+        return ({result:res.data.list, loading:false })
+      } else {
+        this.props.notify(res.data.message, 'error');
+      }
+    }catch (err){
+      this.props.notify(err, 'error');
+    }
   };
 
-  searchlistfunction = (value) => {
-    console.log(value)
-    // console.log(this.state.searchrules)
-    console.log(this.state.searchdataMerchantList)
-    const newfilterdata = this.state.searchdataMerchantList.filter(element =>
-      element.name.toLowerCase().includes(value.toLowerCase()),
-    );
+  getMerchantStats = async(id) => {
+    try {
+      const res = await axios.post(`${API_URL}/user/getMerchantStats`,{merchant_id:id});
+      if (res.data.status === 1){
+        return ({result:res.data })
+      } else {
+        this.props.notify(res.data.message, 'error');
+      }
+    }catch (err){
+      this.props.notify(err, 'error');
+    }
+  };
 
-    this.setState({ dataMerchantList: newfilterdata })
+  getStatsByMerchant = async(list) => {
+    const statlist = list.map(async (item) => {
+        const data = await this.getMerchantStats(item._id);
+        return (data);
+    })
+    const result= await Promise.all(statlist);
+    return({res:result, loading:false});
+  };
 
+  getData = async() => {
+    this.setState({ 
+      loading: true,
+    });
+    const allmerchants = await this.getAllMerchants();
+    const mymerchants = await this.getAddedMerchants();
+    const merchantstats = await this.getStatsByMerchant(mymerchants.result);
+    console.log(merchantstats);
+    this.setState({ 
+      searchdataMerchantList: allmerchants.result,
+      dataMerchantList: mymerchants.result,
+      merchantStats:merchantstats.res,
+      loading: merchantstats.loading,
+    });
   }
+
+  componentWillMount = () => {
+    this.getData();
+  };
+
+  openPopup = () => {
+    this.setState({ popup: true });
+  };
+
+  closePopup = () => {
+    this.setState({ popup: false });
+  };
+
 
   render() {
     const { classes } = this.props;
+
+    if (this.state.loading) {
+      return <Loader fullPage />;
+    }
+
     return (
       <div>
         <Helmet>
@@ -267,7 +329,14 @@ class BillPaymentsPage extends Component {
                         fontSize="large"
                       />
                       </span>
-                    Merchant List
+                    My Merchants
+                    <Button
+                      accentedOutline
+                      style={{float:'right'}}
+                      onClick={this.openPopup}
+                    >
+                        Add merchant
+                    </Button>
                     {/* <Typography
                       style={{ color: 'grey', margin: '0% 0% 0% 9%' }}
                       variant="body1"
@@ -276,13 +345,18 @@ class BillPaymentsPage extends Component {
                     </Typography> */}
                   </Typography>
                   <Table style={{marginTop:'30px'}} className={classes.table}>
-                    {/* <TableHead>
+                    <TableHead>
                       <TableRow>
                         <TableCell>Logo</TableCell>
                         <TableCell>Name</TableCell>
-                        <TableCell align="left" />
+                        <TableCell>Bills paid</TableCell>
+                        <TableCell>Amount paid</TableCell>
+                        <TableCell>Bills pending</TableCell>
+                        <TableCell>Amount pending</TableCell>
+                        <TableCell align="left">Action</TableCell>
+                        {/* <TableCell align="left" /> */}
                       </TableRow>
-                    </TableHead> */}
+                    </TableHead>
                     <TableBody>
                       {/* {console.log(
                           'this.state.dataMerchantList',
@@ -291,7 +365,7 @@ class BillPaymentsPage extends Component {
 
                       {/* {this.state.dataMerchantList.list != undefined ? this.state.dataMerchantList.list[0].name : "error"} */}
                       {this.state.dataMerchantList != undefined ? (
-                        this.state.dataMerchantList.map(row => (
+                        this.state.dataMerchantList.map((row, index) => (
                           <TableRow key={row._id}>
                             <TableCell component="th" scope="row">
                               <img
@@ -302,9 +376,18 @@ class BillPaymentsPage extends Component {
                             <TableCell component="th" scope="row">
                               {row.name}
                             </TableCell>
-                            {/* <TableCell component="th" scope="row">
-                              {row.email}
-                            </TableCell> */}
+                            <TableCell component="th" scope="row">
+                              {this.state.merchantStats[index].result.bill_paid}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {this.state.merchantStats[index].result.amount_paid}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {this.state.merchantStats[index].result.bill_pending}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {this.state.merchantStats[index].result.amount_pending}
+                            </TableCell>
 
                             {/* <TableCell align="left">{row.mobile}</TableCell>
                             <TableCell align="left">{row.email}</TableCell> */}
@@ -317,7 +400,7 @@ class BillPaymentsPage extends Component {
                                 })
                                 //localStorage.setItem('merchant',row);
                               }
-                              align="right"
+                              // align="right"
                             >
                               View
                             </TableCell>
@@ -340,8 +423,14 @@ class BillPaymentsPage extends Component {
               </Grid>
             </Grid>
           </Grid>
-          
         </Grid>
+        {this.state.popup ? (
+           <AddMerchantPopup
+              onClose={() => this.closePopup()}
+              merchants={this.state.searchdataMerchantList}
+              notify={this.props.notify}
+           />
+         ) : null}
         <Footer bankname={this.state.bankName} banklogo={this.state.bankLogo}/>
       </div>
      

@@ -288,7 +288,7 @@ const PayBillsInvoiceList = props => {
               {isButtonLoading ? (
                 <Loader />
               ) : (
-                  `Collect Amount ${totalAmount} + Fee ${totalFee.toFixed(2)} = Total ${totalAmount + totalFee} and Pay Bill`
+                  `Pay Amount ${totalAmount} + Fee ${totalFee.toFixed(2)} = Total ${totalAmount + totalFee} and Pay Bill`
                 )}
             </Button>
           ) : (

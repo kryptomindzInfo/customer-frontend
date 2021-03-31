@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 
 const getContactList = async notify => {
   try {
-    const controller = 'listMerchants';
+    const controller = 'listAddedMerchants';
     const res = await axios.get(`${API_URL}/user/${controller}`);
     if (res.status === 200) {
       if (res.data.error) {

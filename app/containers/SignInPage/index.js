@@ -147,6 +147,7 @@ const SignInPage = props => {
             if (res.data.error) {
               throw res.data.message;
             } else {
+              console.log(res);
               localStorage.setItem('customerLogged', res.data.token);
               const loggedUser = JSON.stringify(res.data.user);
               const bank = JSON.stringify(res.data.bank);
