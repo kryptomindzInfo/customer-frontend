@@ -216,10 +216,10 @@
                // keepMounted
                open={Boolean(anchorEl)}
                onClose={handleClose}
-               style={{ backgroundColor: "", width: "" }}
+               style={{ backgroundColor: "", width: "", marginTop:'50px' }}
              >
                {/* <h2 style={{ marginLeft: "20px", marginRight: "20px" }}>hello</h2> */}
-               <div style={{ width: "100px" }}>
+               <div style={{ width: "100px"}}>
                  <Link to="/profile" style={{ backgroundColor: '', marginLeft: "20px", marginRight: "" }}>
                    {/* <MenuItem onClick={handleClose} style={{ marginLeft: "" }}>Profile</MenuItem> */}
                    <span onClick={handleClose} style={{ marginLeft: "" }}>Profile</span>

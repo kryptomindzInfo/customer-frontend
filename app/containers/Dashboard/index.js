@@ -12,6 +12,7 @@ import { Grid, Typography } from '@material-ui/core';
 import {withStyles}  from '@material-ui/core/styles'
 
 import CardDownloadOurApp from '../../components/CardDownloadOurApp';
+import Footer from '../../components/Footer';
 import AlignItemsList from '../../components/MessageList';
 import MainHeader from '../MainHeader';
 import RecentActivityTab from './RecentActivityTab';
@@ -124,7 +125,10 @@ class Dashboard extends Component {
   // useInjectSaga({ key: 'dashboard', saga });
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      bankLogo: JSON.parse(localStorage.getItem('bank')).logo,
+      bankName: JSON.parse(localStorage.getItem('bank')).name,
+    }
   }
 
   render() {
@@ -180,17 +184,6 @@ class Dashboard extends Component {
               xs={12}
               style={{backgroundColor:""}}
             >
-              {/* <CardEwalletSendMoneyPayBills /> */}
-              <Typography
-                className={classes.amountReceivedMessage}
-                variant="h5"
-              >
-                Congrats!
-                <Typography variant="h6">
-                  You have received $200.00 from Hatim daudi on 27th December
-                  2019
-                </Typography>
-              </Typography>
 
               <Grid container className={classes.listOfMerchantsContainer}
               item
@@ -214,6 +207,7 @@ class Dashboard extends Component {
           </Grid>
         
         </Grid>
+        <Footer bankname={this.state.bankName} banklogo={this.state.bankLogo}/>
       </div>
     );
   }

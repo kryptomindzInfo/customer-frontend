@@ -4,8 +4,10 @@
  *
  */
 
- import React, { Fragment, useEffect, useState } from 'react';
+ import React, { Fragment, useEffect, useState, useRef  } from 'react';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import ReactToPrint from 'react-to-print';
+import PrintIcon from '@material-ui/icons/Print';
 import { Helmet } from 'react-helmet';
 import DateFnsUtils from '@date-io/date-fns';
 import Button from 'components/Button';
@@ -13,7 +15,7 @@ import MainHeader from '../MainHeader';
 import Card from 'components/Card';
 import Table from 'components/Table';
 import Loader from '../../components/Loader';
-import { Grid, Typography } from '@material-ui/core';
+import ReactPaginate from 'react-paginate';
 import { withStyles } from '@material-ui/core/styles'
 import format from 'date-fns/format';
 import axios from 'axios';
@@ -21,19 +23,45 @@ import { API_URL, STATIC_URL, CURRENCY } from 'containers/App/constants';
 import Row from '../../components/Row';
 import Col from '../../components/Col';
 import SelectInput from '../../components/SelectInput';
+import Footer from '../../components/Footer';
 import FormGroup from '../../components/FormGroup';
 import Container from '../../components/Container';
 
-
-const bankID = localStorage.getItem('bankId');
-const mobile = localStorage.getItem('mobile');
-const token = localStorage.getItem('customerLogged');
+const styles = theme => ({
+  gridCardEwalletSendMoney: {
+    margin: '3% 2% 0% 2%',
+    borderRadius: '4px',
+    // border: '1px solid grey',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 auto',
+      // maxWidth: '62%',
+      // margin: '0 auto'
+      // width: '50%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '4% 5%',
+      // maxWidth: '100%',
+      // margin: '0 auto'
+    },
+  },
+  pagination:{
+    display: 'block',
+    listStyle: 'none',
+    padding: 0,
+  },
+  
+});
 
 const ReportPage = (props) => {
+  const bankLogo= JSON.parse(localStorage.getItem('bank')).logo;
+  const bankName= JSON.parse(localStorage.getItem('bank')).name;
   const [startdate, setStartdate] = useState(new Date());
+  const componentRef = useRef();
+  const [pagecount, setPageCount ] = React.useState(0);
   const [enddate, setEnddate] = useState(new Date());
   const [empty, setEmpty] = useState(false);
   const [transList, setTransList] = useState([]);
+  const [transListCopy, setTransListCopy] = useState([]);
   const [userTransList, setUserTransList] = useState([]);
   const [merchantTransList, setMerchantTransList] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -143,7 +171,10 @@ const ReportPage = (props) => {
       setEmpty(false);
       setLoading(merchanttrans.loading);
     }else if(transactionType === 'WallettoMerchant'){
-      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant' && row.Value.tx_data[0].tx_details === `Transferred to ${merchant}`));
+      const list = history.res.filter(row => {return(row.Value.tx_data[0].tx_name === 'Wallet to Merchant' && row.Value.tx_data[0].tx_details === `Transferred to ${merchant}`)});
+      setPageCount(Math.ceil(list.length / 10));
+      setTransList(list);
+      setTransListCopy(list);
       setEmpty(false);
       setLoading(history.loading);
     }else if (transactionType === 'WallettoWallet' && contact==='all'){
@@ -153,11 +184,30 @@ const ReportPage = (props) => {
       setLoading(usertrans.loading);
     }else if(transactionType === 'WallettoWallet'){
       setEmpty(false);
-      setTransList(history.res.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Wallet' && row.Value.tx_data[0].tx_details === `Transferred to ${contact}`));
+      const list = history.res.filter(row => {return(row.Value.tx_data[0].tx_name === 'Wallet to Wallet' && row.Value.tx_data[0].tx_details === `Transferred to ${contact}`)});
+      setPageCount(Math.ceil(list.length / 10));
+      setTransList(list);
+      setTransListCopy(list);
+      setLoading(history.loading);
+    }else if(transactionType === 'NonWallettoWallet'){
+      setEmpty(false);
+      const list = history.res.filter(row => {return(row.Value.tx_data[0].tx_name === 'Non Wallet to Wallet')});
+      setPageCount(Math.ceil(list.length / 10));
+      setTransList(list);
+      setTransListCopy(list);
+      setLoading(history.loading);
+    }else if(transactionType === 'WallettoNonWallet'){
+      setEmpty(false);
+      const list = history.res.filter(row => {return(row.Value.tx_data[0].tx_name === 'Wallet to Non Wallet')});
+      setPageCount(Math.ceil(list.length / 10));
+      setTransList(list);
+      setTransListCopy(list);
       setLoading(history.loading);
     }else if (transactionType === 'all'){
       setEmpty(false);
+      setPageCount(Math.ceil(history.res.length / 10));
       setTransList(history.res);
+      setTransListCopy(history.res);
       setLoading(history.loading);
     }else{
       setEmpty(false);
@@ -188,6 +238,11 @@ const ReportPage = (props) => {
         </tr>
       );
     });
+  };
+
+  const handlePageClick = (data) =>{
+    console.log(data);
+    setTransList(transListCopy.slice(data.selected*10, data.selected + 10));
   };
 
   const getAllTrans = (list) => {
@@ -321,7 +376,7 @@ const ReportPage = (props) => {
                         <option value={'WallettoNonWallet'}>
                           Send Money to Non Wallet
                         </option>
-                        <option value={'NonWallettoNonWallet'}>
+                        <option value={'NonWallettoWallet'}>
                           Received money from Non Wallet
                         </option>
                         <option value={'WallettoMerchant'}>
@@ -415,8 +470,14 @@ const ReportPage = (props) => {
               </Col>
             </Row>
             { !empty ? (
-            <div>
-            {transactionType==='all' ||  (transactionType==='WallettoWallet' && contact!=='all') || (transactionType==='WallettoMerchant' && merchant!=='all') ? (
+              <div>
+               <ReactToPrint
+               trigger={() => <Button accentedOutline><PrintIcon/>  Print</Button>}
+               content={() => componentRef.current}
+             />
+             
+            <div ref={componentRef}>
+            {transactionType==='all' ||  transactionType==='NonWallettoWallet' ||  transactionType === 'WallettoNonWallet' || (transactionType==='WallettoWallet' && contact!=='all') || (transactionType==='WallettoMerchant' && merchant!=='all') ? (
             <Card bigPadding style={{width:'100%'}}>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Transactions</b></h3>
               {transList && transList.length > 0 ? (
@@ -435,6 +496,21 @@ const ReportPage = (props) => {
                     </thead>
                     <tbody>{getTrans()}</tbody>
                   </Table>
+                  <Card className={'pagination'}>
+                  <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pagecount}
+                    marginPagesDisplayed={10}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                  />
+                  </Card>
                 </div>
               ) : (
                   <h3
@@ -449,7 +525,11 @@ const ReportPage = (props) => {
               )}
             </Card>
             
-            ):''}
+            ):(
+              <div style={{height:'300px'}}>
+
+              </div>
+            )}
 
             {transactionType==='WallettoWallet' && contact==='all' ? (
               <div>
@@ -490,7 +570,11 @@ const ReportPage = (props) => {
                   );
                 })}
               </div>
-            ):''}
+            ):(
+              <div style={{height:'300px'}}>
+
+              </div>
+            )}
 
             {transactionType==='WallettoMerchant' && merchant==='all' ? (
               <div>
@@ -531,13 +615,21 @@ const ReportPage = (props) => {
                   );
                 })}
               </div>
-            ):''}
+            ):(
+              <div style={{height:'300px'}}>
+
+              </div>
+            )}
             </div>
-            ):''}
+            </div>
+            ):(
+              <div style={{height:'300px'}}></div>
+            )}
           </Container>
+          <Footer bankname={bankName} banklogo={bankLogo}/>
         </Fragment>
     );
 }
 
 
-export default ReportPage;
+export default withStyles(styles)(ReportPage);

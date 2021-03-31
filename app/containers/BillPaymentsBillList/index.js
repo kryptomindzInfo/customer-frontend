@@ -41,6 +41,7 @@ import PayBillsInvoiceDetails from './PayBillsInvoiceDetails';
 import FormGroup from '../../components/FormGroup';
 import Col from '../../components/Col';
 import Row from '../../components/Row';
+import Footer from '../../components/Footer';
 import makeSelectBillPaymentsBillList from './selectors';
 toast.configure({
   position: 'bottom-right',
@@ -183,6 +184,8 @@ class BillPaymentsBillList extends Component {
     this.state = {
       viewBillPopup: false,
       notification: '',
+      bankLogo: JSON.parse(localStorage.getItem('bank')).logo,
+      bankName: JSON.parse(localStorage.getItem('bank')).name,
       dataMerchantList: {},
       checkMerchantFee: {},
       invoiceDetails: [],
@@ -858,6 +861,7 @@ class BillPaymentsBillList extends Component {
             </Grid>
             </Grid>
           </Grid>
+         
         {this.state.viewBillPopup ? (
           <Popup accentedH1 bigBody close={this.closeViewBillPopup}>
             <PayBillsInvoiceDetails
@@ -886,6 +890,7 @@ class BillPaymentsBillList extends Component {
             pay={() => this.payBill(this.state.selectedInvoices)}
           />
         ) : null}
+         <Footer bankname={this.state.bankName} banklogo={this.state.bankLogo}/>
       </div>
     );
   }

@@ -31,7 +31,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ActionBar from 'components/ActionBar';
-
+import Footer from 'components/Footer';
 import axios from 'axios';
 
 import MainHeader from '../MainHeader';
@@ -135,7 +135,8 @@ class BillPaymentsPage extends Component {
     super(props);
     this.state = {
       viewBillPopup: false,
-      // dataMerchantList: {},
+      bankLogo: JSON.parse(localStorage.getItem('bank')).logo,
+      bankName: JSON.parse(localStorage.getItem('bank')).name,
       dataMerchantList: [],
       searchdataMerchantList: []
     };
@@ -339,9 +340,11 @@ class BillPaymentsPage extends Component {
               </Grid>
             </Grid>
           </Grid>
+          
         </Grid>
-        {/* </Grid> */}
+        <Footer bankname={this.state.bankName} banklogo={this.state.bankLogo}/>
       </div>
+     
     );
   }
 }
