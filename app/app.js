@@ -50,7 +50,7 @@ openSansObserver.load().then(() => {
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#417505',
+      main: '#316B83',
       hover: "#264503"
     },
     // secondary: '#6cac69',
@@ -58,10 +58,10 @@ const theme = createMuiTheme({
     // light: '#9ea0a5',
     // greyLine: '#666565 ',
     white: 'white',
-    main: '#417505',
+    main: '#316B83',
 
-    vGradient: 'linear-gradient(to bottom, #6cac6a, #102910)',
-    hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
+    vGradient: 'linear-gradient(to bottom, #6D8299, #316B83)',
+    hGradient: 'linear-gradient(to right, #6D8299 1%, #316B83)',
     // font: 'Roboto',
     // fontSize: '14px',
   },
