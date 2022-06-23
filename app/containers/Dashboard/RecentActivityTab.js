@@ -257,9 +257,7 @@ export default ({ notify }) => {
   };
 
   const actionfunction = (value) => {
-    console.log(value)
-    console.log(value.tx_data.tx_type)
-    if (value.tx_data.tx_type == "CR") {
+    if (value.tx_data[0].tx_type == "CR") {
       return "Credit"
     }
     else {
