@@ -1,11 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import {
-  Grid,
-  Tab,
-  Tabs,
-  Typography,
-} from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles'
+import { Grid, Tab, Tabs, Typography } from '@material-ui/core';
+import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Icon from '@material-ui/core/Icon';
 import axios from 'axios';
@@ -14,7 +9,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { useTheme } from '@material-ui/core/styles';
+
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -104,8 +99,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
-            <KeyboardArrowLeft />
-          )}
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         className={
@@ -118,8 +113,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
-            <KeyboardArrowRight />
-          )}
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         className={
@@ -188,10 +183,14 @@ export default ({ notify }) => {
         r.reverse();
         setRow(r);
         setAllRow(r);
-        console.log(r)
-        setTransferRow(r.filter(row => row.Value.tx_data[0].tx_type === 'DR'))
-        setReceiveRow(r.filter(row => row.Value.tx_data[0].tx_type === 'CR'))
-        setInvoiceRow(r.filter(row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant'))
+        console.log(r);
+        setTransferRow(r.filter(row => row.Value.tx_data[0].tx_type === 'DR'));
+        setReceiveRow(r.filter(row => row.Value.tx_data[0].tx_type === 'CR'));
+        setInvoiceRow(
+          r.filter(
+            row => row.Value.tx_data[0].tx_name === 'Wallet to Merchant',
+          ),
+        );
         // setTransferRow(r.filter(row => row.Value.action === 'Transfer'));
         // setReceiveRow(r.filter(row => row.Value.action === 'Receive'));
       })
@@ -256,15 +255,12 @@ export default ({ notify }) => {
     return date.toLocaleTimeString();
   };
 
-  const actionfunction = (value) => {
-    if (value.tx_data[0].tx_type == "CR") {
-      return "Credit"
+  const actionfunction = value => {
+    if (value.tx_data[0].tx_type == 'CR') {
+      return 'Credit';
     }
-    else {
-      return "Debit"
-    }
-
-  }
+    return 'Debit';
+  };
 
   return (
     <Fragment>
@@ -345,7 +341,7 @@ export default ({ notify }) => {
                 : fullRow
               ).map(row => (
                 <TableRow key={row.TxId}>
-                  {row.Value.action != 'Create' &&
+                  {row.Value.action != 'Create' && (
                     <>
                       <TableCell>
                         <Typography variant="h7">
@@ -356,7 +352,7 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                      <Typography variant="h7">
+                        <Typography variant="h7">
                           {row.Value.tx_data[0].master_id}
                         </Typography>
                       </TableCell>
@@ -375,7 +371,6 @@ export default ({ notify }) => {
                                   "Debit"
                                 )}
                             </>} */}
-
                         </Typography>
                       </TableCell>
                       <TableCell>
@@ -384,10 +379,12 @@ export default ({ notify }) => {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="h7">XOF:{row.Value.tx_data[0].amount}</Typography>
+                        <Typography variant="h7">
+                          XOF:{row.Value.tx_data[0].amount}
+                        </Typography>
                       </TableCell>
                     </>
-                  }
+                  )}
                 </TableRow>
               ))}
               {emptyRows > 0 && (
